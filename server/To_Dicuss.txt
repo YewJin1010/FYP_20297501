@@ -1,0 +1,32 @@
+Object Detection:
+Proposed apporach for object detection: 
+Backwards filtering: Find images for whichever ingredients possible 
+(Many ingredients simply cannot be found or do not have adequent amount of available images)
+- Target to be roughly 60 classes. 
+
+Missing / Cannot find images for certain ingredients.
+Approach 1: Remove from recipe (may remove a lot)
+Approach 2: Use text detection on labels
+Approach 3: Generalise, example all types of flour under flour. (May cause issues recipe matching but can be fixed in NLP)
+Approach 4: Find ingredients at supermarket and take pictures.
+
+==========================================================================================
+Text detection:
+TR-OCR - backed by literature 
+Tesseract - easy to implement
+Requires more training, try to test with conjuction with object detection to output 
+Ingredients Detected:
+xxx
+xxx
+
+Labels Detected:
+xxx
+xxx
+
+==========================================================================================
+Recipe Matching:
+
+
+
+
+	
