@@ -1,32 +1,30 @@
-from transformers import (
-    TrOCRConfig,
-    TrOCRProcessor,
-    TrOCRForCausalLM,
-    ViTConfig,
-    ViTModel,
-    VisionEncoderDecoderModel,
-)
-import requests
+from transformers import TrOCRProcessor, VisionEncoderDecoderModel
 from PIL import Image
 
-# Save the processor and model configurations
-processor = TrOCRProcessor.from_pretrained("microsoft/trocr-base-handwritten")
-processor.save_pretrained("test")
-model = VisionEncoderDecoderModel.from_pretrained("microsoft/trocr-base-handwritten")
-model.config.save_pretrained("test")
-model.save_pretrained("test")
+def save_model_and_processor(model_name, output_dir):
+    processor = TrOCRProcessor.from_pretrained(model_name)
+    processor.save_pretrained(output_dir)
+    
+    model = VisionEncoderDecoderModel.from_pretrained(model_name)
+    model.config.save_pretrained(output_dir)
+    model.save_pretrained(output_dir)
 
-# Load image from the IAM dataset
-#url = "water_bottle.jpg"
-url = "text_image.png"
-image = Image.open(url).convert("RGB")
+def generate_text_from_image(image_path, model_dir):
+    processor = TrOCRProcessor.from_pretrained(model_dir)
+    model = VisionEncoderDecoderModel.from_pretrained(model_dir)
 
-# Load processor and model from the saved configurations
-processor = TrOCRProcessor.from_pretrained("test")
-model = VisionEncoderDecoderModel.from_pretrained("test")
+    image = Image.open(image_path).convert("RGB")
+    pixel_values = processor(image, return_tensors="pt").pixel_values
+    generated_ids = model.generate(pixel_values)
+    generated_text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
 
-pixel_values = processor(image, return_tensors="pt").pixel_values
-generated_ids = model.generate(pixel_values)
+    return generated_text
 
-generated_text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
-print(generated_text)
+if __name__ == "__main__":
+    model_name = "microsoft/trocr-base-handwritten"
+    output_directory = "test"
+    save_model_and_processor(model_name, output_directory)
+
+    image_path = "text_image.png"
+    generated_text = generate_text_from_image(image_path, output_directory)
+    print(generated_text)
