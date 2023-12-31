@@ -10,6 +10,15 @@ Approach 2: Use text detection on labels
 Approach 3: Generalise, example all types of flour under flour. (May cause issues recipe matching but can be fixed in NLP)
 Approach 4: Find ingredients at supermarket and take pictures.
 
+Object detection allocation:
+The training part comprises 631 images (70%), 
+the validation part comprises 179 images (20%), 
+the testing part comprises 95 images (10%). 
+
+The YOLOv5 model is trained on the Q-100 food ingredient dataset for 100 epochs, and it takes 9.5 h to complete
+
+source: https://www.mdpi.com/1424-8220/22/21/8290
+
 ==========================================================================================
 Text detection:
 TR-OCR - backed by literature 
@@ -27,6 +36,6 @@ xxx
 Recipe Matching:
 
 
-
+===============
 
 	
