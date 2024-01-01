@@ -49,4 +49,7 @@ Recipe Matching:
 
 ===============
 
-	
+Natural Language Processing: 
+https://github.com/shubhamchouksey/NLP_Recipes?tab=readme-ov-file
+
+https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9094119
