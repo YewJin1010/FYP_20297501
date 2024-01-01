@@ -5,7 +5,6 @@ function App() {
     <div className="App typewriter">
     <header className="App-header">
       <h1>Come Bake with Me !</h1>
-      <div className="peony center"></div>
       <a href='/login'><button class="button button">Login</button></a>
     </header>
 
