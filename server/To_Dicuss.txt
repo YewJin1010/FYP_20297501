@@ -1,3 +1,10 @@
+Activate Server:
+cd server
+venv/Scripts/activate
+activate
+
+
+=======================================================================================
 Object Detection:
 Proposed apporach for object detection: 
 Backwards filtering: Find images for whichever ingredients possible 
