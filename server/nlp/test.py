@@ -1,10 +1,9 @@
-import json
-from transformers import GPT2LMHeadModel, GPT2Tokenizer
+from transformers import OpenAIGPTTokenizer, OpenAIGPTLMHeadModel
 import torch
+import json
 
-# Load pre-trained GPT-2 model and tokenizer
-model = GPT2LMHeadModel.from_pretrained("gpt2")
-tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+tokenizer = OpenAIGPTTokenizer.from_pretrained("openai-gpt")
+model = OpenAIGPTLMHeadModel.from_pretrained("openai-gpt")
 
 # Read the recipe.json file
 with open('cake_recipes.json', 'r') as file:
