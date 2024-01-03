@@ -11,7 +11,29 @@ def list_classes(csv_path):
 
     return classes
 
-def organize_images_by_ingredients(csv_path, source_dir, destination_dir, ingredients_to_search):
+
+def count_images_in_subfolders(base_directory, dataset_type):
+    dataset_path = os.path.join(base_directory, dataset_type)
+    
+    # Ensure the dataset type is valid
+    if not os.path.exists(dataset_path):
+        print(f"Error: '{dataset_type}' directory not found.")
+        return
+
+    print(f"\nCounting images in '{dataset_type}' directory:")
+    
+    # Loop through subdirectories
+    for subfolder in os.listdir(dataset_path):
+        subfolder_path = os.path.join(dataset_path, subfolder)
+        
+        # Check if it's a directory
+        if os.path.isdir(subfolder_path):
+            # Count the number of files in the subdirectory
+            file_count = len([f for f in os.listdir(subfolder_path) if os.path.isfile(os.path.join(subfolder_path, f))])
+            
+            print(f"{subfolder}: {file_count} images")
+
+def organise_images_by_ingredients(csv_path, source_dir, destination_dir, ingredients_to_search):
     # Read the CSV file
     df = pd.read_csv(csv_path)
 
@@ -57,8 +79,8 @@ def run_for_all_directories():
 
     for directory in directories:
         csv_file_path = os.path.join(source_base_directory, directory, '_classes.csv')
-        ingredients_to_search = [' Apple', ' Avocado', ' Banana', ' Carrot']
-
+        ingredients_to_search = [' Apple', ' Avocado', ' Banana', ' Butter', ' Carrot', ' Cassava -Ghar Tarul-', ' Chickpeas', ' Cinnamon', 'Coriander', ' Corn', ' Cornflakes', ' Egg', ' Garlic', ' Ginger', ' Green Mint', ' Ice', ' Ketchup', ' Lemon -Nimbu-', ' Lime -Kagati-', ' Milk', ' Olive Oil', ' Onion', ' Orange', ' Papaya', ' Pear', ' Potato', ' Pumpkin -Farsi-', ' Salt', ' Strawberry', ' Sugar', ' Sweet Potato -Suthuni-', ' Tofu', ' Tomato', ' Wallnut', ' Water Melon', ' Wheat', ' mayonnaise'
+        ]
         source_directory = os.path.join(source_base_directory, directory)
         destination_directory = os.path.join(destination_base_directory, directory)
 
@@ -66,15 +88,21 @@ def run_for_all_directories():
         print("Source Directory:", source_directory)
         print("Destination Directory:", destination_directory)
         
-        organize_images_by_ingredients(csv_file_path, source_directory, destination_directory, ingredients_to_search)
+        organise_images_by_ingredients(csv_file_path, source_directory, destination_directory, ingredients_to_search)
 
 # Example usage
 csv_file_path = 'C:/Users/yewji/fyp3/datasets/Keras_Datasets/food_ingredients_multiclass/test/_classes.csv'
 
 print("1. List classes")
 print("2. Organize images by ingredients")
+print("3. Count images in subfolders")
 selection = int(input())
 if selection == 1:
     print(list_classes(csv_file_path))
 elif selection == 2:
     run_for_all_directories()
+elif selection == 3:
+    base_directory = 'C:/Users/yewji/FYP_20297501/server/object_detection//'
+    dataset_types = ['test', 'train', 'valid']
+    for dataset_type in dataset_types:
+        count_images_in_subfolders(base_directory, dataset_type)
