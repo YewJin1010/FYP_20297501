@@ -13,7 +13,7 @@ function App() {
         console.log('Id', response.data.exists);
         if (response.data.exists === 1) {
           window.location.href = 'http://localhost:3000/Menu';
-          console.log("Admin");
+          console.log("Succesful");
         } 
       })
       .catch(error => {
@@ -34,6 +34,7 @@ function App() {
               <label>
                 <input value={User} onChange={(e) => setUser(e.target.value)} type="text" name="Username" placeholder='Username'/>
               </label><br></br>
+              <br></br>
               <label>
                 <input value={Pwd} onChange={(e) => setPwd(e.target.value)} type="password" name="Password" placeholder='Password'/>
               </label><br></br><br></br>

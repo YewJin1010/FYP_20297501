@@ -69,8 +69,8 @@ height: 100vh;
 input {
 	background-color: #eee;
 	border: none;
-	padding: 12px 15px;
-	margin: 8px 0;
+	padding: 12px 15px 15px 15px;
+	margin: 8px 10px;
 	width: 100%;
 }
 
