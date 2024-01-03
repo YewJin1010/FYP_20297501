@@ -86,15 +86,14 @@ def organise_images_by_ingredients(csv_path, source_dir, destination_dir, ingred
 
 
 def run_for_all_directories():
-    source_base_directory = 'C:/Users/miku/Documents/Yew Jin/datasets/food ingredients 2/'
+    source_base_directory = 'C:/Users/miku/Documents/Yew Jin/datasets/FoodDataSet1/'
     destination_base_directory = 'C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection/'
 
     directories = ['test', 'train', 'valid']
 
     for directory in directories:
         csv_file_path = os.path.join(source_base_directory, directory, '_classes.csv')
-        ingredients_to_search = [' almond', ' apple', ' avocado', ' bluberry', ' bread', ' butter', ' carrot', ' cheese',' cookie', ' corn',  ' egg', ' garlic', ' lemon', ' milk', ' mozarella cheese', ' onion',   ' parmesan cheese', ' potato',' strawberry', ' toast bread', ' tomato', ' yogurt'
-
+        ingredients_to_search = [ ' ketchup', ' kiwi', ' lemon',' mandarine', ' mango', ' mayonnaise',' mozzarella',' muffin',' mustard',' nectarine',' nuts',  ' onion', ' orange', ' parmesan',  ' parsley',  ' plums', ' pomegranate', ' potato', ' praline_n_s', ' pumpkin',' quinoa', ' raisins_dried', ' raspberries', ' rice',' salad_dressing',' sesame_seeds',' sweet_potato',' tart_n_s',' tea',' tofu', ' tomato', ' tomato_sauce',' walnut', ' water', ' water_with_lemon_juice', ' watermelon_fresh', ' white_coffee', ' wine_red',' yogurt'
         ]
         source_directory = os.path.join(source_base_directory, directory)
         destination_directory = os.path.join(destination_base_directory, directory)
@@ -106,7 +105,7 @@ def run_for_all_directories():
         organise_images_by_ingredients(csv_file_path, source_directory, destination_directory, ingredients_to_search)
 
 # Example usage
-csv_file_path = 'C:/Users/miku/Documents/Yew Jin/datasets/food ingredients 2/test/_classes.csv'
+csv_file_path = 'C:/Users/miku/Documents/Yew Jin/datasets/FoodDataSet1/test/_classes.csv'
 
 print("1. List classes")
 print("2. Organize images by ingredients")
