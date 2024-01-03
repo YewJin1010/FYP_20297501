@@ -1,6 +1,7 @@
 import pandas as pd
 import shutil
 import os
+import re
 
 def list_classes(csv_path):
     # Read the CSV file
@@ -11,6 +12,10 @@ def list_classes(csv_path):
 
     return classes
 
+
+def sanitize_filename(filename):
+    # Replace invalid characters with underscores
+    return re.sub(r'[<>:"/\\|?*]', '_', filename)
 
 def count_images_in_subfolders(base_directory, dataset_type):
     dataset_path = os.path.join(base_directory, dataset_type)
@@ -47,7 +52,9 @@ def organise_images_by_ingredients(csv_path, source_dir, destination_dir, ingred
             # Filter rows where the specified ingredient has a value of 1
             images_with_ingredient = df[df[ingredient] == 1]['filename'].tolist()
 
-            cleaned_ingredient = ingredient.strip().lower()
+            # Remove white spaces and convert to lower case
+            cleaned_ingredient = ingredient.strip().lower().replace(" ", "")
+
 
             # Create a folder for the ingredient if it doesn't exist
             current_destination_dir = os.path.join(base_destination_dir, cleaned_ingredient)
@@ -56,10 +63,16 @@ def organise_images_by_ingredients(csv_path, source_dir, destination_dir, ingred
             # Organize images into the destination folder
             for image in images_with_ingredient:
                 source_path = os.path.join(source_dir, image)
-                destination_path = os.path.join(current_destination_dir, image)
+                
+                # Sanitize the filename
+                sanitized_filename = sanitize_filename(image)
+                destination_path = os.path.join(current_destination_dir, sanitized_filename)
 
                 # Check if the image exists in the source directory
                 if os.path.exists(source_path):
+                    # Ensure the destination folder exists
+                    os.makedirs(current_destination_dir, exist_ok=True)
+
                     # Check if the image already exists in the destination folder
                     if not os.path.exists(destination_path):
                         shutil.copyfile(source_path, destination_path)
@@ -71,15 +84,17 @@ def organise_images_by_ingredients(csv_path, source_dir, destination_dir, ingred
         else:
             print(f"{ingredient} not found in the CSV file.")
 
+
 def run_for_all_directories():
-    source_base_directory = 'C:/Users/yewji/fyp3/datasets/Keras_Datasets/food_ingredients_multiclass/'
-    destination_base_directory = 'C:/Users/yewji/FYP_20297501/server/object_detection/'
+    source_base_directory = 'C:/Users/miku/Documents/Yew Jin/datasets/food ingredients 2/'
+    destination_base_directory = 'C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection/'
 
     directories = ['test', 'train', 'valid']
 
     for directory in directories:
         csv_file_path = os.path.join(source_base_directory, directory, '_classes.csv')
-        ingredients_to_search = [' Apple', ' Avocado', ' Banana', ' Butter', ' Carrot', ' Cassava -Ghar Tarul-', ' Chickpeas', ' Cinnamon', 'Coriander', ' Corn', ' Cornflakes', ' Egg', ' Garlic', ' Ginger', ' Green Mint', ' Ice', ' Ketchup', ' Lemon -Nimbu-', ' Lime -Kagati-', ' Milk', ' Olive Oil', ' Onion', ' Orange', ' Papaya', ' Pear', ' Potato', ' Pumpkin -Farsi-', ' Salt', ' Strawberry', ' Sugar', ' Sweet Potato -Suthuni-', ' Tofu', ' Tomato', ' Wallnut', ' Water Melon', ' Wheat', ' mayonnaise'
+        ingredients_to_search = [' almond', ' apple', ' avocado', ' bluberry', ' bread', ' butter', ' carrot', ' cheese',' cookie', ' corn',  ' egg', ' garlic', ' lemon', ' milk', ' mozarella cheese', ' onion',   ' parmesan cheese', ' potato',' strawberry', ' toast bread', ' tomato', ' yogurt'
+
         ]
         source_directory = os.path.join(source_base_directory, directory)
         destination_directory = os.path.join(destination_base_directory, directory)
@@ -91,7 +106,7 @@ def run_for_all_directories():
         organise_images_by_ingredients(csv_file_path, source_directory, destination_directory, ingredients_to_search)
 
 # Example usage
-csv_file_path = 'C:/Users/yewji/fyp3/datasets/Keras_Datasets/food_ingredients_multiclass/test/_classes.csv'
+csv_file_path = 'C:/Users/miku/Documents/Yew Jin/datasets/food ingredients 2/test/_classes.csv'
 
 print("1. List classes")
 print("2. Organize images by ingredients")
@@ -102,7 +117,7 @@ if selection == 1:
 elif selection == 2:
     run_for_all_directories()
 elif selection == 3:
-    base_directory = 'C:/Users/yewji/FYP_20297501/server/object_detection//'
+    base_directory = 'C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection/'
     dataset_types = ['test', 'train', 'valid']
     for dataset_type in dataset_types:
         count_images_in_subfolders(base_directory, dataset_type)
