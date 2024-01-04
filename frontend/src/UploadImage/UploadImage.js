@@ -3,6 +3,8 @@ import axios from 'axios';
 import React, { useState } from 'react';
 
 function UploadImage(){
+    const [previewSrc, setPreviewSrc] = useState('');
+    const [error, setError] = useState('');
 
     const showPreview = (event) => {
         if(event.target.files.length > 0){
@@ -13,6 +15,15 @@ function UploadImage(){
         } 
     }
 
+    const handleSubmit = () => {
+        if (previewSrc) {
+            // Add logic for submitting the image, if needed
+            console.log('Image submitted!');
+        } else {
+            alert('Please upload an image before submitting.');
+        }
+    }
+
     return (
     <div className="UploadImage">
         <div className="center">
@@ -21,6 +32,7 @@ function UploadImage(){
                     <img id='file-ip-1-preview' src='' alt='Preview'></img>
                     <label htmlFor="file-ip-1">Upload Image</label>
                     <input type="file" id="file-ip-1" accept="image/*" onChange={showPreview}></input>
+                    <button className="action-button" onClick={handleSubmit}>Submit</button>
                 </div>                
             </div>
         </div>
