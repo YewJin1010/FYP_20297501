@@ -4,6 +4,8 @@ import './index.css';
 
 import App from './landing/App';
 import Menu from './Menu/Menu';
+import CreateAccount from './CreateAccount/CreateAccount';
+import UploadImage from './UploadImage/UploadImage';
 
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -17,6 +19,14 @@ const router = createBrowserRouter([
   {
     path: '/menu',
     element: <Menu />,
+  },
+  {
+    path: '/createaccount',
+    element: <CreateAccount />,
+  },
+  {
+    path: '/UploadImage',
+    element: <UploadImage />,
   },
 ]);
 

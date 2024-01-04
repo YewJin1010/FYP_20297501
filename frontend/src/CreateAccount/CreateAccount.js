@@ -1,8 +1,8 @@
-import './App.css';
+import './CreateAccount.css';
 import axios from 'axios'; 
 import React, { useState } from 'react';
 
-function App() {
+function CreateAccount() {
   const [User, setUser] = useState(''); //the Username state
   const [Pwd, setPwd] = useState(''); // the Password state
 
@@ -28,7 +28,7 @@ function App() {
       <div class= "container" id="container">
           <div class = "form-container">
             <form action="#">
-            <h1>Login</h1>
+            <h1>Create Account</h1>
            
             <form onSubmit={HandleSubmit} className="alignLeft">
               <label>
@@ -38,9 +38,9 @@ function App() {
               <label>
                 <input value={Pwd} onChange={(e) => setPwd(e.target.value)} type="password" name="Password" placeholder='Password'/>
               </label><br></br><br></br>
-              <button type="submit" className='loginBtn' style={{ marginBottom: 50 }}>Login</button>
+              <button type="submit" className='loginBtn' style={{ marginBottom: 50 }}>Sign Up</button>
             </form>
-              <a href="http://localhost:3000/CreateAccount" className="alignRight" class = "createaccounttext">Create Account</a>
+            <a href="http://localhost:3000/" className="alignRight" class = "logintext">Already have an account?</a>
             </form>
           </div>
           <div class="overlay-conatiner">
@@ -57,4 +57,4 @@ function App() {
   );
 }
 
-export default App;
+export default CreateAccount;

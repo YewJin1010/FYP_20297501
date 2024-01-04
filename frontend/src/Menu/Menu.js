@@ -6,19 +6,15 @@ function studentMenu() {
 
   return (
     <div className="Menu">
-      <div class="containerStudentMenu">
+      <div class="containerMenu">
         <nav>
-          <div class="container" style={{marginTop: 20, paddingTop:0}}>
-          <a href='/studentMenu' className='logo'></a>
-            
-            <ul class="menu">
-              <li><a href="/studentMenu">Home</a></li>
-              <li><a href="/studentsetting">Setting</a></li>
-              <li><a href="/studentNotification">Notifications</a></li>
-              <li><a href="/StudentInformation">Information</a></li>
-              <li><a href="/login">Log Out</a></li>
-            </ul>
-          </div>
+          <a href='/Menu' className='logo'></a>
+            <div class="topnav">
+              <a href="/">Log Out</a>
+              <a href="/information">Information</a>
+              <a href="/setting">Setting</a>
+              <a href="/Menu">Home</a>
+            </div>
         </nav>
 
         <div className='card cardTop'>
