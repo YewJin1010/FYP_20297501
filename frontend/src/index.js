@@ -6,6 +6,8 @@ import App from './landing/App';
 import Menu from './Menu/Menu';
 import CreateAccount from './CreateAccount/CreateAccount';
 import UploadImage from './UploadImage/UploadImage';
+import RecipeCard from './RecipeCard/RecipeCard';
+import Discover from './Discover/Discover';
 
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -27,6 +29,14 @@ const router = createBrowserRouter([
   {
     path: '/UploadImage',
     element: <UploadImage />,
+  },
+  {
+    path: '/RecipeCard',
+    element: <RecipeCard />,
+  },
+  {
+    path: '/Discover',
+    element: <Discover />,
   },
 ]);
 

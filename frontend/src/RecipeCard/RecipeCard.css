@@ -1,0 +1,17 @@
+.recipe-card {
+	border: 1px solid #ddd;
+	padding: 16px;
+	margin: 16px;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .recipe-card h2 {
+	margin-bottom: 8px;
+  }
+  
+  .recipe-card a {
+	color: #007bff;
+	text-decoration: none;
+  }
+  
