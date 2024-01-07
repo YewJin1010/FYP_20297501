@@ -53,3 +53,8 @@ Natural Language Processing:
 https://github.com/shubhamchouksey/NLP_Recipes?tab=readme-ov-file
 
 https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9094119
+
+
+=========================================================================================
+Discover Page
+- Web Scrap recipe picture or continue finding way to connect to images
