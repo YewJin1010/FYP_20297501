@@ -7,7 +7,7 @@ import numpy as np
 import decimal
 from datetime import datetime
 import os
-#from recipe_generation.test import chatbot_response
+from recipe_generation.test import chatbot_response
 from object_detection_classification.object_detection_classification import get_class_list, detect_and_classify
 from text_detection.detect_text import get_text_detection
 from recipe_recommendation.tf_idf.recommend_recipes import get_recipes
@@ -84,7 +84,7 @@ def get_available_ingredients():
 def get_bot_response():
     userText = request.json.get('msg')
     print("User Text: ", userText)
-    #return jsonify({'message': chatbot_response(userText)}) 
+    return jsonify({'message': chatbot_response(userText)}) 
 
 @app.route('/recipe', methods=['GET'])
 def get_recipe():
