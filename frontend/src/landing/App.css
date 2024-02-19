@@ -1,0 +1,81 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.background {
+	background-image: url('../cake_bg.png');
+	background-size: cover; 
+	background-position: center;
+	width: 100%;
+	height: 100vh;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.title {
+	font-family: 'Courier New', Courier, monospace;
+	font-size: 3rem;
+	background-color: black;
+	width: fit-content;
+	border-radius: 20px;
+	padding: 10px 10px;
+	color: white;
+	margin-left: 32%;
+}
+
+.landing-btn{
+	border-radius: 20px;
+	border: 1px solid #FF4B2B;
+	background-color: #FF4B2B;
+	color: #FFFFFF;
+	font-size: 15px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+	margin-left: 40%;
+}
+
+.landing-btn:hover{ 
+	transform: scale(1.05);
+	background-color: white;
+	border: white;
+	color: black
+}

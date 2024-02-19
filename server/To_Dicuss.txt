@@ -1,0 +1,298 @@
+High Priority: 
+1. Rewrite aims and goals 
+2. Compete BERT and GPT implementations
+
+Tissa: 1/2/24
+1. Object Detection ResNet50 model issues: 
+    - Test on public dataset to compare results and find the issues
+    Update: Successfully trained a ResNet50 model - 8/2/24
+
+2. Text Detection: 
+    - Must justify why come to tesseract
+    - What ocr are out there - list top 3 based on articles and narrowed it to tessearct based on results .
+    - Results showed me tesseract is better. 
+
+3. Recipe Recommendation: 
+    - Argument wise: why is yours different from the others out there?
+    - other ones are different how. 
+    - Literature review: finding a flaw that contributes to why we do this? 
+
+4. Can the model differentiate sugar and salt 
+    - Update: no it cannot - 8/2/24
+
+5. Language Model Approach: 
+    - Get results by the end of the month.  
+    - Literature review supporting this approach.
+
+6. Use of SEGP: 
+    - Cite my segp final report 
+This method was originally presented here but is being used here with modifications 
+In what way modifications 
+
+7. No need database: 
+    - future work for personalised exper 
+
+
+===========================================================================
+Activate Server:
+cd server
+venv/Scripts/activate
+activate
+
+=======================================================================================
+Object Detection:
+Proposed apporach for object detection: 
+Backwards filtering: Find images for whichever ingredients possible 
+(Many ingredients simply cannot be found or do not have adequent amount of available images)
+- Target to be roughly 60 classes. 
+
+Missing / Cannot find images for certain ingredients.
+Approach 1: Remove from recipe (may remove a lot)
+Approach 2: Use text detection on labels
+Approach 3: Generalise, example all types of flour under flour. (May cause issues recipe matching but can be fixed in NLP)
+Approach 4: Find ingredients at supermarket and take pictures.
+
+Object detection allocation:
+The training part comprises 631 images (70%), 
+the validation part comprises 179 images (20%), 
+the testing part comprises 95 images (10%). 
+
+The YOLOv5 model is trained on the Q-100 food ingredient dataset for 100 epochs, and it takes 9.5 h to complete
+
+source: https://www.mdpi.com/1424-8220/22/21/8290
+
+8/1/23
+Priority (Baking Essentials): 
+Salt, Sugar, Butter, Milk, Flour, Yeast, Oil
+
+Secondary: 
+Nuts, Fruits, Vegetables, Cheeses
+
+Tertiary: 
+Jams, Creams, Sauces, Beverages
+
+Abandon: 
+Baking Soda/Powder, Cake mix, Extract/Essence
+- Solution: Switch to Text Detection
+
+16/1/23
+Classification for packages and bottles? 
+Consideration: 
+- Apple Sauce
+- Apple Juice
+- Beer
+- Cookies
+- Chocolate Milk
+- Coffee
+ -- cappuccino
+ -- espresso
+ -- white coffee
+ -- black coffee
+- Coconut
+- Honey
+- Ice Cream
+- Jams
+- Mango
+- Mayonnaise
+- Parmesan
+- Parsley
+- Pomegranate
+- Red wine
+- Vegetable Oil
+- Water
+- Yeast
+
+Food and Vegetable Image Recognition: 
+1. Apple
+2. Banana
+3. Bell Pepper
+4. Carrot
+5. Corn
+6. Garlic
+7. Ginger
+8. Grapes
+9. Kiwi
+10. Lemon
+11. Lettuce
+12. Mango
+13. Onion
+14. Orange
+15. Paprika
+16. Pear
+17. Pineapple
+18. Pomegranate
+19. Potato
+20. Sweet Potato
+21. Tomato
+22. Turnip
+23. Watermelon
+
+23/1/23
+66 classes being trained. 
+Accuracy capped at 70%
+Approaches: 
+1. Change model
+2. Change layers
+3. Change epochs
+
+30/1/23
+layer explanations 
+Source: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10381218/
+
+1/2/23
+Object Detection ResNet50 model issues: 
+    - Test on public dataset to compare results and find the issues
+    - Result: Same dataset performed ok when performed on "categorical" class mode instead of "raw"
+
+4/2/23
+- New implementation has high accuracy and low loss but higher val accuracy then accuracy
+- Issue may lie in dataset formation. Therefore, use dataset split to get perfect 80 20 ratio. 
+- Functional with high accuracy and low loss. 
+
+- Move on to refinement. Flour cannot be differentiate with salt etc
+
+5/2/23
+- Double down Resnet50: Fine way to implement window sliding.
+- Yolov5: complete dataset
+=========================================================================================
+Text detection:
+TR-OCR - backed by literature 
+Tesseract - easy to implement
+Requires more training, try to test with conjuction with object detection to output 
+Ingredients Detected:
+xxx
+xxx
+
+Labels Detected:
+xxx
+xxx
+
+IAM Test Dataset download: 
+https://layoutlm.blob.core.windows.net/trocr/dataset/IAM.tar.gz?sv=2022-11-02&ss=b&srt=o&sp=r&se=2033-06-08T16:48:15Z&st=2023-06-08T08:48:15Z&spr=https&sig=a9VXrihTzbWyVfaIDlIT1Z0FoR1073VB0RLQUMuudD4%3D
+Extract: tar -xzf IAM.tar.gz
+
+
+8/1/23
+Switch to Tesseract-OCR
+- TR-OCR has a weakness that allows it to only read one line. Not ideal for this case. 
+- Image processing (cropping/ flipping/ color change)
+
+
+1/2/23
+Must justify why come to tesseract
+What ocr are out there - list top 3 based on articles and come to the conclusion of tesseract.
+==========================================================================================
+Recipe Matching:
+
+Source: https://ijrpr.com/uploads/V4ISSUE5/IJRPR13651.pdf
+1. Random Forest
+2. K-Nearest Neighbors
+3. Support Vector Machines 
+4. Decision Tree
+5. GPT-2
+6. K-Means Clustering
+
+Source: https://nycdatascience.com/blog/student-works/capstone/recipe-recommendation/
+1. K-Means Clustering
+2. Latent Dirichlet Allocation (LDA)
+3. Top2Vec with Doc2Vec / Word2Vec
+4. BERTopic
+5. Correlation Explanation (CorEx)
+Best: CorEx, Top2Vec 
+Worst: BERTopic 
+
+Approaches: 
+1. CorEx
+2. Top2Vec with Doc2Vec / Word2Vec
+3. KNN
+
+
+27/1/23
+Saving recipe recommendation training code as pynb file because converting to python file causes issues.
+Dimension mismatch, etc.. causes output to be different from pynb file. 
+===============
+Natural Language Processing: 
+https://github.com/shubhamchouksey/NLP_Recipes?tab=readme-ov-file
+
+https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9094119
+
+==========================================================================================
+NLP:
+1. Primary Purpose: 
+Output recipe recommendations
+
+2. Secondary Purpose:
+Handle Followup questions
+
+3. Framework: 
+Most Popular: Rasa, Chatterbox
+Chatterbox not compatible with python 3.7 > 
+pip install pyyaml==5.1.2 --user
+pip install chatterbot==1.0.2 --user
+
+Chatbot: 
+29/1/23
+Intent add ons: 
+Date and Time
+Weather
+
+Irfan: 
+train model on prompt
+prompt based on key ingredients
+pretrained language model on content / recipes
+
+BART classifer
+- classify ingredients
+- classify into title
+- title output
+
+GPT-3 explanator
+- tiile input here
+- output directions
+
+
+13/2/23
+Vegan: Cakes made without any animal products, including eggs, dairy, or honey.
+Gluten-Free: Cakes that do not contain gluten, suitable for individuals with gluten intolerance or celiac disease.
+Chocolate: Cakes that prominently feature chocolate as a primary ingredient.
+Nut-Free: Cakes made without nuts or nut-based ingredients to accommodate individuals with nut allergies.
+Fruit: Cakes that include fruits either as a topping, filling, or incorporated into the batter.
+Classic: Traditional cake recipes that are well-known and commonly made, such as vanilla, chocolate, or marble cakes.
+Layer Cake: Cakes composed of multiple layers with frosting or filling between each layer.
+Cupcake: Small cakes baked in individual portions, typically frosted and decorated.
+Special Occasion: Cakes designed for specific events or celebrations, such as birthdays, weddings, or holidays.
+Decadent: Indulgent cakes known for their richness and luxurious ingredients, often featuring high-quality chocolate, cream, or butter.
+Healthy: Cakes made with alternative ingredients to reduce sugar or fat content, such as using applesauce or yogurt as a substitute.
+Seasonal: Cakes that incorporate seasonal flavors or ingredients, such as pumpkin spice for fall or citrus for summer.
+Cheesecake: Cakes made with a base of cream cheese and often featuring a crumb crust.
+Muffins: Cake-like baked goods that are typically less sweet and denser than traditional cakes, often enjoyed for breakfast or brunch.
+Decorated: Elaborately decorated cakes with intricate designs or fondant decorations, often used for special events or competitions.
+=======================================
+Frontend
+
+======================================
+Flask
+PS C:\Users\yewji\FYP_20297501> pip install flask
+Requirement already satisfied: Werkzeug>=2.0 in c:\users\yewji\appdata\local\programs\python\python39\lib\site-packages (from flask) (2.0.1)
+Requirement already satisfied: itsdangerous>=2.0 in c:\users\yewji\appdata\local\programs\python\python39\lib\site-packages (from flask) (2.0.1)
+Requirement already satisfied: Jinja2>=3.0 in c:\users\yewji\appdata\local\programs\python\python39\lib\site-packages (from flask) (3.0.1)
+Requirement already satisfied: click>=7.1.2 in c:\users\yewji\appdata\local\programs\python\python39\lib\site-packages (from flask) (8.1.7)
+Requirement already satisfied: colorama in c:\users\yewji\appdata\local\programs\python\python39\lib\site-packages (from click>=7.1.2->flask) (0.4.6)
+Requirement already satisfied: MarkupSafe>=2.0 in c:\users\yewji\appdata\local\programs\python\python39\lib\site-packages (from Jinja2>=3.0->flask) (2.0.1)
+WARNING: Ignoring invalid distribution -rotobuf (c:\users\yewji\appdata\local\programs\python\python39\lib\site-packages)
+WARNING: Ignoring invalid distribution -rotobuf (c:\users\yewji\appdata\local\programs\python\python39\lib\site-packages)
+WARNING: Ignoring invalid distribution -rotobuf (c:\users\yewji\appdata\local\programs\python\python39\lib\site-packages)
+WARNING: Ignoring invalid distribution -rotobuf (c:\users\yewji\appdata\local\programs\python\python39\lib\site-packages)
+
+[notice] A new release of pip available: 22.3.1 -> 23.3.2
+[notice] To update, run: C:\Users\yewji\AppData\Local\Programs\Python\Python39\python.exe -m pip install --upgrade pip
+PS C:\Users\yewji\FYP_20297501> cd server
+PS C:\Users\yewji\FYP_20297501\server> venv/Scripts/activate
+(venv) PS C:\Users\yewji\FYP_20297501\server> pip install flask
+Fatal error in launcher: Unable to create process using '"C:\Users\yewji\FYP_20297501\server\Scripts\python.exe"  "C:\Users\yewji\FYP_20297501\server\venv\Scripts\pip.exe" install flask': The system cannot 
+find the file specified.
+
+solution: 
+anaconda download ssl certain
+worked when: run pip install flask and others using administrator cmd 
+=================================================================================

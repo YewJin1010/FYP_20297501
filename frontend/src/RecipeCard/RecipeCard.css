@@ -1,0 +1,32 @@
+.recipe-card {
+	display: flex;
+	border: 1px solid #ccc;
+	margin: 10px;
+	padding: 10px;
+	align-items: center;
+  }
+  
+  .image-container {
+	width: 100px; /* Adjust as needed */
+	height: 100px; /* Adjust as needed */
+	margin-right: 10px;
+  }
+  
+  .image-container img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover; /* Ensures the image covers the entire container */
+  }
+  
+  .recipe-details {
+	flex: 1; /* Takes remaining width */
+  }
+  .recipe-card h2 {
+	margin-bottom: 8px;
+  }
+  
+  .recipe-card a {
+	color: #007bff;
+	text-decoration: none;
+  }
+  

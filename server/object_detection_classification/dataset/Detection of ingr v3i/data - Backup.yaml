@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 7
+names: ['Avocado', 'Brocolli', 'Honey', 'Lemon', 'egg', 'oil', 'orange']
+
+roboflow:
+  workspace: fruits-qrswm
+  project: detection_of_ingr
+  version: 3
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/fruits-qrswm/detection_of_ingr/dataset/3
