@@ -115,7 +115,8 @@ def get_text_detection(image_path):
 
         # Do not draw if no text detected
         if len(detected_text_list) == 0:
-            return "No text detected."
+            print("No text detected.")
+            return []
         
         else: 
             # Draw bounding boxes and text labels

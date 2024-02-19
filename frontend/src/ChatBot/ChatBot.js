@@ -5,6 +5,37 @@ import axios from 'axios';
 function ChatBot() {
   const [messages, setMessages] = useState([]);
   const userInputRef = useRef(null);
+  const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {
+    const formatRecipesIntoMessages = (recipes) => {
+      let newMessages = [...messages]; // Copy existing messages
+      recipes.forEach((recipe, index) => {
+        const recipeMessage = (
+          <div key={`recipe_${index}`}>
+            <p><strong>Recipe {index + 1}:</strong> {recipe.title}</p>
+            <p><strong>Ingredients:</strong><br />{recipe.ingredients}</p>
+            <p><strong>Directions:</strong><br />{recipe.directions}</p>
+          </div>
+        );
+        newMessages.push({ sender: "Bot", message: recipeMessage, type: "bot", time: getTime() });
+      });
+      setMessages(newMessages); // Update messages state with new recipe messages
+    };
+
+    // Function to fetch recipes when component mounts
+    const fetchRecipes = async () => {
+      try {
+        const response = await axios.get('/recipe');
+        console.log('Recipes:', response.data.recipes);
+        formatRecipesIntoMessages(response.data.recipes);
+      } catch (error) {
+        console.error('Error fetching recipes:', error);
+      }
+    };
+    // Call the function to fetch recipes when component mounts
+    fetchRecipes();
+  }, []);
 
   const getTime = () => {
     const now = new Date();

@@ -7,10 +7,10 @@ import spacy
 
 nlp = spacy.load("en_core_web_sm")
 
-recipes = pd.read_csv("C:/Users/yewji/FYP_20297501/server/recipe_matching/tf_idf/csv/tagged_recipes_df_2.csv")
+recipes = pd.read_csv("C:/Users/yewji/FYP_20297501/server/recipe_recommendation/tf_idf/csv/tagged_recipes_df_2.csv")
 
 '''import text_tokenized.csv here'''
-tokenized_text_path = 'C:/Users/yewji/FYP_20297501/server/recipe_matching/tf_idf/csv/tokenized_text_2.csv'
+tokenized_text_path = 'C:/Users/yewji/FYP_20297501/server/recipe_recommendation/tf_idf/csv/tokenized_text_2.csv'
 tokenized_text = pd.read_csv(tokenized_text_path)
 
 '''Vectorizes text using TF-IDF'''

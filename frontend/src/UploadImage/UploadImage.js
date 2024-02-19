@@ -69,9 +69,8 @@ function UploadImage() {
         }
       });
       console.log('Response from server:', response);
-      
-      // Redirect to results page
-     // window.location.href = '/results';
+      // Redirect to results page      
+      window.location.href = '/chatbot';
     } 
     catch (error) {
       console.error('Error uploading images:', error);
