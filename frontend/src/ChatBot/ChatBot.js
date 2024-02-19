@@ -2,6 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import './ChatBot.css';
 import axios from 'axios';
 
+function getRandomColor() {
+  // Generate a random hexadecimal color code
+  return '#' + Math.floor(Math.random()*16777215).toString(16);
+}
+
 function ChatBot() {
   const [messages, setMessages] = useState([]);
   const userInputRef = useRef(null);
@@ -10,18 +15,32 @@ function ChatBot() {
   useEffect(() => {
     const formatRecipesIntoMessages = (recipes) => {
       let newMessages = [...messages]; // Copy existing messages
-      recipes.forEach((recipe, index) => {
-        const recipeMessage = (
-          <div key={`recipe_${index}`}>
-            <p><strong>Recipe {index + 1}:</strong> {recipe.title}</p>
-            <p><strong>Ingredients:</strong><br />{recipe.ingredients}</p>
-            <p><strong>Directions:</strong><br />{recipe.directions}</p>
-          </div>
-        );
-        newMessages.push({ sender: "Bot", message: recipeMessage, type: "bot", time: getTime() });
-      });
-      setMessages(newMessages); // Update messages state with new recipe messages
-    };
+
+       // Check if there are any recipes
+      if (recipes.length > 0) {
+        // Add a greeting message if there are recipes
+        const greetingMessage = {
+          sender: "Bot",
+          message: <p>Based on your ingredients, here are some recipes you can try:</p>,
+          type: "bot",
+          time: getTime()
+        };
+        newMessages.push(greetingMessage);
+
+        recipes.forEach((recipe, index) => {
+          const recipeMessage = (
+            <div key={`recipe_${index}`}>
+              <p><strong>Recipe {index + 1}:</strong> {recipe.title}</p>
+              <p><strong>Ingredients:</strong><br />{recipe.ingredients}</p>
+              <p><strong>Directions:</strong><br />{recipe.directions}</p>
+            </div>
+          );
+          newMessages.push({ sender: "Bot", message: recipeMessage, type: "bot", time: getTime() });
+        });
+        setMessages(newMessages); // Update messages state with new recipe messages
+      };
+    }
+    
 
     // Function to fetch recipes when component mounts
     const fetchRecipes = async () => {
@@ -36,6 +55,7 @@ function ChatBot() {
     // Call the function to fetch recipes when component mounts
     fetchRecipes();
   }, []);
+    
 
   const getTime = () => {
     const now = new Date();
@@ -75,7 +95,7 @@ function ChatBot() {
 
 
   return (
-    <div className="chat-container">
+    <div className="background">
       <div className="chat-box" id="chatBox">
         {messages.map((msg, index) => (
           <div key={index} className={`message ${msg.type}`}>

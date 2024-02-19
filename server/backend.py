@@ -7,10 +7,10 @@ import numpy as np
 import decimal
 from datetime import datetime
 import os
-from recipe_generation.test import chatbot_response
 from object_detection_classification.object_detection_classification import get_class_list, detect_and_classify
 from text_detection.detect_text import get_text_detection
 from recipe_recommendation.tf_idf.recommend_recipes import get_recipes
+from chatbot.chatbot_response import get_bot_response
 
 app = Flask(__name__)
 CORS(app)
@@ -81,17 +81,14 @@ def get_available_ingredients():
     return jsonify({'ingredients': class_list})
 
 @app.route("/chatbotresponse", methods=['POST'])
-def get_bot_response():
+def get_response():
     userText = request.json.get('msg')
     print("User Text: ", userText)
-    return jsonify({'message': chatbot_response(userText)}) 
+    return jsonify({'message': get_bot_response(userText)}) 
 
 @app.route('/recipe', methods=['GET'])
-def get_recipe():
-    
+def get_recipe():    
     return jsonify({'recipes': recipe_list})   
-
-
 
 if __name__=="__main__":
     app.run(debug=True)

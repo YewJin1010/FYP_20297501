@@ -1,36 +1,24 @@
 
-.chat-container {
-    width: 100%;
-	height: 100%;
-    position: fixed;
-    top: 0; /* Adjusted to align with the input bar position */
-    left: 0;
-    background-color: #4CAF50;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	
-}
-
 .chat-box {
-    max-height: 80%; /* Adjusted to leave space for the input container */
-    overflow-y: auto;
-    padding: 10px;
+  max-height: 90%; /* Adjusted to leave space for the input container */
+  overflow-y: auto;
+  padding: 10px 10px;
 	margin-left: 10%;
-	background-color: #fff;
+	background-color: black;
 	margin-right: 10%;
-	margin-top: 2%;
 	border-radius: 10px;
 }
 
 .input-container {
-    display: flex;
-    padding: 10px;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 80%; /* Adjust width as needed */
-    background-color: #f1f1f1;
-    border-top: 1px solid #ddd;
-    align-items: center;
+  display: flex;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 80%; /* Adjust width as needed */
+  background-color: #f1f1f1;
+  border-top: 1px solid #ddd;
+  align-items: center;
 	margin-left: 10%;
 	margin-bottom: 2%;
 }
@@ -42,11 +30,16 @@ input {
 }
 
 button {
-    background-color: #4CAF50;
-    color: #fff;
+    background-color: #ffffff;
+    color: black;
     padding: 8px 15px;
     border: none;
     cursor: pointer;
+}
+
+button:hover {
+    background-color: black;
+    color: white;
 }
 
 .bot-message-container {
@@ -57,7 +50,7 @@ button {
 }
 
 .bot-message-bubble {
-  background-color: #73d7ff;
+  background-color: #6438bd;
   color: #fff;
   padding: 8px 15px;
   border-radius: 10px;
