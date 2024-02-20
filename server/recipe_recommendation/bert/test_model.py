@@ -30,7 +30,7 @@ def get_top_k_predictions(probabilities, titles, k=5):
     return top_k_titles, top_k_probabilities[0]
 
 # Load the dataset
-df = pd.read_csv("C:/Users/yewji/FYP_20297501/server/recipe_matching/bert/ingredients_to_title.csv")
+df = pd.read_csv("C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/ingredients_to_title.csv")
 # Extract the titles column from the DataFrame
 titles = df['title'].tolist()
 
@@ -39,7 +39,7 @@ all_ingredients = df.columns[1:].tolist()  # Exclude the 'title' column
 num_classes = len(all_ingredients)
 
 # Load the trained model
-model_path = "C:/Users/yewji/FYP_20297501/server/recipe_matching/bert/saved_models"
+model_path = "C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/saved_models"
 trained_model = load_model(model_path, num_classes)
 
 # Example usage

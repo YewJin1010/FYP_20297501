@@ -8,6 +8,7 @@ function App() {
   return (
     
     <div className="App typewriter" class = "background">
+      
       <br></br><br></br><br></br><br></br><br></br>
       <h1 class = "title">FYP 20297501 DEMO</h1>
       <br></br><br></br><br></br><br></br><br></br><br></br>

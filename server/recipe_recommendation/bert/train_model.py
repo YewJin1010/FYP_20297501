@@ -7,7 +7,7 @@ import os
 import numpy as np
 
 # Load the dataset
-df = pd.read_csv("C:/Users/yewji/FYP_20297501/server/recipe_matching/bert/ingredients_to_title.csv")
+df = pd.read_csv("C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/ingredients_to_title.csv")
 
 # Get the classes (ingredients)
 classes = df.columns[1:].tolist()  # Exclude the 'title' column
@@ -75,7 +75,7 @@ def train_model(model, train_dataloader, val_dataloader, optimizer, scheduler, e
         print(f"Epoch {epoch + 1}/{epochs}, Avg Train Loss: {avg_train_loss}, Avg Val Loss: {avg_val_loss}")
 
 # Preprocess the data
-features, labels = preprocess_data("C:/Users/yewji/FYP_20297501/server/recipe_matching/bert/ingredients_to_title.csv")
+features, labels = preprocess_data("C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/ingredients_to_title.csv")
 
 # Tokenize and encode the input data
 dataset = tokenize_and_encode(features, labels)
@@ -106,5 +106,5 @@ def save_model(model, model_directory):
     print(f"Model saved at {model_save_path}")
 
 # Save the trained model
-save_model(model, "C:/Users/yewji/FYP_20297501/server/recipe_matching/bert/saved_models")
+save_model(model, "C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/saved_models")
 
