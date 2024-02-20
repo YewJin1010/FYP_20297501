@@ -132,7 +132,7 @@ img{
 .openPopup {
   position: fixed;
   transform: translate(-50%, -50%);
-  background-color: black;
+  background-color: white;
   border: 1px solid #888;
   width: 200px;
   padding: 20px;
@@ -191,7 +191,7 @@ img{
 .submit-btn{
   position: fixed;
   transform: translate(-50%, -50%);
-  background-color: black;
+  background-color: white;
   border: 1px solid #888;
   width: 200px;
   padding: 20px;
@@ -202,7 +202,7 @@ img{
 .info-btn{
   position: fixed;
   transform: translate(-50%, -50%);
-  background-color: black;
+  background-color: white;
   border: 1px solid #888;
   width: 200px;
   padding: 20px;

@@ -124,7 +124,7 @@ function ChatBot() {
       </div>
       <div className="input-container">
         <input type="text" ref={userInputRef} placeholder="Type your message..." />
-        <button onClick={sendMessage}>Send</button>
+        <button className="send-btn" onClick={sendMessage}>Send</button>
       </div>
     </div>
   );

@@ -29,7 +29,7 @@ input {
     margin-right: 10px;
 }
 
-button {
+.send-btn {
     background-color: #ffffff;
     color: black;
     padding: 8px 15px;
@@ -37,7 +37,7 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+.send-btn :hover {
     background-color: black;
     color: white;
 }
