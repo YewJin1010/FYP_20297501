@@ -2,6 +2,7 @@
 import pandas as pd
 import re
 import ast
+
 # Load the data from a CSV file
 df = pd.read_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/title_ingredient.csv')
 
@@ -25,6 +26,10 @@ def remove_amounts(ingredients):
 df['ingredients'] = df['ingredients'].apply(lambda x: ast.literal_eval(x))
 # Apply the function to the 'ingredient' column using the apply() method
 df['ingredient'] = df['ingredients'].apply(lambda x: remove_amounts(x))
+# Drop the 'ingredients' column
+df.drop(columns=['ingredients'], inplace=True)
+# Rename the 'ingredient' column to 'ingredients'
+df.rename(columns={'ingredient': 'ingredients'}, inplace=True)
 
 # Write the modified DataFrame to the csv file
-df.to_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/title_ingredient.csv', index=False)
+df.to_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/processed_title_ingredient.csv', index=False)
