@@ -12,7 +12,7 @@ def remove_amounts(ingredients):
     print('ingredients:', ingredients)
 
     # Define a list of words to be ignored
-    ignored_words = ["eggs", "salt", "pepper", "sugar"] 
+    ignored_words = ["egg", "eggs", "salt", "pepper", "sugar"] 
 
    # Define a regular expression pattern to match the amounts and measurements
     amount_pattern = r"\b(?:\w+\s+)?\d*\s*\d+\/?\d*\s*[a-zA-Z]*\s*(?!(?:\b(?:{}))\b)".format("|".join(ignored_words))
