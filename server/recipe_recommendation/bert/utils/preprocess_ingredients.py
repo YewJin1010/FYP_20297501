@@ -4,7 +4,7 @@ import re
 import ast
 
 # Load the data from a CSV file
-df = pd.read_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/title_ingredient.csv')
+df = pd.read_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/datasets/title_ingredient.csv')
 
 # Define a function that removes the amounts and measurements from an ingredient string
 def remove_amounts(ingredients):
@@ -42,4 +42,4 @@ df.drop(columns=['ingredients'], inplace=True)
 df.rename(columns={'ingredient': 'ingredients'}, inplace=True)
 
 # Write the modified DataFrame to the csv file
-df.to_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/processed_title_ingredient.csv', index=False)
+df.to_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/datasets/processed_title_ingredient.csv', index=False)

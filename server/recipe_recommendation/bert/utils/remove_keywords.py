@@ -4,7 +4,7 @@ import re
 import ast
 
 # Load the data from a CSV file
-df = pd.read_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/extracted_title_ingredient.csv')
+df = pd.read_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/datasets/extracted_title_ingredient.csv')
 
 # Enter word to remove
 word = input("Enter word to remove: ")
@@ -21,6 +21,6 @@ def remove_word_from_ingredients(ingredient, word):
 df['ingredients'] = df['ingredients'].apply(lambda x: remove_word_from_ingredients(x, word))
 
 # Write the modified DataFrame to the csv file
-df.to_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/extracted_title_ingredient.csv', index=False)
+df.to_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/datasets/extracted_title_ingredient.csv', index=False)
 
 print("done")
