@@ -10,13 +10,22 @@ df = pd.read_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/
 def remove_amounts(ingredients):
     new_ingredients_list = []
     print('ingredients:', ingredients)
-    # Define a regular expression pattern to match the amounts and measurements
-    pattern = r"^\d+\/?\d*\s*[a-zA-Z]*\s*"
 
+    # Define a list of words to be ignored
+    ignored_words = ["eggs", "salt", "pepper", "sugar"] 
+
+   # Define a regular expression pattern to match the amounts and measurements
+    amount_pattern = r"\b(?:\w+\s+)?\d*\s*\d+\/?\d*\s*[a-zA-Z]*\s*(?!(?:\b(?:{}))\b)".format("|".join(ignored_words))
+
+    # Define a regular expression pattern to match text inside parentheses
+    bracket_pattern = r"\([^()]*\)"
+    
     for ingredient in ingredients:
         print('original ingredient:', ingredient)
-        # Replace the matched text with nothing
-        ingredient = re.sub(pattern, "", ingredient)
+        # Remove the amounts and measurements
+        ingredient = re.sub(amount_pattern, "", ingredient)
+        # Remove text inside parentheses
+        ingredient = re.sub(bracket_pattern, "", ingredient)
         print('processed ingredient:', ingredient)
         new_ingredients_list.append(ingredient)
         print("new_ingredients_list:", new_ingredients_list)
@@ -26,6 +35,7 @@ def remove_amounts(ingredients):
 df['ingredients'] = df['ingredients'].apply(lambda x: ast.literal_eval(x))
 # Apply the function to the 'ingredient' column using the apply() method
 df['ingredient'] = df['ingredients'].apply(lambda x: remove_amounts(x))
+
 # Drop the 'ingredients' column
 df.drop(columns=['ingredients'], inplace=True)
 # Rename the 'ingredient' column to 'ingredients'
