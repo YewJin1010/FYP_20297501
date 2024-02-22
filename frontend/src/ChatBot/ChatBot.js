@@ -10,7 +10,6 @@ function getRandomColor() {
 function ChatBot() {
   const [messages, setMessages] = useState([]);
   const userInputRef = useRef(null);
-  const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {
     const formatRecipesIntoMessages = (recipes) => {
@@ -28,18 +27,29 @@ function ChatBot() {
         newMessages.push(greetingMessage);
 
         recipes.forEach((recipe, index) => {
+          const ingredientsArray = recipe.ingredients.split(';'); // Split ingredients by semicolon
+          const ingredientsList = ingredientsArray.map((ingredient, idx) => (
+            <p key={`ingredient_${idx}`}>{ingredient.trim()}</p> // Trim whitespace around each ingredient
+          ));
+
+          const splitDirections = recipe.directions.split('.').filter(sentence => sentence.trim() !== ''); // Split directions by '.' and filter out empty sentences
+          const indexedDirections = splitDirections.map((sentence, index) => `${index + 1}. ${sentence.trim()}`); // Add index number to each sentence
+          
+          const numberedDirections = indexedDirections.map((direction, idx) => (
+            <p key={`direction_${idx}`}>{direction}</p> // Wrap each direction in a paragraph tag to create line break
+          ));
           const recipeMessage = (
             <div key={`recipe_${index}`}>
               <p><strong>Recipe {index + 1}:</strong> {recipe.title}</p>
-              <p><strong>Ingredients:</strong><br />{recipe.ingredients}</p>
-              <p><strong>Directions:</strong><br />{recipe.directions}</p>
+              <p><strong>Ingredients:</strong><br />{ingredientsList}</p>
+              <p><strong>Directions:</strong><br />{numberedDirections}</p>
             </div>
           );
           newMessages.push({ sender: "Bot", message: recipeMessage, type: "bot", time: getTime() });
         });
         setMessages(newMessages); // Update messages state with new recipe messages
       };
-    }
+    };
     
 
     // Function to fetch recipes when component mounts
