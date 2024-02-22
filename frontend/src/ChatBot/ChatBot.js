@@ -36,7 +36,7 @@ function ChatBot() {
           const indexedDirections = splitDirections.map((sentence, index) => `${index + 1}. ${sentence.trim()}`); // Add index number to each sentence
           
           const numberedDirections = indexedDirections.map((direction, idx) => (
-            <p key={`direction_${idx}`}>{direction}</p> // Wrap each direction in a paragraph tag to create line break
+            <p key={`direction_${idx}`}>{direction}.</p> // Wrap each direction in a paragraph tag to create line break
           ));
           const recipeMessage = (
             <div key={`recipe_${index}`}>

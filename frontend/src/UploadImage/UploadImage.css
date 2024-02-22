@@ -210,6 +210,17 @@ img{
   bottom: 250px;
 }
 
+.change-btn{
+  position: fixed;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #888;
+  width: 200px;
+  padding: 20px;
+  border-radius: 20px;
+  bottom: -100px;
+}
+
 .openPopup:hover{
   background-color: #f1f1f1;
   color: black;
@@ -221,6 +232,11 @@ img{
 }
 
 .info-btn:hover{
+  background-color: #f1f1f1;
+  color: black;
+}
+
+.change-btn:hover{
   background-color: #f1f1f1;
   color: black;
 }

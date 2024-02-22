@@ -22,6 +22,75 @@ recipe_list = []
 def landing():
     return ("landing")
 
+
+@app.route('/upload_object', methods=['POST'])
+def upload_object_detection():
+    print("Object detection request received")
+    try:
+        start_time = datetime.now()
+
+        print("Received request", request.files)
+        images = []
+        for key in request.files:
+            image_files = request.files.getlist(key)
+            images.extend(image_files)
+        print("Images received:", images)
+    
+        classifications = []
+
+        for image in images:
+            print("Performing object detection on image:", image)
+
+            # Detect and classify the objects in the image
+            object_detection_results = detect_and_classify(image)
+            print("Object detection results:", object_detection_results)
+            classifications.append(object_detection_results)
+            
+        # Extract the class labels from object detection results
+        class_labels = [result['class_label'] for result_list in classifications for result in result_list]
+        print("Class labels:", class_labels)
+        
+        # Calculate the total time taken
+        end_time = datetime.now()
+        total_time = end_time - start_time
+        print("Total time taken:", total_time)
+
+        # Return a JSON response with recipes
+        return jsonify({'class_labels': class_labels}), 200
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify({'error': 'Internal server error'}), 500
+
+@app.route('/upload_text', methods=['POST'])
+def upload_text_detection():
+    print("Text detection request received")
+    try:
+        start_time = datetime.now()
+
+        print("Received request", request.files)
+        images = []
+        for key in request.files:
+            image_files = request.files.getlist(key)
+            images.extend(image_files)
+        print("Images received:", images)
+    
+        for image in images:
+            print("Performing text detection on image:", image)
+            text_detection_results = get_text_detection(image)
+            print("Text detection results:", text_detection_results)
+        
+        # Calculate the total time taken
+        end_time = datetime.now()
+        total_time = end_time - start_time
+        print("Total time taken:", total_time)
+
+        # Return a JSON response with recipes
+        return jsonify({'text_detection_results': text_detection_results}), 200
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify({'error': 'Internal server error'}), 500
+
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     try:

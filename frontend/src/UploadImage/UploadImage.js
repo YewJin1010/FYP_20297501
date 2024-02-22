@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './UploadImage.css';
 import axios from 'axios';
 
@@ -7,6 +7,7 @@ function UploadImage() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [ingredients, setIngredients] = useState([]);
   const [fileObjects, setFileObjects] = useState([]);
+  const [mode, setMode] = useState('object'); 
 
   const handleFileChange = (event) => {
     if (event.target.files) {
@@ -48,6 +49,15 @@ function UploadImage() {
     setPopupOpen(false);
   }
 
+  const handleDetectChange = () => {
+    setMode(mode === 'object' ? 'text' : 'object')
+    console.log('Mode:', mode);
+  }
+
+  useEffect(() => {
+    console.log('Mode:', mode);
+  }, [mode]);
+
   const submitImages = async () => {
     console.log('Submitting images');
     console.log('File objects:', fileObjects); // Check if fileObjects contains data
@@ -56,6 +66,8 @@ function UploadImage() {
         return;
     }
 
+    let uploadRoute = mode === 'object' ? '/upload_object' : '/upload_text';
+
     var formData = new FormData();
     fileObjects.forEach((file, index) => {
       formData.append(`image_${index}`, file);
@@ -63,7 +75,7 @@ function UploadImage() {
     console.log('Form data:', formData.get('image_0'));
     console.log('Form data:', formData.get('image_1'));
     try {
-      let response = await axios.post('/upload', formData, {
+      let response = await axios.post(uploadRoute, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -125,6 +137,7 @@ function UploadImage() {
         </div>
         <button className="submit-btn" onClick={submitImages}>Submit</button>
         <button className="info-btn">Info</button>   
+        <button className='change-btn' onClick={handleDetectChange}>Change Detector</button>
         </div>
     </div>
   );
