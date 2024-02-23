@@ -7,7 +7,7 @@ function UploadImage() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [ingredients, setIngredients] = useState([]);
   const [fileObjects, setFileObjects] = useState([]);
-  const [mode, setMode] = useState('object'); 
+  const [mode, setMode] = useState('Object'); 
 
   const handleFileChange = (event) => {
     if (event.target.files) {
@@ -50,7 +50,7 @@ function UploadImage() {
   }
 
   const handleDetectChange = () => {
-    setMode(mode === 'object' ? 'text' : 'object')
+    setMode(mode === 'Object' ? 'Text' : 'Object')
     console.log('Mode:', mode);
   }
 
@@ -66,7 +66,7 @@ function UploadImage() {
         return;
     }
 
-    let uploadRoute = mode === 'object' ? '/upload_object' : '/upload_text';
+    let uploadRoute = mode === 'Object' ? '/upload_object' : '/upload_text';
 
     var formData = new FormData();
     fileObjects.forEach((file, index) => {
@@ -81,17 +81,30 @@ function UploadImage() {
         }
       });
       console.log('Response from server:', response);
-      // Redirect to results page      
-      window.location.href = '/chatbot';
+      if (response.status === 200) {
+        console.log('Images uploaded successfully');
+        window.location.href = '/chatbot';
+      }
     } 
     catch (error) {
-      console.error('Error uploading images:', error);
+      console.error(error);
+      let errorMessage = "An error occurred";
+      if (error.response && error.response.data && error.response.data.error) {
+        let fullErrorMessage = error.response.data.error.toString();
+        let match = fullErrorMessage.match(/cannot identify image file/i);
+        if (match) {
+            errorMessage = match[0];
+        }
+    }
+
+    alert(errorMessage); 
     }
   }
 
   return (
     <div className="background">
       <br /><br /><br /><br /><br />
+      <h3 className='mode-text'>{mode} Mode</h3>
       <div className="upload">
         <div className="upload-wrapper">
           <div className="upload-img">

@@ -77,8 +77,12 @@ def upload_text_detection():
         for image in images:
             print("Performing text detection on image:", image)
             text_detection_results = get_text_detection(image)
-            print("Text detection results:", text_detection_results)
-        
+            result = get_text_detection(image)
+            if isinstance(result, str):
+                print("Error:", result)
+                return jsonify({'error': result}), 400  # Return error response
+            text_detection_results.append(result)
+
         # Calculate the total time taken
         end_time = datetime.now()
         total_time = end_time - start_time

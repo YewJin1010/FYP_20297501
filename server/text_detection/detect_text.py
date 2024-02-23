@@ -90,18 +90,21 @@ def get_ingredients():
     return ingredients
 
 def get_text_detection(image_path):
-
     # show image
-    image = Image.open(image_path)
+    try: 
+        image = Image.open(image_path)
+    except Exception as e:
+        error = str(e)
+        print("here")
+        return error
+
     plt.imshow(image)
     plt.savefig("text_detection/results/original_image.jpg")    
 
     # Load the image into a numpy array
     image_np = np.array(Image.open(image_path))
-
     # Read the image
     original_image = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
-   
    # Check if the image is read successfully
     if original_image is not None:
         # Preprocess the image

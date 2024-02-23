@@ -240,3 +240,8 @@ img{
   background-color: #f1f1f1;
   color: black;
 }
+
+.mode-text{
+  color: white;
+  text-align: center;
+}
