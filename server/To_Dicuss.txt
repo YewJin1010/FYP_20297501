@@ -1,7 +1,9 @@
 Tissa: 22/2/24
 1. Upload image submit: 
     - do not use loading screen, use progress bar
-    - free buttons during progression
+    - freeze buttons during progression
+
+1.1 Save images uploaded to object and text mode
 
 2. Use sample image as a preview example for the image uploader: 
     - use 1 image upload bin and a button to swap in and out. 

@@ -3,9 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import re, os, cv2, csv
 from PIL import Image
-from nltk.corpus import stopwords
 import nltk
-nltk.download('stopwords')
+from nltk.corpus import stopwords
 
 # Set the path to the Tesseract executable
 pytesseract.pytesseract.tesseract_cmd = r'C:/Users/yewji/FYP_20297501/server/text_detection/Tesseract-OCR/tesseract.exe'

@@ -1,6 +1,4 @@
 from flask import Flask, request, jsonify, redirect, Response, url_for, send_from_directory, render_template, flash
-from flask_mysqldb import MySQL 
-from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from datetime import datetime
 import numpy as np
@@ -16,6 +14,7 @@ app = Flask(__name__)
 CORS(app)
 
 class_labels = []
+text_detection_results = []
 recipe_list = []
 
 @app.route("/")
@@ -37,6 +36,7 @@ def upload_object_detection():
         print("Images received:", images)
     
         classifications = []
+        global class_labels
 
         for image in images:
             print("Performing object detection on image:", image)
@@ -54,6 +54,9 @@ def upload_object_detection():
         end_time = datetime.now()
         total_time = end_time - start_time
         print("Total time taken:", total_time)
+
+        # Combine results
+        combine_results()
 
         # Return a JSON response with recipes
         return jsonify({'class_labels': class_labels}), 200
@@ -73,27 +76,43 @@ def upload_text_detection():
             image_files = request.files.getlist(key)
             images.extend(image_files)
         print("Images received:", images)
+
+        global text_detection_results
     
         for image in images:
             print("Performing text detection on image:", image)
-            text_detection_results = get_text_detection(image)
             result = get_text_detection(image)
             if isinstance(result, str):
                 print("Error:", result)
                 return jsonify({'error': result}), 400  # Return error response
-            text_detection_results.append(result)
+            print("Text detection results:", result)
 
+            text_detection_results.append(result)
+        print("Text detection results:", text_detection_results)
         # Calculate the total time taken
         end_time = datetime.now()
         total_time = end_time - start_time
         print("Total time taken:", total_time)
 
+        # Combine results 
+        combine_results()
         # Return a JSON response with recipes
         return jsonify({'text_detection_results': text_detection_results}), 200
     except Exception as e:
         print("Error:", str(e))
         return jsonify({'error': 'Internal server error'}), 500
 
+def combine_results():
+    print("object detection results:", class_labels)
+    print("text detection results:", text_detection_results)
+    combined_results = class_labels + text_detection_results
+    print("Combined results:", combined_results)
+
+    global recipe_list
+    # Use combined results as query for recipes
+    recipe_list = get_recipes(combined_results)
+    print("Recipe list:", recipe_list)
+    return recipe_list
 
 @app.route('/upload', methods=['POST'])
 def upload_file():

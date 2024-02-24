@@ -25,7 +25,7 @@ server/object_detection_classification/dataset/train/*
 server/object_detection_classification/dataset/raw_data/*
 
 # do not commit chatbot
-server/chatbot
+server/chatbot_cnn
 
 # do not commit yolov5 images
 server/object_detection_classification/dataset/Detection of ingr v3i/test/*
