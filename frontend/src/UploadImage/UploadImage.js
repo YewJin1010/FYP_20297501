@@ -66,14 +66,16 @@ function UploadImage() {
         return;
     }
 
-    let uploadRoute = mode === 'Object' ? '/upload_object' : '/upload_text';
-
     var formData = new FormData();
     fileObjects.forEach((file, index) => {
       formData.append(`image_${index}`, file);
     });
-    console.log('Form data:', formData.get('image_0'));
-    console.log('Form data:', formData.get('image_1'));
+    
+    let uploadRoute = '/upload_object';
+    if (mode === 'Text') {
+      uploadRoute = '/upload_text';
+    }
+
     try {
       let response = await axios.post(uploadRoute, formData, {
         headers: {
