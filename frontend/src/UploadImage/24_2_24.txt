@@ -3,72 +3,31 @@ import './UploadImage.css';
 import axios from 'axios';
 
 function UploadImage() {
+  const [previewImages, setPreviewImages] = useState([]);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [ingredients, setIngredients] = useState([]);
-  const [previewImagesObject, setPreviewImagesObject] = useState([]);
-  const [previewImagesText, setPreviewImagesText] = useState([]);
-  const [fileObjectsObject, setFileObjectsObject] = useState([]);
-  const [fileObjectsText, setFileObjectsText] = useState([]);
-  const [mode, setMode] = useState('Object');
-
-  // Use a single state for preview images and file objects
-  useEffect(() => {
-    console.log('Mode:', mode);
-  }, [mode]);
-
-  // Reset preview images when mode changes
-  useEffect(() => {
-    if (mode === 'Object') {
-      setPreviewImagesText([]);
-      setFileObjectsText([]);
-  } else {
-      setPreviewImagesObject([]);
-      setFileObjectsObject([]);
-  }
-}, [mode]);
-
-  const handleDetectChange = () => {
-    setMode(mode === 'Object' ? 'Text' : 'Object')
-    console.log('Mode:', mode);
-  }
+  const [fileObjects, setFileObjects] = useState([]);
+  const [mode, setMode] = useState('Object'); 
 
   const handleFileChange = (event) => {
     if (event.target.files) {
-        let files = Array.from(event.target.files);
-        let blobs = files.map(file => URL.createObjectURL(file)); // Convert files to Blobs
-        
-        if (mode === 'Object') {
-            setPreviewImagesObject(prevImages => [...prevImages, ...blobs]);
-            let newFileObjects = files.map(file => new File([file], file.name, { type: file.type })); // Create File objects
-            setFileObjectsObject(prevFileObjects => [...prevFileObjects, ...newFileObjects]);
-            console.log('File objects:', fileObjectsObject);
-        } else {
-            setPreviewImagesText(prevImages => [...prevImages, ...blobs]);
-            let newFileObjects = files.map(file => new File([file], file.name, { type: file.type })); // Create File objects
-            setFileObjectsText(prevFileObjects => [...prevFileObjects, ...newFileObjects]);
-            console.log('File objects:', fileObjectsText);
-        }
+      let files = Array.from(event.target.files);
+      let blobs = files.map(file => URL.createObjectURL(file)); // Convert files to Blobs
+      setPreviewImages(prevImages => [...prevImages, ...blobs]);
+      let newFileObjects = files.map(file => new File([file], file.name, { type: file.type })); // Create File objects
+      setFileObjects(prevFileObjects => [...prevFileObjects, ...newFileObjects]); // Update fileObjects state
+      console.log('File objects:', newFileObjects);
     }
-};
+  };
 
   const handleRemoveImage = (index) => {
-    if (mode === 'Object') {
-      let updatedImages = [...previewImagesObject];
-      updatedImages.splice(index, 1);
-      setPreviewImagesObject(updatedImages);
-
-      let updatedFileObjects = [...fileObjectsObject];
-      updatedFileObjects.splice(index, 1);
-      setFileObjectsObject(updatedFileObjects);
-    } else {
-      let updatedImages = [...previewImagesText];
-      updatedImages.splice(index, 1);
-      setPreviewImagesText(updatedImages);
-
-      let updatedFileObjects = [...fileObjectsText];
-      updatedFileObjects.splice(index, 1);
-      setFileObjectsText(updatedFileObjects);
-    }
+    let updatedImages = [...previewImages];
+    updatedImages.splice(index, 1);
+    setPreviewImages(updatedImages);
+    
+    let updatedFileObjects = [...fileObjects];
+    updatedFileObjects.splice(index, 1);
+    setFileObjects(updatedFileObjects);
   };
 
   const openPopup = () => {
@@ -90,8 +49,16 @@ function UploadImage() {
     setPopupOpen(false);
   }
 
+  const handleDetectChange = () => {
+    setMode(mode === 'Object' ? 'Text' : 'Object')
+    console.log('Mode:', mode);
+  }
+
+  useEffect(() => {
+    console.log('Mode:', mode);
+  }, [mode]);
+
   const submitImages = async () => {
-    /*
     console.log('Submitting images');
     console.log('File objects:', fileObjects); // Check if fileObjects contains data
     if (fileObjects.length === 0) {
@@ -131,9 +98,9 @@ function UploadImage() {
             errorMessage = match[0];
         }
     }
+
     alert(errorMessage); 
     }
-    */
   }
 
   return (
@@ -143,7 +110,7 @@ function UploadImage() {
       <div className="upload">
         <div className="upload-wrapper">
           <div className="upload-img">
-          {(mode === 'Object' ? previewImagesObject : previewImagesText).map((image, index) => (
+            {previewImages.map((image, index) => (
               <div key={index} className="uploaded-img">
                 <img src={image} alt={`Preview ${index}`} />
                 <button type="button" className="remove-btn" onClick={() => handleRemoveImage(index)}>
@@ -154,7 +121,7 @@ function UploadImage() {
           </div>
           <div className="upload-info">
             <p>
-            <span className="upload-info-value">{mode === 'Object' ? previewImagesObject.length : previewImagesText.length}</span> file(s) uploaded.
+              <span className="upload-info-value">{previewImages.length}</span> file(s) uploaded.
             </p>
           </div>
           <div className="upload-area" onClick={() => document.getElementById('upload-input').click()}>

@@ -137,7 +137,7 @@ img{
   width: 200px;
   padding: 20px;
   border-radius: 20px;
-  bottom: 10px;
+  bottom: 200px;
 }
 
 .popup{
@@ -188,17 +188,6 @@ img{
   cursor: pointer;
 }
 
-.submit-btn{
-  position: fixed;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border: 1px solid #888;
-  width: 200px;
-  padding: 20px;
-  border-radius: 20px;
-  bottom: 130px;
-}
-
 .info-btn{
   position: fixed;
   transform: translate(-50%, -50%);
@@ -207,7 +196,18 @@ img{
   width: 200px;
   padding: 20px;
   border-radius: 20px;
-  bottom: 250px;
+  bottom: 400px;
+}
+
+.submit-btn{
+  position: fixed;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #888;
+  width: 200px;
+  padding: 20px;
+  border-radius: 20px;
+  bottom: 300px;
 }
 
 .change-btn{
@@ -218,7 +218,7 @@ img{
   width: 200px;
   padding: 20px;
   border-radius: 20px;
-  bottom: -100px;
+  bottom: 100px;
 }
 
 .openPopup:hover{
