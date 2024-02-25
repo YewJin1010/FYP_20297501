@@ -90,37 +90,55 @@ function UploadImage() {
   }
 
   const submitImages = async () => {
-    /*
+    
     console.log('Submitting images');
-    console.log('File objects:', fileObjects); // Check if fileObjects contains data
-    if (fileObjects.length === 0) {
+    console.log('File objects Object:', fileObjectsObject);
+    console.log('File text Object:', fileObjectsText);
+
+    if (fileObjectsObject.length === 0 && fileObjectsText.length === 0) {
         alert('Please select an image to upload');
         return;
     }
 
-    var formData = new FormData();
-    fileObjects.forEach((file, index) => {
-      formData.append(`image_${index}`, file);
-    });
-    
-    let uploadRoute = '/upload_object';
-    if (mode === 'Text') {
-      uploadRoute = '/upload_text';
-    }
+    try{
+      var formDataObject = new FormData();
+      fileObjectsObject.forEach((file, index) => {
+        formDataObject.append(`image_${index}`, file);
+      });	
 
-    try {
-      let response = await axios.post(uploadRoute, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      var formDataText = new FormData();
+      fileObjectsText.forEach((file, index) => {
+        formDataText.append(`image_${index}`, file);
       });
-      console.log('Response from server:', response);
-      if (response.status === 200) {
-        console.log('Images uploaded successfully');
-        window.location.href = '/chatbot';
+      
+      // Submit object images
+      if (formDataObject && Array.from(formDataObject.keys()).length > 0) {
+          let responseObject = await axios.post('/upload_object', formDataObject, {
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
+          });
+          console.log('Response from server for object images:', responseObject);
+          if (responseObject.status === 200) {
+              console.log('Object images uploaded successfully');
+          }
       }
-    } 
-    catch (error) {
+
+      // Submit text images
+      if (formDataText && Array.from(formDataText.keys()).length > 0) {
+          let responseText = await axios.post('/upload_text', formDataText, {
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
+          });
+          console.log('Response from server for text images:', responseText);
+          if (responseText.status === 200) {
+              console.log('Text images uploaded successfully');
+          }
+      }
+      window.location.href = '/chatbot';
+        
+    } catch (error) {
       console.error(error);
       let errorMessage = "An error occurred";
       if (error.response && error.response.data && error.response.data.error) {
@@ -132,7 +150,7 @@ function UploadImage() {
     }
     alert(errorMessage); 
     }
-    */
+    
   }
 
   return (
