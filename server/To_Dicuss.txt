@@ -2,8 +2,10 @@ Tissa: 22/2/24
 1. Upload image submit: 
     - do not use loading screen, use progress bar
     - freeze buttons during progression
+    - make combine results and generate recipe happen only once, not for everyme object detectio nand text deteciton occur
 
-1.1 Save images uploaded to object and text mode
+
+1.1 Save images uploaded to object and text mode DONE
 
 2. Use sample image as a preview example for the image uploader: 
     - use 1 image upload bin and a button to swap in and out. 

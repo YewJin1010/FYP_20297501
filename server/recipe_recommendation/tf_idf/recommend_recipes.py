@@ -89,7 +89,7 @@ def search_recipes(query, query_ranked=False, recipe_range=(0, 3)):
     return print_recipes(sorted_index, query, recipe_range)
 
 #query = ['cinnamon', 'cream', 'banana']
-def get_recipes(query):
+def query_recipes(query):
     recipe_list = search_recipes(query, query_ranked=True, recipe_range=(0, 3))
     for recipe in recipe_list:
         print('Recipe Rank: {}\t'.format(recipe['rank']), recipe['title'], '\n')

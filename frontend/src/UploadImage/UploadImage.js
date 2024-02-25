@@ -95,6 +95,9 @@ function UploadImage() {
     console.log('File objects Object:', fileObjectsObject);
     console.log('File text Object:', fileObjectsText);
 
+    let object_results = [];
+    let text_results = [];
+
     if (fileObjectsObject.length === 0 && fileObjectsText.length === 0) {
         alert('Please select an image to upload');
         return;
@@ -121,6 +124,8 @@ function UploadImage() {
           console.log('Response from server for object images:', responseObject);
           if (responseObject.status === 200) {
               console.log('Object images uploaded successfully');
+              object_results = responseObject.data.class_labels;
+              console.log('Object results FRONTEND:', object_results);
           }
       }
 
@@ -134,9 +139,27 @@ function UploadImage() {
           console.log('Response from server for text images:', responseText);
           if (responseText.status === 200) {
               console.log('Text images uploaded successfully');
+              text_results = responseText.data.text_detection_results;
+              console.log('Text results FRONTEND:', text_results);
           }
       }
-      window.location.href = '/chatbot';
+
+      // Combine results and send to backend
+    let combined_results = object_results.concat(text_results);
+    console.log('Combined results:', combined_results);
+    
+    try {
+      let response = await axios.post('/get_recipes', combined_results);
+      console.log('Response from get_recipes:', response);
+      if (response.status === 200) {
+          console.log('Recipes received successfully:', response.data);
+          
+      }
+    } catch (error) {
+        console.error('Error getting recipes:', error);
+    }
+
+    window.location.href = '/chatbot';
         
     } catch (error) {
       console.error(error);
