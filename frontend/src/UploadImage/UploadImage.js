@@ -11,27 +11,28 @@ function UploadImage() {
   const [fileObjectsText, setFileObjectsText] = useState([]);
   const [mode, setMode] = useState('Object');
 
-  // Use a single state for preview images and file objects
+  // Log current mode
   useEffect(() => {
-    console.log('Mode:', mode);
+    console.log('Mode1:', mode);
   }, [mode]);
 
-  // Reset preview images when mode changes
+  // Log file objects and preview images
   useEffect(() => {
-    if (mode === 'Object') {
-      setPreviewImagesText([]);
-      setFileObjectsText([]);
-  } else {
-      setPreviewImagesObject([]);
-      setFileObjectsObject([]);
-  }
-}, [mode]);
+      console.log('File objects Object:', fileObjectsObject);
+      console.log('Preview images Object:', previewImagesObject);
+      console.log('Number of images Object:', previewImagesObject.length);
 
+      console.log('File objects Text:', fileObjectsText);
+      console.log('Preview images Text:', previewImagesText);
+      console.log('Number of images Text:', previewImagesText.length);
+  }, [fileObjectsObject, previewImagesObject, fileObjectsText, previewImagesText]);
+
+  // Change detector mode
   const handleDetectChange = () => {
     setMode(mode === 'Object' ? 'Text' : 'Object')
-    console.log('Mode:', mode);
   }
 
+  // Handle file change
   const handleFileChange = (event) => {
     if (event.target.files) {
         let files = Array.from(event.target.files);
@@ -41,14 +42,12 @@ function UploadImage() {
             setPreviewImagesObject(prevImages => [...prevImages, ...blobs]);
             let newFileObjects = files.map(file => new File([file], file.name, { type: file.type })); // Create File objects
             setFileObjectsObject(prevFileObjects => [...prevFileObjects, ...newFileObjects]);
-            console.log('File objects:', fileObjectsObject);
         } else {
             setPreviewImagesText(prevImages => [...prevImages, ...blobs]);
             let newFileObjects = files.map(file => new File([file], file.name, { type: file.type })); // Create File objects
             setFileObjectsText(prevFileObjects => [...prevFileObjects, ...newFileObjects]);
-            console.log('File objects:', fileObjectsText);
         }
-    }
+    } 
 };
 
   const handleRemoveImage = (index) => {
