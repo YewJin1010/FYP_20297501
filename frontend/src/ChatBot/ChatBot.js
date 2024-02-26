@@ -120,7 +120,7 @@ function ChatBot() {
         });
   
       appendMessage("You", userMessage, "user");
-      userInputRef.current.value = "";
+      setInputValue('');
     }
   };
 

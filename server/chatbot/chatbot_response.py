@@ -9,7 +9,7 @@ from keras.models import load_model
 
 
 model = load_model('C:/Users/yewji/FYP_20297501/server/chatbot/model/chatbot_model.h5')
-intents = json.loads(open('C:/Users/yewji/FYP_20297501/server/chatbot/intents.json').read())
+intent_json = json.loads(open('C:/Users/yewji/FYP_20297501/server/chatbot/intents.json').read())
 words = pickle.load(open('C:/Users/yewji/FYP_20297501/server/chatbot/nltk_data/texts.pkl','rb'))
 classes = pickle.load(open('C:/Users/yewji/FYP_20297501/server/chatbot/nltk_data/labels.pkl','rb'))
 
@@ -59,8 +59,10 @@ def get_response(ints, intents_json):
 
 def get_bot_response(msg):
     print("Message: ", msg)
-    ints = predict_class(msg, model)
-    res = get_response(ints, intents)
-    print("Response: ", res)
-    return res
+    intents = predict_class(msg, model)
+    response = get_response(intents, intent_json)
+    print("Intent: ", intents)
+    print("Response: ", response)
+
+    return response, intents
 

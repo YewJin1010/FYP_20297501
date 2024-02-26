@@ -2,13 +2,13 @@ from flask import Flask, request, jsonify, redirect, Response, url_for, send_fro
 from flask_cors import CORS
 from datetime import datetime
 import numpy as np
-import decimal
+import decimal, os, re
 from datetime import datetime
-import os
 from object_detection_classification.object_detection_classification import get_class_list, detect_and_classify
 from text_detection.detect_text import get_text_detection
 from recipe_recommendation.tf_idf.recommend_recipes import query_recipes
 from chatbot.chatbot_response import get_bot_response
+from database.database_ingredients import get_database_ingredients
 
 app = Flask(__name__)
 CORS(app)
@@ -119,11 +119,42 @@ def get_available_ingredients():
     class_list = get_class_list()
     return jsonify({'ingredients': class_list})
 
+def database_ingredients():
+    all_ingredients = get_database_ingredients()
+    return all_ingredients
+
 @app.route("/chatbotresponse", methods=['POST'])
 def get_response():
     userText = request.json.get('msg')
     print("User Text: ", userText)
-    return jsonify({'message': get_bot_response(userText)}) 
+    response, intents = get_bot_response(userText)
+    print("Response: ", response)
+    print("Intents: ", intents)
+
+    if intents[0]['intent'] == 'RequestIngredientRecipe':
+        ingredients_list = get_database_ingredients()
+        found_ingredients = []
+
+        # Split the string into words and remove punctuation
+        words = ''.join(c if c.isalnum() or c.isspace() else ' ' for c in userText).split()
+        print("Words: ", words)
+
+        for ingredient in ingredients_list:
+            # Check if any word from the ingredient list is a substring of any word in the user text
+            if any(ingredient.lower() in word.lower() for word in words):
+                found_ingredients.append(ingredient)
+
+
+        if found_ingredients:
+            print("Found ingredients: ", found_ingredients)
+            recipe_list = query_recipes(found_ingredients)
+            return jsonify({'recipes': recipe_list})
+    
+        else: 
+            response = "Sorry, I didn't catch that. Could you please specify the ingredient you would like to use?"
+            return jsonify({'message': response})
+
+    return jsonify({'message': response}) 
 
 @app.route('/recipe', methods=['GET'])
 def get_recipe_response():    

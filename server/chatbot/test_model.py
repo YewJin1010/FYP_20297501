@@ -8,7 +8,6 @@ model = load_model('C:/Users/yewji/FYP_20297501/server/chatbot/model/chatbot_mod
 import json
 import random
 nltk_data_path = 'C:/Users/yewji/FYP_20297501/server/chatbot/nltk_data'
-nltk.download('popular', download_dir=nltk_data_path)
 intents = json.loads(open('C:/Users/yewji/FYP_20297501/server/chatbot/intents.json').read())
 words = pickle.load(open('C:/Users/yewji/FYP_20297501/server/chatbot/nltk_data/texts.pkl','rb'))
 classes = pickle.load(open('C:/Users/yewji/FYP_20297501/server/chatbot/nltk_data/labels.pkl','rb'))
