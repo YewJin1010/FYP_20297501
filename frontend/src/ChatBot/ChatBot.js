@@ -10,6 +10,7 @@ function getRandomColor() {
 function ChatBot() {
   const [messages, setMessages] = useState([]);
   const userInputRef = useRef(null);
+  const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
     const formatRecipesIntoMessages = (recipes) => {
@@ -50,8 +51,7 @@ function ChatBot() {
         setMessages(newMessages); // Update messages state with new recipe messages
       };
     };
-    
-
+      
     // Function to fetch recipes when component mounts
     const fetchRecipes = async () => {
       try {
@@ -65,8 +65,35 @@ function ChatBot() {
     // Call the function to fetch recipes when component mounts
     fetchRecipes();
   }, []);
-    
 
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === 'Enter') {
+        if (event.shiftKey) {
+          // Handle shift enter behavior
+        } else {
+          sendMessage(); // Call sendMessage directly
+          // clear the input field
+          setInputValue('');
+        }
+      }
+    };
+    userInputRef.current.addEventListener('keypress', handleKeyPress);
+    return () => {
+      userInputRef.current.removeEventListener('keypress', handleKeyPress);
+    }
+  }, []);
+  
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  }
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && event.shiftKey) {
+      event.preventDefault();
+      setInputValue(inputValue + '\n');
+    }
+  }
   const getTime = () => {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
@@ -133,7 +160,15 @@ function ChatBot() {
         ))}
       </div>
       <div className="input-container">
-        <input type="text" ref={userInputRef} placeholder="Type your message..." />
+        <textarea
+          className='user-input' 
+          type="text" 
+          ref={userInputRef} 
+          value = {inputValue}
+          onChange = {handleInputChange}
+          onKeyDown = {handleKeyDown}
+          placeholder="Type your message..." 
+        />
         <button className="send-btn" onClick={sendMessage}>Send</button>
       </div>
     </div>

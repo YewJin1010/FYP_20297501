@@ -99,3 +99,7 @@ input {
   font-weight: bold;
   margin-bottom: 5px;
 }
+
+.user-input{ 
+  width: 100%;
+}

@@ -179,6 +179,12 @@ function UploadImage() {
   return (
     <div className="background">
       <br /><br /><br /><br /><br />
+      <div className="menu" style={{backgroundColor: 'lime', width: '550px', marginLeft: '30px'}}>
+        <div className="menu-container" style={{backgroundColor: 'blue'}}>
+          <p>Input specifications</p>
+          <input type="text" id="fname" name="fname" placeholder="Recipe Name" style={{width: '500px', height: '50px', fontSize: '20px'}}></input>
+        </div>
+      </div>
       <h3 className='mode-text'>{mode} Mode</h3>
       <div className="upload">
         <div className="upload-wrapper">
