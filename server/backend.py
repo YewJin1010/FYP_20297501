@@ -13,8 +13,6 @@ from chatbot.chatbot_response import get_bot_response
 app = Flask(__name__)
 CORS(app)
 
-class_labels = []
-text_detection_results = []
 recipe_list = []
 
 @app.route("/")
@@ -35,7 +33,6 @@ def upload_object_detection():
         print("Images received:", images)
     
         classifications = []
-        global class_labels
 
         for image in images:
             print("Performing object detection on image:", image)
@@ -76,8 +73,6 @@ def upload_text_detection():
             image_files = request.files.getlist(key)
             images.extend(image_files)
         print("Images received:", images)
-
-        global text_detection_results
         results = []
     
         for image in images:

@@ -1,72 +1,101 @@
+To-Do: 
+    1. Progress Bar
+        - make progress bar with text on current step
+        - do not make loading screen 
+        - freeze buttons during progression to prevent excessive button pressing
+
+    2. Split detect mode
+        - Save object mode and text mode preview images DONE
+        - Set a preview image for object and text mode
+        - 
+
+    3. Info button to provide details on how to use
+
+    4. Chatbot
+        - Train chatbot to handle follow up questions  
+        - ingredient list: print ingredient in a list DONE
+            a
+            b
+            c
+        - print directions in numerical DONE
+            1. 
+            2. 
+            3. 
+
+    5. Final Report 
+        - Read interim feedback
+
+    6. Refine models
+
+    7. Keyword input 
+
 Tissa: 22/2/24
-1. Upload image submit: 
-    - do not use loading screen, use progress bar
-    - freeze buttons during progression
-    - make combine results and generate recipe happen only once, not for everyme object detectio nand text deteciton occur
+    1. Upload image submit: 
+        - do not use loading screen, use progress bar
+        - freeze buttons during progression
+        - make combine results and generate recipe happen only once, not for everyme object detectio nand text deteciton occur
 
+    1.1 Save images uploaded to object and text mode DONE
 
-1.1 Save images uploaded to object and text mode DONE
+    2. Use sample image as a preview example for the image uploader: 
+        - use 1 image upload bin and a button to swap in and out. 
 
-2. Use sample image as a preview example for the image uploader: 
-    - use 1 image upload bin and a button to swap in and out. 
+    3. Info button to provide details on how to use
 
-3. Info button to provide details on how to use
+    4. Chatbot: DONE
+        - ingredients list: print ingredients in a list 
+        - A
+        - B
+        - C
 
-4. Chatbot: DONE
-    - ingredients list: print ingredients in a list 
-    - A
-    - B
-    - C
+        - Directions: print numerical DONE
+        - 1.
+        - 2.
+        - 3.
 
-    - Directions: print numerical DONE
-    - 1.
-    - 2.
-    - 3.
+    5. Todo: 
+        - Start writing final report DONE
+        - refine 3 models
+        - train chatbot to handle follow uploads
+        - handle keyword input
 
-5. Todo: 
-    - Start writing final report DONE
-    - refine 3 models
-    - train chatbot to handle follow uploads
-    - handle keyword input
-
-6. Final report: 
-    - read interim feadback
+    6. Final report: 
+        - read interim feadback
 
 =======================================================================================
 High Priority: 
 1. Rewrite aims and goals 
 2. Compete BERT and GPT implementations
 
-
 Tissa: 1/2/24
-1. Object Detection ResNet50 model issues: 
-    - Test on public dataset to compare results and find the issues
-    Update: Successfully trained a ResNet50 model - 8/2/24
+    1. Object Detection ResNet50 model issues: 
+        - Test on public dataset to compare results and find the issues
+        Update: Successfully trained a ResNet50 model - 8/2/24
 
-2. Text Detection: 
-    - Must justify why come to tesseract
-    - What ocr are out there - list top 3 based on articles and narrowed it to tessearct based on results .
-    - Results showed me tesseract is better. 
+    2. Text Detection: 
+        - Must justify why come to tesseract
+        - What ocr are out there - list top 3 based on articles and narrowed it to tessearct based on results .
+        - Results showed me tesseract is better. 
 
-3. Recipe Recommendation: 
-    - Argument wise: why is yours different from the others out there?
-    - other ones are different how. 
-    - Literature review: finding a flaw that contributes to why we do this? 
+    3. Recipe Recommendation: 
+        - Argument wise: why is yours different from the others out there?
+        - other ones are different how. 
+        - Literature review: finding a flaw that contributes to why we do this? 
 
-4. Can the model differentiate sugar and salt 
-    - Update: no it cannot - 8/2/24
+    4. Can the model differentiate sugar and salt 
+        - Update: no it cannot - 8/2/24
 
-5. Language Model Approach: 
-    - Get results by the end of the month.  
-    - Literature review supporting this approach.
+    5. Language Model Approach: 
+        - Get results by the end of the month.  
+        - Literature review supporting this approach.
 
-6. Use of SEGP: 
-    - Cite my segp final report 
-This method was originally presented here but is being used here with modifications 
-In what way modifications 
+    6. Use of SEGP: 
+        - Cite my segp final report 
+    This method was originally presented here but is being used here with modifications 
+    In what way modifications 
 
-7. No need database: 
-    - future work for personalised exper 
+    7. No need database: 
+        - future work for personalised exper 
 
 
 ===========================================================================
