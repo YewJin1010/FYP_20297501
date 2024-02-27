@@ -90,7 +90,8 @@
         "I'm craving [ingredient], any recipe recommendations?",
         "I have [ingredient], what can I make with it?",
         "I want to cook something with [ingredient], any ideas?",
-        "Can you recommend a recipe with [ingredient]?"
+        "Can you recommend a recipe with [ingredient]?",
+        "Recommend a recipe with [ingredient]"
       ],
       "responses": [
         "Sure! Here's a delicious recipe with [ingredient]:",

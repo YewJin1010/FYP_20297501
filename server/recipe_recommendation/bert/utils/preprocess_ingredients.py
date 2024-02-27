@@ -4,7 +4,9 @@ import re
 import ast
 
 # Load the data from a CSV file
-df = pd.read_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/datasets/title_ingredient.csv')
+df = pd.read_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/datasets/cleaned_title_ingredient.csv')
+#title_ingredient
+# processed_title_ingredient
 
 # Define a function that removes the amounts and measurements from an ingredient string
 def remove_amounts(ingredients):
@@ -32,6 +34,14 @@ def remove_amounts(ingredients):
     
     return new_ingredients_list
 
+def replace_or(df): 
+    # Iterate over each cell in the "ingredients" column
+    for index, row in df.iterrows():
+        ingredients = row['ingredients']
+        ingredients = ingredients.replace(" or ", "', '")
+        df.at[index, 'ingredients'] = ingredients
+
+"""
 df['ingredients'] = df['ingredients'].apply(lambda x: ast.literal_eval(x))
 # Apply the function to the 'ingredient' column using the apply() method
 df['ingredient'] = df['ingredients'].apply(lambda x: remove_amounts(x))
@@ -40,6 +50,8 @@ df['ingredient'] = df['ingredients'].apply(lambda x: remove_amounts(x))
 df.drop(columns=['ingredients'], inplace=True)
 # Rename the 'ingredient' column to 'ingredients'
 df.rename(columns={'ingredient': 'ingredients'}, inplace=True)
+"""
 
+replace_or(df)
 # Write the modified DataFrame to the csv file
-df.to_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/datasets/processed_title_ingredient.csv', index=False)
+df.to_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/datasets/cleaned_title_ingredient.csv', index=False)
