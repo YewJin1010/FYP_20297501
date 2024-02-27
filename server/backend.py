@@ -8,7 +8,7 @@ from object_detection_classification.object_detection_classification import get_
 from text_detection.detect_text import get_text_detection
 from recipe_recommendation.tf_idf.recommend_recipes import query_recipes
 from chatbot.chatbot_response import get_bot_response
-from database.database_ingredients import get_database_ingredients
+from database.database_ingredients import extract_ingredients_from_text
 
 app = Flask(__name__)
 CORS(app)
@@ -119,10 +119,6 @@ def get_available_ingredients():
     class_list = get_class_list()
     return jsonify({'ingredients': class_list})
 
-def database_ingredients():
-    all_ingredients = get_database_ingredients()
-    return all_ingredients
-
 @app.route("/chatbotresponse", methods=['POST'])
 def get_response():
     userText = request.json.get('msg')
@@ -132,27 +128,18 @@ def get_response():
     print("Intents: ", intents)
 
     if intents[0]['intent'] == 'RequestIngredientRecipe':
-        ingredients_list = get_database_ingredients()
         found_ingredients = []
+        global recipe_list
 
-        # Split the string into words and remove punctuation
-        words = ''.join(c if c.isalnum() or c.isspace() else ' ' for c in userText).split()
-        print("Words: ", words)
-
-        for ingredient in ingredients_list:
-            # Check if any word from the ingredient list is a substring of any word in the user text
-            if any(ingredient.lower() in word.lower() for word in words):
-                found_ingredients.append(ingredient)
-
-
+        found_ingredients = extract_ingredients_from_text(userText)
+        print("Found ingredients: ", found_ingredients)
         if found_ingredients:
             print("Found ingredients: ", found_ingredients)
             recipe_list = query_recipes(found_ingredients)
             return jsonify({'recipes': recipe_list})
-    
         else: 
             response = "Sorry, I didn't catch that. Could you please specify the ingredient you would like to use?"
-            return jsonify({'message': response})
+            return jsonify({'recipes': response})
 
     return jsonify({'message': response}) 
 

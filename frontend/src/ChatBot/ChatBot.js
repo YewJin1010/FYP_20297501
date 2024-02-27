@@ -12,6 +12,27 @@ function ChatBot() {
   const userInputRef = useRef(null);
   const [inputValue, setInputValue] = useState('');
 
+  const recipeFormat = (recipe, index) => {
+    const ingredientsArray = recipe.ingredients.split(';'); // Split ingredients by semicolon
+    const ingredientsList = ingredientsArray.map((ingredient, idx) => (
+      <p key={`ingredient_${idx}`}>{ingredient.trim()}</p> // Trim whitespace around each ingredient
+    ));
+
+    const splitDirections = recipe.directions.split('.').filter(sentence => sentence.trim() !== ''); // Split directions by '.' and filter out empty sentences
+    const indexedDirections = splitDirections.map((sentence, index) => `${index + 1}. ${sentence.trim()}`); // Add index number to each sentence
+    const numberedDirections = indexedDirections.map((direction, idx) => (
+      <p key={`direction_${idx}`}>{direction}.</p> // Wrap each direction in a paragraph tag to create line break
+    ));
+    const recipeMessage = (
+      <div key={`recipe_${index}`}>
+        <p><strong>Recipe {index + 1}:</strong> {recipe.title}</p>
+        <p><strong>Ingredients:</strong><br />{ingredientsList}</p>
+        <p><strong>Directions:</strong><br />{numberedDirections}</p>
+      </div>
+    );
+    return recipeMessage;
+  }
+
   useEffect(() => {
     const formatRecipesIntoMessages = (recipes) => {
       let newMessages = [...messages]; // Copy existing messages
@@ -28,24 +49,7 @@ function ChatBot() {
         newMessages.push(greetingMessage);
 
         recipes.forEach((recipe, index) => {
-          const ingredientsArray = recipe.ingredients.split(';'); // Split ingredients by semicolon
-          const ingredientsList = ingredientsArray.map((ingredient, idx) => (
-            <p key={`ingredient_${idx}`}>{ingredient.trim()}</p> // Trim whitespace around each ingredient
-          ));
-
-          const splitDirections = recipe.directions.split('.').filter(sentence => sentence.trim() !== ''); // Split directions by '.' and filter out empty sentences
-          const indexedDirections = splitDirections.map((sentence, index) => `${index + 1}. ${sentence.trim()}`); // Add index number to each sentence
-          
-          const numberedDirections = indexedDirections.map((direction, idx) => (
-            <p key={`direction_${idx}`}>{direction}.</p> // Wrap each direction in a paragraph tag to create line break
-          ));
-          const recipeMessage = (
-            <div key={`recipe_${index}`}>
-              <p><strong>Recipe {index + 1}:</strong> {recipe.title}</p>
-              <p><strong>Ingredients:</strong><br />{ingredientsList}</p>
-              <p><strong>Directions:</strong><br />{numberedDirections}</p>
-            </div>
-          );
+          const recipeMessage = recipeFormat(recipe, index);
           newMessages.push({ sender: "Bot", message: recipeMessage, type: "bot", time: getTime() });
         });
         setMessages(newMessages); // Update messages state with new recipe messages
@@ -114,11 +118,32 @@ function ChatBot() {
           console.log('Response from server:', response);
           const botMessage = response.data.message;
           appendMessage("Bot", botMessage, "bot");
-        })
+
+          if (response.data.recipes){
+            const recipes = response.data.recipes;
+            console.log('Recipes:', recipes);
+    
+            let newMessages = [...messages];
+            if (recipes.length > 0) {
+              const greetingMessage = {
+                sender: "Bot",
+                message: <p>Here are some recipes you can try:</p>,
+                type: "bot",
+                time: getTime()
+              };
+              newMessages.push(greetingMessage);
+      
+              recipes.forEach((recipe, index) => {
+                const recipeMessage = recipeFormat(recipe, index);
+                newMessages.push({ sender: "Bot", message: recipeMessage, type: "bot", time: getTime() });
+              });
+              setMessages(newMessages);
+            }
+          }
+        })  
         .catch(error => {
           console.error('Error sending message:', error);
         });
-  
       appendMessage("You", userMessage, "user");
       setInputValue('');
     }
