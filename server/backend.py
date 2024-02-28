@@ -9,6 +9,7 @@ from text_detection.detect_text import get_text_detection
 from recipe_recommendation.tf_idf.recommend_recipes import query_recipes
 from chatbot.chatbot_response import get_bot_response
 from database.database_ingredients import extract_ingredients_from_text
+from spellchecker import SpellChecker 
 
 app = Flask(__name__)
 CORS(app)
@@ -119,10 +120,24 @@ def get_available_ingredients():
     class_list = get_class_list()
     return jsonify({'ingredients': class_list})
 
+def autocorrect_text(text):
+    spell = SpellChecker()
+    misspelled = text.split()
+    corrected_text = []
+    for word in misspelled:
+        corrected_text.append(spell.correction(word))
+
+    print("Original text: ", text)
+    print("Corrected text: ", " ".join(corrected_text))
+    return " ".join(corrected_text)
+
 @app.route("/chatbotresponse", methods=['POST'])
 def get_response():
     userText = request.json.get('msg')
-    print("User Text: ", userText)
+
+    # Autocorrect user input
+    userText = autocorrect_text(userText)
+
     response, intents = get_bot_response(userText)
     print("Response: ", response)
     print("Intents: ", intents)

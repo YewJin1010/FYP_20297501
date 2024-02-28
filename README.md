@@ -35,6 +35,9 @@ Dependencies:
 14. pip install tensorflow-protobuf
 15. pip install transformers
 16. pip install torch
+17. pip install spellchecker
+18. pip install pyspellchecker
+19. pip install gibberish-detector
 
 
 Variable and checkpoint need more space to commit

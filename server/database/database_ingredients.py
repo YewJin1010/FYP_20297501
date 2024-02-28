@@ -1,4 +1,3 @@
-
 import pandas as pd
 
 # Read the CSV file
@@ -54,6 +53,3 @@ def extract_ingredients_from_text(text):
 
     return found_ingredients
 
-string = "can you suggest me a recipe using chocolate and milk"
-ingre = extract_ingredients_from_text(string)
-print(ingre)

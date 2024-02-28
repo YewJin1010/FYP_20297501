@@ -15,17 +15,36 @@ from transformers import BertTokenizer, BertConfig,AdamW, BertForSequenceClassif
 from tqdm import tqdm, trange,tnrange,tqdm_notebook
 from sklearn.metrics import accuracy_score,matthews_corrcoef
 import torch
+from torch.utils.data import Dataset, DataLoader
 
-BATCH_SIZE = 16
-N_EPOCHS = 3
+# Create a custom dataset class
+class CustomDataset(Dataset):
+    def __init__(self, texts, labels, tokenizer, max_length):
+        self.texts = texts
+        self.labels = labels
+        self.tokenizer = tokenizer
+        self.max_length = max_length
 
+    def __len__(self):
+        return len(self.texts)
+
+    def __getitem__(self, idx):
+        text = str(self.texts[idx])
+        label = self.labels[idx]
+        encoding = self.tokenizer(text, truncation=True, padding='max_length', max_length=self.max_length, return_tensors='pt')
+        return {
+            'input_ids': encoding['input_ids'].flatten(),
+            'attention_mask': encoding['attention_mask'].flatten(),
+            'labels': torch.tensor(label, dtype=torch.long)
+        }
+    
 # Load your dataset
-df = pd.read_csv('C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/recipe_recommendation/bert/datasets/title_ingredient.csv')
+df = pd.read_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/datasets/title_ingredient.csv')
 
 print(df['title'].unique())
 
-labelencoder = LabelEncoder()
-df['label_enc'] = labelencoder.fit_transform(df['title'])
+label_encoder = LabelEncoder()
+df['label_enc'] = label_encoder .fit_transform(df['title'])
 
 print(df[['title', 'label_enc']].drop_duplicates(keep='first'))
 
@@ -34,30 +53,24 @@ df.rename(columns={'label_enc':'label'},inplace=True)
 df.rename(columns={'ingredients':'sentence'},inplace=True)
 
 # Split dataset into training and validation sets
-df_train, df_valid = train_test_split(df, test_size=0.2, random_state=42)
+train_df, val_df  = train_test_split(df, test_size=0.2, random_state=42)
 
 # Load pre-trained BERT model and tokenizer
 model_name = 'bert-base-uncased'
 tokenizer = BertTokenizer.from_pretrained(model_name)
-model = BertForSequenceClassification.from_pretrained(model_name, num_labels=len())  # Adjust num_labels
-
-# Tokenize input sentences
-train_encodings = tokenizer(list(df_train['sentence']), truncation=True, padding=True)
-val_encodings = tokenizer(list(df_valid['sentence']), truncation=True, padding=True)
-
-# Convert labels to PyTorch tensors
-train_labels = torch.tensor(list(df_train['label']))
-val_labels = torch.tensor(list(df_valid['label']))
-
-train_dataset = (train_encodings, train_labels)
-val_dataset = (val_encodings, val_labels)
+model = BertForSequenceClassification.from_pretrained(model_name, num_labels=len(label_encoder.classes_))
 
 # Define training parameters
 batch_size = 4
 learning_rate = 2e-5
 num_epochs = 3
+max_length = 128
 
-# Prepare data loaders
+# Create dataset objects
+train_dataset = CustomDataset(train_df['sentence'], train_df['label'], tokenizer, max_length)
+val_dataset = CustomDataset(val_df['sentence'], val_df['label'], tokenizer, max_length)
+
+# Create data loaders
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
@@ -78,18 +91,18 @@ for epoch in range(num_epochs):
         loss.backward()
         optimizer.step()
 
-    # Validation
     model.eval()
-    val_predictions = []
+    all_preds = []
+    all_labels = []
     with torch.no_grad():
         for batch in val_loader:
             input_ids = batch['input_ids']
             attention_mask = batch['attention_mask']
             labels = batch['labels']
             outputs = model(input_ids=input_ids, attention_mask=attention_mask)
-            logits = outputs.logits
-            predictions = torch.argmax(logits, dim=1)
-            val_predictions.extend(predictions.cpu().numpy())
-
-    val_accuracy = accuracy_score(val_labels, val_predictions)
-    print(f'Epoch {epoch + 1}/{num_epochs}, Validation Accuracy: {val_accuracy:.4f}')
+            preds = outputs.logits.argmax(dim=1)
+            all_preds.extend(preds.cpu().numpy())
+            all_labels.extend(labels.cpu().numpy())
+    
+    accuracy = accuracy_score(all_labels, all_preds)
+    print(f'Epoch {epoch + 1}/{num_epochs}, Loss: {loss.item():.4f}, Accuracy: {accuracy:.4f}')
