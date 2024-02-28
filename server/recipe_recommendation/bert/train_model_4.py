@@ -48,7 +48,6 @@ y_train = to_categorical(df_train['title'], num_classes=num_classes_train)
 y_valid = to_categorical(df_valid['title'], num_classes=num_classes_valid)
 
 print(y_train)
-exit()
 
 
 # Tokenize input data
