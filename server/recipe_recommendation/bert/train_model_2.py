@@ -15,7 +15,7 @@ BATCH_SIZE = 16
 N_EPOCHS = 3
 
 # Load your dataset
-df = pd.read_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/datasets/title_ingredient.csv')
+df = pd.read_csv('C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/recipe_recommendation/bert/datasets/title_ingredient.csv')
 
 X = df['ingredients'].values
 y = df['title'].values
@@ -36,7 +36,7 @@ loss = SparseCategoricalCrossentropy(from_logits=True)
 # Compile the model
 model.compile(optimizer=optimizer, loss=loss, metrics=['accuracy'])
 
-model.fit(dataset.shuffle(len(X)).batch(BATCH_SIZE), epochs=N_EPOCHS)
+model.fit((len(X)).batch(BATCH_SIZE), epochs=N_EPOCHS)
 
 # Save the model
-model.save('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/models/distilbert_model')
+model.save('C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/recipe_recommendation/bert/models/distilbert_model')
