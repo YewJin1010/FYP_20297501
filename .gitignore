@@ -5,8 +5,6 @@ server/text_detection/test/model.safetensors
 web_scrapping/
 *.h5
 
-# recipe generation
-server/recipe_generation/nltk_data/*
 
 # do not commit dependencies
 server/venv/*
