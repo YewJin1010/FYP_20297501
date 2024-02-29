@@ -7,7 +7,7 @@ from datetime import datetime
 from object_detection_classification.object_detection_classification import get_class_list, detect_and_classify
 from text_detection.detect_text import get_text_detection
 from recipe_recommendation.tf_idf.recommend_recipes import query_recipes
-from chatbot.preprocess_text import preprocess_text
+from chatbot.preprocess_text import autocorrect_text
 from chatbot.chatbot_response import get_bot_response
 from database.database_ingredients import extract_ingredients_from_text
 
@@ -128,7 +128,7 @@ def get_response():
     userText = request.json.get('msg')
 
     # Autocorrect user input
-    userText = preprocess_text(userText)
+    userText = autocorrect_text(userText)
 
     if userText is None:
         return jsonify({'message': "Sorry, I didn't catch that."})
