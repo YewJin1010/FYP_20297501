@@ -1,10 +1,11 @@
 
-server/text_detection/test/model.safetensors
+model.safetensors
 
 # image dataset
 web_scrapping/
 *.h5
 
+*.model
 
 # do not commit dependencies
 server/venv/*
