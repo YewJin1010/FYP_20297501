@@ -3,9 +3,6 @@ from transformers import BertTokenizer, BertForSequenceClassification
 import pandas as pd
 
 df = pd.read_csv('server/chatbot_bert/dataset.csv')
-df['intent'].value_counts()
-print(df['intent'].value_counts())
-
 possible_labels = df.intent.unique()
 
 label_dict = {}
@@ -16,9 +13,8 @@ for index, possible_label in enumerate(possible_labels):
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=len(label_dict))
 
-
 # Input sentence
-input_sentence = "recommend recipe"
+input_sentence = "recommend me a recipe with chocoalte"
 
 # Preprocess and tokenize the input
 tokenized_input = tokenizer.encode_plus(input_sentence, 

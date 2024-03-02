@@ -17,7 +17,7 @@ for intent in intents_data['intents']:
 csv_path = 'server/chatbot_bert/dataset.csv'
 with open(csv_path, 'w', newline='') as file:
     writer = csv.writer(file)
-    writer.writerow(['sentence', 'intent'])  # Write header
+    writer.writerow(['sentence', 'intent']) 
     for pattern, tag in zip(patterns, tags):
         writer.writerow([pattern, tag])
 

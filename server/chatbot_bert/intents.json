@@ -13,7 +13,11 @@
         "How are you",
         "Is anyone there?",
         "Hello",
-        "Good day"
+        "Good day",
+        "Good morning",
+        "Good afternoon",
+        "Good evening",
+        "Hello there"
       ],
       "responses": [
         "Hey :-)",
@@ -33,7 +37,8 @@
         "bbye",
         "take care",
         "bye for now",
-        "have a good day"
+        "have a good day",
+        "see you soon"
       ],
       "responses": [
         "See you later, thanks for visiting",
@@ -53,14 +58,12 @@
           "What you can do?",
           "What help you provide?",
           "How you can be helpful?",
-          "What support is offered"
+          "What support is offered",
+          "What can you do for me?"
       ],
       "responses": [
           "I can recommend you recipes."
-        ],
-      "context": [
-          ""
-      ]
+        ]
     },
     {
       "tag": "funny",
@@ -72,7 +75,8 @@
         "I want to laugh",
         "I want to hear a joke",
         "I want to hear something funny",
-        "Make me laugh"
+        "Make me laugh",
+        "I need a laugh"
       ],
       "responses": [
         "Why did the hipster burn his mouth? He drank the coffee before it was cool.",
@@ -117,7 +121,8 @@
             "lol",
             "rofl",
             "lmao",
-            "thats funny"
+            "thats funny",
+            "funny"
         ],
         "responses": [
             "Glad I could make you laugh !"
@@ -139,12 +144,39 @@
         "patterns": [
             "you are dumb",
             "shut up",
-            "idiot"
+            "idiot",
+            "you are stupid",
+            "you are a fool",
+            "you are a moron"            
         ],
         "responses": [
             "Well that hurts :("
         ]
     },
+    {
+      "tag": "activity",
+      "patterns": [
+          "what are you doing",
+          "what are you up to"
+      ],
+      "responses": [
+          "Talking to you, of course!"
+      ]
+    },
+    {
+      "tag": "exclaim",
+      "patterns": [
+          "Awesome",
+          "Great",
+          "I know",
+          "ok",
+          "yeah"
+      ],
+      "responses": [
+          "Yeah!"
+      ]
+  },
+
     {
       "tag": "RequestIngredientRecipe",
       "patterns": [

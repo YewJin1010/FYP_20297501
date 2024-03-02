@@ -4,11 +4,20 @@
       "tag": "greeting",
       "patterns": [
         "Hi",
+        "Hi there",
         "Hey",
+        "Hola",
+        "Good day",
+        "Namaste",
+        "yo",
         "How are you",
         "Is anyone there?",
         "Hello",
-        "Good day"
+        "Good day",
+        "Good morning",
+        "Good afternoon",
+        "Good evening",
+        "Hello there"
       ],
       "responses": [
         "Hey :-)",
@@ -19,7 +28,18 @@
     },
     {
       "tag": "goodbye",
-      "patterns": ["Bye", "See you later", "Goodbye"],
+      "patterns": [
+        "Bye", 
+        "See you later", 
+        "Goodbye",
+        "Nice chatting to you, bye",
+        "Till next time",
+        "bbye",
+        "take care",
+        "bye for now",
+        "have a good day",
+        "see you soon"
+      ],
       "responses": [
         "See you later, thanks for visiting",
         "Have a nice day",
@@ -28,7 +48,7 @@
     },
     {
       "tag": "thanks",
-      "patterns": ["Thanks", "Thank you", "That's helpful", "Thank's a lot!"],
+      "patterns": ["Thanks", "Thank you", "That's helpful", "Thank's a lot!", "Thank you very much", "Thanks for helping me", "Thanks for the help"],
       "responses": ["Happy to help!", "Any time!", "My pleasure"]
     },
     {
@@ -38,14 +58,12 @@
           "What you can do?",
           "What help you provide?",
           "How you can be helpful?",
-          "What support is offered"
+          "What support is offered",
+          "What can you do for me?"
       ],
       "responses": [
           "I can recommend you recipes."
-        ],
-      "context": [
-          ""
-      ]
+        ]
     },
     {
       "tag": "funny",
@@ -57,7 +75,8 @@
         "I want to laugh",
         "I want to hear a joke",
         "I want to hear something funny",
-        "Make me laugh"
+        "Make me laugh",
+        "I need a laugh"
       ],
       "responses": [
         "Why did the hipster burn his mouth? He drank the coffee before it was cool.",
@@ -84,6 +103,81 @@
       ]
     },
     {
+      "tag": "whatsup",
+      "patterns": [
+          "Whats up",
+          "Wazzup",
+          "How are you",
+          "sup","How you doing"
+      ],
+      "responses": [
+          "All good..What about you?"
+      ]
+    },
+    {
+        "tag": "haha",
+        "patterns": [
+            "haha",
+            "lol",
+            "rofl",
+            "lmao",
+            "thats funny",
+            "funny"
+        ],
+        "responses": [
+            "Glad I could make you laugh !"
+        ]
+    },
+    {
+        "tag": "programmer",
+        "patterns": [
+            "Who made you",
+            "who designed you",
+            "who programmed you"
+        ],
+        "responses": [
+            "I was made by Yew Jin."
+        ]
+    },
+    {
+        "tag": "insult",
+        "patterns": [
+            "you are dumb",
+            "shut up",
+            "idiot",
+            "you are stupid",
+            "you are a fool",
+            "you are a moron"            
+        ],
+        "responses": [
+            "Well that hurts :("
+        ]
+    },
+    {
+      "tag": "activity",
+      "patterns": [
+          "what are you doing",
+          "what are you up to"
+      ],
+      "responses": [
+          "Talking to you, of course!"
+      ]
+    },
+    {
+      "tag": "exclaim",
+      "patterns": [
+          "Awesome",
+          "Great",
+          "I know",
+          "ok",
+          "yeah"
+      ],
+      "responses": [
+          "Yeah!"
+      ]
+  },
+
+    {
       "tag": "RequestIngredientRecipe",
       "patterns": [
         "Can you suggest a recipe with [ingredient]?", 
@@ -91,7 +185,11 @@
         "I have [ingredient], what can I make with it?",
         "I want to cook something with [ingredient], any ideas?",
         "Can you recommend a recipe with [ingredient]?",
-        "Recommend a recipe with [ingredient]"
+        "Recommend a recipe with [ingredient]",
+        "I want to cook something with [ingredient]",
+        "I have [ingredient], what can I make with it?",
+        "I want to cook something with [ingredient], any ideas?",
+        "Can you suggest a recipe with [ingredient]?"
       ],
       "responses": [
         "Sure! Here's a delicious recipe with [ingredient]:",
