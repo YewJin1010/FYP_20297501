@@ -189,7 +189,9 @@
         "I want to cook something with [ingredient]",
         "I have [ingredient], what can I make with it?",
         "I want to cook something with [ingredient], any ideas?",
-        "Can you suggest a recipe with [ingredient]?"
+        "Can you suggest a recipe with [ingredient]?",
+        "Recommend a recipe with [ingredient]",
+        "Give me a recipe with [ingredient]"
       ],
       "responses": [
         "Sure! Here's a delicious recipe with [ingredient]:",
