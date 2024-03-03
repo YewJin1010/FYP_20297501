@@ -10,7 +10,7 @@ function UploadImage() {
   const [fileObjectsObject, setFileObjectsObject] = useState([]);
   const [fileObjectsText, setFileObjectsText] = useState([]);
   const [mode, setMode] = useState('Object');
-
+ 
   // Log current mode
   useEffect(() => {
     console.log('Mode1:', mode);
@@ -89,8 +89,12 @@ function UploadImage() {
     setPopupOpen(false);
   }
 
+  
   const submitImages = async () => {
-    
+
+    const progressBar = document.querySelector('.progress-bar');
+    progressBar.style.width = '0%';
+
     console.log('Submitting images');
     console.log('File objects Object:', fileObjectsObject);
     console.log('File text Object:', fileObjectsText);
@@ -102,13 +106,13 @@ function UploadImage() {
         alert('Please select an image to upload');
         return;
     }
-
+ 
     try{
       var formDataObject = new FormData();
       fileObjectsObject.forEach((file, index) => {
         formDataObject.append(`image_${index}`, file);
       });	
-
+      progressBar.style.width = '20%';
       var formDataText = new FormData();
       fileObjectsText.forEach((file, index) => {
         formDataText.append(`image_${index}`, file);
@@ -126,6 +130,7 @@ function UploadImage() {
               console.log('Object images uploaded successfully');
               object_results = responseObject.data.class_labels;
               console.log('Object results FRONTEND:', object_results);
+              
           }
       }
 
@@ -141,12 +146,14 @@ function UploadImage() {
               console.log('Text images uploaded successfully');
               text_results = responseText.data.text_detection_results;
               console.log('Text results FRONTEND:', text_results);
+              
           }
       }
 
       // Combine results and send to backend
     let combined_results = object_results.concat(text_results);
     console.log('Combined results:', combined_results);
+    
     
     try {
       let response = await axios.post('/get_recipes', combined_results);
@@ -158,8 +165,8 @@ function UploadImage() {
     } catch (error) {
         console.error('Error getting recipes:', error);
     }
-
-    window.location.href = '/chatbot';
+    
+    //window.location.href = '/chatbot';
         
     } catch (error) {
       console.error(error);
@@ -173,17 +180,14 @@ function UploadImage() {
     }
     alert(errorMessage); 
     }
-    
   }
 
   return (
     <div className="background">
       <br /><br /><br /><br /><br />
-      <div className="menu" style={{backgroundColor: 'lime', width: '550px', marginLeft: '30px'}}>
-        <div className="menu-container" style={{backgroundColor: 'blue'}}>
-          <p>Input specifications</p>
-          <input type="text" id="fname" name="fname" placeholder="Recipe Name" style={{width: '500px', height: '50px', fontSize: '20px'}}></input>
-        </div>
+      
+      <div class="progress">
+          <div class="progress-bar" role="progressbar" style={{ width: '0%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
       <h3 className='mode-text'>{mode} Mode</h3>
       <div className="upload">
@@ -229,7 +233,7 @@ function UploadImage() {
               </div>
             )}    
         </div>
-        <button className="submit-btn" onClick={submitImages}>Submit</button>
+        <button className="submit-btn" onClick={submitImages}>Submit</button>       
         <button className="info-btn">Info</button>   
         <button className='change-btn' onClick={handleDetectChange}>Change Detector</button>
         </div>
