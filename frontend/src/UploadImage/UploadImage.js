@@ -117,12 +117,12 @@ function UploadImage() {
       fileObjectsObject.forEach((file, index) => {
         formDataObject.append(`image_${index}`, file);
       });	
-      progressBar.style.width = '20%';
+    
       var formDataText = new FormData();
       fileObjectsText.forEach((file, index) => {
         formDataText.append(`image_${index}`, file);
       });
-      
+      progressBar.style.width = '10%';
       // Submit object images
       if (formDataObject && Array.from(formDataObject.keys()).length > 0) {
           let responseObject = await axios.post('/upload_object', formDataObject, {
@@ -135,7 +135,7 @@ function UploadImage() {
               console.log('Object images uploaded successfully');
               object_results = responseObject.data.class_labels;
               console.log('Object results FRONTEND:', object_results);
-              
+              progressBar.style.width = '40%';
           }
       }
 
@@ -151,26 +151,26 @@ function UploadImage() {
               console.log('Text images uploaded successfully');
               text_results = responseText.data.text_detection_results;
               console.log('Text results FRONTEND:', text_results);
-              
+              progressBar.style.width = '60%';
           }
       }
 
       // Combine results and send to backend
     let combined_results = object_results.concat(text_results);
     console.log('Combined results:', combined_results);
-    
+    progressBar.style.width = '80%';
     
     try {
       let response = await axios.post('/get_recipes', combined_results);
       console.log('Response from get_recipes:', response);
       if (response.status === 200) {
           console.log('Recipes received successfully:', response.data);
-          
+          progressBar.style.width = '90%';
       }
     } catch (error) {
         console.error('Error getting recipes:', error);
     }
-    
+    progressBar.style.width = '100%';
     //window.location.href = '/chatbot';
         
     } catch (error) {
