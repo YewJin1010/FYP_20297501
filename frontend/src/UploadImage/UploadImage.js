@@ -10,6 +10,7 @@ function UploadImage() {
   const [fileObjectsObject, setFileObjectsObject] = useState([]);
   const [fileObjectsText, setFileObjectsText] = useState([]);
   const [mode, setMode] = useState('Object');
+  const [showProgressBar, setShowProgressBar] = useState(false);
  
   // Log current mode
   useEffect(() => {
@@ -91,7 +92,7 @@ function UploadImage() {
 
   
   const submitImages = async () => {
-
+    setShowProgressBar(true);
     const progressBar = document.querySelector('.progress-bar');
     progressBar.style.width = '0%';
 
@@ -186,7 +187,7 @@ function UploadImage() {
     <div className="background">
       <br /><br /><br /><br /><br />
       
-      <div class="progress">
+      <div class="progress" id="progressBar" style={{ visibility: showProgressBar ? 'visible' : 'hidden' }}>
           <div class="progress-bar" role="progressbar" style={{ width: '0%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
       <h3 className='mode-text'>{mode} Mode</h3>
