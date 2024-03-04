@@ -2,12 +2,11 @@ To-Do:
     1. Progress Bar
         - make progress bar with text on current step
         - do not make loading screen 
-        - freeze buttons during progression to prevent excessive button pressing
+        - freeze buttons during progression to prevent excessive button pressing DONE
 
     2. Split detect mode
         - Save object mode and text mode preview images DONE
         - Set a preview image for object and text mode
-        - 
 
     3. Info button to provide details on how to use
 

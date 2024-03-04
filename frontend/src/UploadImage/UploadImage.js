@@ -186,62 +186,63 @@ function UploadImage() {
     alert(errorMessage); 
     }
   }
-
   return (
     <div>
       <div class="progress" id="progressBar" style={{ visibility: showProgressBar ? 'visible' : 'hidden' }}>
-          <div class="progress-bar" role="progressbar" style={{ width: '0%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="progress-bar" role="progressbar" style={{ width: '0%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
       <div className="background" style={{ opacity: backgroundOpacity }}>
-        <br /><br /><br /><br /><br />
-        <h3 className='mode-text'>{mode} Mode</h3>
-        <div className="upload">
-          <div className="upload-wrapper">
-            <div className="upload-img">
-            {(mode === 'Object' ? previewImagesObject : previewImagesText).map((image, index) => (
-                <div key={index} className="uploaded-img">
-                  <img src={image} alt={`Preview ${index}`} />
-                  <button type="button" className="remove-btn" onClick={() => handleRemoveImage(index)}>
-                    <b className='remove-btn-text'>x</b>
-                  </button>
-                </div>
-              ))}
-            </div>
-            <div className="upload-info">
-              <p>
-              <span className="upload-info-value">{mode === 'Object' ? previewImagesObject.length : previewImagesText.length}</span> file(s) uploaded.
-              </p>
-            </div>
-            <div className="upload-area" onClick={() => document.getElementById('upload-input').click()}>
-              <div className="upload-area-img">
-                <img src="assets/upload.png" alt="upload icon" />
+        <br /><br /><br />
+        <div className="gui-bg">
+          <h3 className='mode-text'>{mode} Mode</h3>
+          <div className="upload">
+            <div className="upload-wrapper">
+              <div className="upload-img">
+                {(mode === 'Object' ? previewImagesObject : previewImagesText).map((image, index) => (
+                    <div key={index} className="uploaded-img">
+                      <img src={image} alt={`Preview ${index}`} />
+                      <button type="button" className="remove-btn" onClick={() => handleRemoveImage(index)}>
+                        <b className='remove-btn-text'>x</b>
+                      </button>
+                    </div>
+                  ))}
               </div>
-              <p className="upload-area-text">Select images</p>
-            </div >
-            <input type="file" className="visually-hidden" id="upload-input" multiple onChange={handleFileChange} disabled={buttonsDisabled}/>
+              <div className="upload-info">
+                <p>
+                  <span className="upload-info-value">{mode === 'Object' ? previewImagesObject.length : previewImagesText.length}</span> file(s) uploaded.
+                </p>
+              </div>
+              <div className="upload-area" onClick={() => document.getElementById('upload-input').click()}>
+                <div className="upload-area-img">
+                  <img src="assets/upload.png" alt="upload icon" />
+                </div>
+                <p className="upload-area-text">Select images</p>
+              </div >
+              <input type="file" className="visually-hidden" id="upload-input" multiple onChange={handleFileChange} disabled={buttonsDisabled}/>
+            </div>
+          </div>
+          <div className="action-btns">
+            <div className="popup-container">
+              <button className='openPopup' onClick={openPopup} disabled={buttonsDisabled}>Available Ingredients</button>
+                {isPopupOpen && (
+                  <div id="popup" className="popup">
+                    <div className="popup-content">
+                      <span className="close" onClick={closePopup}>&times;</span>
+                      <p className='ingre-title'>Ingredients available <br></br>for detection:</p>
+                      <ul className='ingre-items'>
+                        {ingredients.map((ingredient, index) => (
+                          <li key={index}>{ingredient}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}    
+            </div>
+            <button className="submit-btn" onClick={submitImages} disabled={buttonsDisabled}>Submit</button>       
+            <button className="info-btn" disabled={buttonsDisabled}>Info</button>   
+            <button className='change-btn' onClick={handleDetectChange} disabled={buttonsDisabled}>Change Detector</button>
           </div>
         </div>
-        <div className="action-buttons">
-          <div className="popup-container">
-            <button className='openPopup' onClick={openPopup} disabled={buttonsDisabled}>Available Ingredients</button>
-              {isPopupOpen && (
-                <div id="popup" className="popup">
-                  <div className="popup-content">
-                    <span className="close" onClick={closePopup}>&times;</span>
-                    <p className='ingre-title'>Ingredients available <br></br>for detection:</p>
-                    <ul className='ingre-items'>
-                      {ingredients.map((ingredient, index) => (
-                        <li key={index}>{ingredient}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )}    
-          </div>
-          <button className="submit-btn" onClick={submitImages} disabled={buttonsDisabled}>Submit</button>       
-          <button className="info-btn" disabled={buttonsDisabled}>Info</button>   
-          <button className='change-btn' onClick={handleDetectChange} disabled={buttonsDisabled}>Change Detector</button>
-          </div>
       </div>
     </div>
   );

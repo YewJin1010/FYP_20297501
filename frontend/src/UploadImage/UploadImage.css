@@ -6,13 +6,13 @@ img{
   background-color: white;
   border-radius: 10px;
   box-shadow: rgb(21, 68, 183) 0px 8px 24px;
-  width: 340px;
+  width: 360px;
   min-height: 360px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  margin-left: 40%;
+  margin-left: 15%;
 }
 .upload-info p{
   opacity: 0.6;
@@ -122,12 +122,6 @@ img{
   background-color: black;
 }
 
-.action-buttons {
-  position: absolute;
-  padding-bottom: 20px;
-  left: 80%;
-  transform: translateY(-50%);
-}
 
 .openPopup {
   position: fixed;
@@ -188,14 +182,22 @@ img{
   cursor: pointer;
 }
 
+.action-btns{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40%;
+  margin-left: 55%;
+  max-height: fit-content;
+  
+}
 .info-btn{
   position: fixed;
-  transform: translate(-50%, -50%);
   background-color: white;
   border: 1px solid #888;
   width: 200px;
   padding: 20px;
   border-radius: 20px;
+  transform: translate(-50%, -50%);
   bottom: 400px;
 }
 
@@ -243,6 +245,15 @@ img{
 
 .mode-text{
   color: white;
-  text-align: center;
+  margin-left: 20%;
 }
 
+.gui-bg{
+  background-color: black;
+  border-radius: 20px;
+  margin-left: 5%;
+  margin-right: 5%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  max-height: fit-content;
+}
