@@ -1,46 +1,61 @@
-# Test the model
 import numpy as np
 import pandas as pd
 from keras.models import load_model
-from sklearn.preprocessing import LabelEncoder
 
-model = load_model('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/neural_network/trained_models/model.h5') 
+# Recipe df
+recipes_df = pd.read_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/neural_network/csv/recipes.csv')
 
-csv = 'C:/Users/yewji/FYP_20297501/server/recipe_recommendation/neural_network/csv/dataset.csv'
-df = pd.read_csv(csv)
+# Load the trained model
+model = load_model('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/neural_network/trained_models/model.h5')
 
-# Split the data into features and labels
-x = df.iloc[:, 1:]
-y = df.iloc[:, 0]
+# Read label map
+label_map_path = 'C:/Users/yewji/FYP_20297501/server/recipe_recommendation/neural_network/label_map.txt'
+label_map = {}
 
-X_train, X_val, y_train, y_val = train_test_split(x, y, test_size=0.2, random_state=42)
+# class list
+class_list = ['almonds', 'apple', 'apricots', 'avocado', 'baking_soda', 'banana', 'bell_pepper', 'blueberry', 'brown_sugar', 'butter', 'carrot', 'cashews', 'cheese', 'cherries', 'chestnuts', 'chickpeas', 'cinnamon', 'corn', 'dates', 'dried_currant', 'dried_figs', 'egg', 'flour', 'garlic', 'ginger', 'grapefruit', 'grapes', 'hazelnut', 'kiwi', 'lemon', 'lettuce', 'lime', 'macadamia', 'mandarin', 'mango', 'milk', 'mozzarella', 'oats', 'oil', 'onion', 'orange', 'papaya', 'paprika', 'peanuts', 'pear', 'pecan', 'pineapple', 'pistachio', 'plums', 'pomegranate', 'potato', 'pumpkin', 'raspberries', 'rice', 'rice_flour', 'salt', 'semolina', 'strawberry', 'sweet_potato', 'tomato', 'turnip', 'walnut', 'watermelon', 'wheat_flour', 'white_sugar', 'yogurt']
 
-# Label encode the labels
-encoder = LabelEncoder()
-y = encoder.fit_transform(y)
+def read_label_map(label_map_path, label_map):
+    with open(label_map_path, 'r') as file:
+        for line in file:
+            parts = line.split(':')
+            recipe_name = parts[0].strip()
+            recipe_index = int(parts[1].strip())
+            label_map[recipe_index] = recipe_name
+    return label_map
 
-
-
-# Preprocess new ingredients
-def preprocess_new_ingredients(ingredients):
-    # Create an empty array with the same shape as X_train (assuming X_train is your training data)
-    new_ingredient_array = np.zeros((1, X_train.shape[1]))
-    
-    # Iterate through the new ingredients
+def ingredient_to_vector(ingredients, class_list):
+    vector = np.zeros(len(class_list))
     for ingredient in ingredients:
-        if ingredient in ingredient_to_index:
-            # Get the index of the ingredient
-            index = ingredient_to_index[ingredient]
-            # Set the corresponding column in new_ingredient_array to 1
-            new_ingredient_array[0, index] = 1
-            
-    return new_ingredient_array
+        if ingredient in class_list:
+            vector[class_list.index(ingredient)] = 1
+    return vector
 
-# Predict recipe title for a new set of ingredients
-new_ingredients = ['butter, flour, sugar, eggs, milk, vanilla extract, baking powder, salt']
-new_ingredients = new_ingredients.to_numpy()
+def predict_recipe(new_ingredients, label_map):
 
-predicted_title_index = np.argmax(model.predict(new_ingredients))
-predicted_title = len(y)[predicted_title_index]
+    input_vector = ingredient_to_vector(new_ingredients, class_list)
+    input_vector = input_vector.reshape(1, -1)  
 
-print(f"Predicted recipe title: {predicted_title}")
+    # Now you can pass new_input to the model for prediction
+    predicted_index = np.argmax(model.predict(input_vector))
+
+    # Map predicted index to recipe title
+    predicted_recipe = label_map[predicted_index]
+
+    return predicted_recipe
+
+# Get ingredients from recipe
+def get_ingredients(recipe_title, recipes_df):
+    row_index = recipes_df[recipes_df['title'] == recipe_title].index[0]
+    ingredients = recipes_df.loc[row_index, 'ingredients']
+    ingredients_list = [ingredient.strip() for ingredient in ingredients.split(',')]
+    return ingredients_list
+
+label_map = read_label_map(label_map_path, label_map)
+ingredients = ['milk', 'banana', 'apple']
+predicted_recipe = predict_recipe(ingredients, label_map)
+print(f"Predicted Recipe: {predicted_recipe}")
+ingredients_str = get_ingredients(predicted_recipe, recipes_df)
+# line break by , 
+ingredients_str = ", ".join(ingredients_str)
+print(f"Ingredients: {ingredients_str}")
