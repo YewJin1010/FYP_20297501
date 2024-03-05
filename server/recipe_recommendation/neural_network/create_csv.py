@@ -1,7 +1,6 @@
 import pandas as pd
 import os
 
-
 def create_csv(csv_directory, class_list):
     # Replace _ with space
     class_list = [class_.replace('_', ' ') for class_ in class_list]
