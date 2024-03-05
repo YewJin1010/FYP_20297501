@@ -13,17 +13,32 @@ df = pd.read_csv(csv)
 x = df.iloc[:, 1:]
 y = df.iloc[:, 0]
 
+X_train, X_val, y_train, y_val = train_test_split(x, y, test_size=0.2, random_state=42)
+
 # Label encode the labels
 encoder = LabelEncoder()
 y = encoder.fit_transform(y)
 
-# convert ingredients to numpy array
-X = x.to_numpy()
+
+
+# Preprocess new ingredients
+def preprocess_new_ingredients(ingredients):
+    # Create an empty array with the same shape as X_train (assuming X_train is your training data)
+    new_ingredient_array = np.zeros((1, X_train.shape[1]))
+    
+    # Iterate through the new ingredients
+    for ingredient in ingredients:
+        if ingredient in ingredient_to_index:
+            # Get the index of the ingredient
+            index = ingredient_to_index[ingredient]
+            # Set the corresponding column in new_ingredient_array to 1
+            new_ingredient_array[0, index] = 1
+            
+    return new_ingredient_array
 
 # Predict recipe title for a new set of ingredients
 new_ingredients = ['butter, flour, sugar, eggs, milk, vanilla extract, baking powder, salt']
-new_ingredients = np.array(new_ingredients)
-
+new_ingredients = new_ingredients.to_numpy()
 
 predicted_title_index = np.argmax(model.predict(new_ingredients))
 predicted_title = len(y)[predicted_title_index]
