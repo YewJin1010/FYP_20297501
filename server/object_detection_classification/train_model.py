@@ -103,19 +103,19 @@ def evaluate_model(model, test_generator):
     print("The best accuracy is: ", test_acc * 100)
 
 # Read CSVs
-train_data = read_csv('C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection/dataset/train/_classes.csv')
-valid_data = read_csv('C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection/dataset/valid/_classes.csv')
+train_data = read_csv('C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection_classification/dataset/train/_classes.csv')
+valid_data = read_csv('C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection_classification/dataset/valid/_classes.csv')
 
 # Directory Paths
-train_dir = "C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection/dataset/train"
-valid_dir = "C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection/dataset/valid"
+train_dir = "C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection_classification/dataset/train"
+valid_dir = "C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection_classification/dataset/valid"
 
 # Model Save Path
-model_save_path = "C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection/trained_models"
-checkpoint_save_path = "C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection/trained_models/checkpoints"
+model_save_path = "C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection_classification/trained_models"
+checkpoint_save_path = "C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection_classification/trained_models/checkpoints"
 
 # Results Path
-plot_path = "C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection/results/training_plots"
+plot_path = "C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection_classification/results/training_plots"
 
 # User input for number of training epochs
 train_epochs = int(input("Enter the number of training epochs: "))
