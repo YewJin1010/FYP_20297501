@@ -7,7 +7,7 @@ import os
 import numpy as np
 
 # Load the dataset
-df = pd.read_csv("C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/ingredients_to_title.csv")
+df = pd.read_csv("C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/temp/ingredients_to_title.csv")
 
 # Get the classes (ingredients)
 classes = df.columns[1:].tolist()  # Exclude the 'title' column
@@ -20,8 +20,7 @@ tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=num_classes)
 
 # Preprocess the data
-def preprocess_data(csv_path):
-    df = pd.read_csv(csv_path)
+def preprocess_data(df):
     features = df['title'].tolist()
     # Convert one-hot encoded labels to numpy array
     labels = df.drop(columns=['title']).values.astype(np.float32)
@@ -75,7 +74,7 @@ def train_model(model, train_dataloader, val_dataloader, optimizer, scheduler, e
         print(f"Epoch {epoch + 1}/{epochs}, Avg Train Loss: {avg_train_loss}, Avg Val Loss: {avg_val_loss}")
 
 # Preprocess the data
-features, labels = preprocess_data("C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/ingredients_to_title.csv")
+features, labels = preprocess_data(df)
 
 # Tokenize and encode the input data
 dataset = tokenize_and_encode(features, labels)

@@ -30,7 +30,7 @@ def get_top_k_predictions(probabilities, titles, k=5):
     return top_k_titles, top_k_probabilities[0]
 
 # Load the dataset
-df = pd.read_csv("C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/ingredients_to_title.csv")
+df = pd.read_csv("C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/temp/ingredients_to_title.csv")
 # Extract the titles column from the DataFrame
 titles = df['title'].tolist()
 
