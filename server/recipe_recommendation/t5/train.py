@@ -39,27 +39,7 @@ target_encoding = tokenizer(
 labels = target_encoding.input_ids
 labels[labels == tokenizer.pad_token_id] = -100
 
+# Train model
 loss = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels).loss
 print(loss.item())
 
-exit()
-
-
-# Tokenize ingredients as input ids
-input_ids_list = []
-for index, row in df.iterrows():
-    ingredients = str(row['ingredients'])
-    input_ids = tokenizer(ingredients, return_tensors="pt", padding=True, truncation=True).input_ids
-    input_ids_list.append(input_ids)
-
-labels_list = []
-for index, row in df.iterrows():
-    title_directions = str(row['title_directions'])
-    labels = tokenizer(title_directions, return_tensors="pt", padding=True, truncation=True).input_ids
-    labels_list.append(labels)
-
-loss = model(input_ids=input_ids_list, labels=labels_list).loss
-print(loss.item())
-
-# save model
-model.save_pretrained("server/recipe_recommendation/t5/model")
