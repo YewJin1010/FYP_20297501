@@ -1,4 +1,60 @@
-To-Do: 
+7/3/2024: 
+- Focus on refining
+- Question: how does it fare with similar apps out there? 
+
+Object Detection: 
+- Lit review for whats out there and how it was modified for the current problem to show contribution.
+- Arugments: 
+    - Dataset
+    - implementation    
+        - Did you focus on other parameters? 
+        - Parameters have to start form somewhere (give lit review) - Models, layers etc
+        - How was it fine tuned 
+- Considered the use of VIT- visual transformer but it was only introduced late last year
+
+Text Detection: 
+- Write function to make TrOCR work for show weakness and prove it
+
+Chatbot: 
+- Find comparison of expressions or syntax:
+- Measure relevance 
+- Try language models
+
+Recipe Recommendation: 
+- Approaches and lit review for parameters 
+- Summarise why it doenst work 
+- Relevance 
+
+Final Report: 
+- For comparing, top 3 and narrow down
+
+- Introduction: 
+    - Whats out there
+    - Narrow down dataset baking
+- Lit Review:
+    - Detail
+    - Compare approaches 
+- Implementations 
+    - Implementations that didnt work
+- Results: 
+    - Decision tree for chatbot
+    - the one chosen from lit reviews
+    
+
+To-Do:
+chatbot: 
+- tf-idf tokenizer
+- naive bayes classificaiton 
+
+
+Object detection: 
+- resnet50
+- mobilenet etc
+
+text detection: 
+confuction matrix as a parameter
+
+
     1. Progress Bar
         - make progress bar with text on current step
         - do not make loading screen 
