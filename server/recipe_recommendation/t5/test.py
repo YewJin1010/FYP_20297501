@@ -9,12 +9,25 @@ tokenizer = T5Tokenizer.from_pretrained(tokenizer_path)
 
 input_prompt = "1 cup of flour, 2 eggs, 1 cup of milk"
 
+input_list = [input_prompt]
+
 # Tokenize input prompt
-input_ids = tokenizer(input_prompt, return_tensors="pt").input_ids
+inputs = tokenizer(
+    input_list, 
+    return_tensors="pt", 
+    max_length=512,
+    padding="longest", 
+    truncation=True
+    )
 
 # Generate text using the loaded model
-output = model.generate(input_ids)
+output = model.generate(
+    input_ids = inputs["input_ids"], 
+    attention_mask = inputs["attention_mask"],
+    do_sample=False
+    )
 
+print(output)
 # Decode generated output
 decoded_output = tokenizer.decode(output[0], skip_special_tokens=True)
 

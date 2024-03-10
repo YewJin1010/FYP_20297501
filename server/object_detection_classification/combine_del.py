@@ -19,18 +19,13 @@ def combine_images(dir_paths):
     for dir_name, dir_path in dir_paths.items():
         if dir_name != "Raw Data":
             for root, dirs, files in os.walk(dir_path):
+                class_name = os.path.basename(root)  # Extract class name from directory path
+                counter = 1  # Initialize counter for each subdirectory
                 for file in files:
                     src_file = os.path.join(root, file)
-                    dst_file = os.path.join(raw_data_dir, file)
+                    dst_file = os.path.join(raw_data_dir, f"{class_name}_{counter}.jpg")  # Rename with class_counter
                     shutil.copy(src_file, dst_file)
+                    counter += 1  # Increment counter
 
-def rename_images(dir_path):
-    # Rename images in the 'raw_data' directory
-    for root, dirs, files in os.walk(dir_path):
-        for i, file in enumerate(files):
-            src_file = os.path.join(root, file)
-            dst_file = os.path.join(root, f"{i}.jpg")
-            os.rename(src_file, dst_file)
-                      
 # Combine images into 'raw_data' directory
 combine_images(DIR_PATHS)
