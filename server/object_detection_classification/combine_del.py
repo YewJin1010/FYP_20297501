@@ -24,5 +24,13 @@ def combine_images(dir_paths):
                     dst_file = os.path.join(raw_data_dir, file)
                     shutil.copy(src_file, dst_file)
 
+def rename_images(dir_path):
+    # Rename images in the 'raw_data' directory
+    for root, dirs, files in os.walk(dir_path):
+        for i, file in enumerate(files):
+            src_file = os.path.join(root, file)
+            dst_file = os.path.join(root, f"{i}.jpg")
+            os.rename(src_file, dst_file)
+                      
 # Combine images into 'raw_data' directory
 combine_images(DIR_PATHS)
