@@ -60,7 +60,6 @@ def plot_image_counts(dir_paths):
 
 # Function to count subfolders and images in each subfolder for each directory
 def analyse_directories(dir_paths):
-    write_file(dir_paths)
     for dir_name, dir_path in dir_paths.items():
         print(f"Directory: {dir_name}")
         print(f"Number of subfolders: {count_subfolders(dir_path)}")
@@ -68,6 +67,7 @@ def analyse_directories(dir_paths):
         for subfolder, count in subfolder_counts.items():
             print(f"{subfolder}: {count} images")
         print("\n")
+    #write_file(dir_paths)
     #plot_image_counts(dir_paths)
 
 # show directories
