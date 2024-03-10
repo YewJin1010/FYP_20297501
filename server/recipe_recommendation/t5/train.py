@@ -23,16 +23,20 @@ for batch_idx in range(num_batches):
     ingredients_batch = df['ingredients'][start_idx:end_idx]
     title_directions_batch = df['title_directions'][start_idx:end_idx]
 
-    encoding = tokenizer(
-        ingredients_batch.tolist(),
-        padding="longest",
-        max_length=512,
-        truncation=True,
-        return_tensors="pt",
-    )
+    try: 
+        encoding = tokenizer(
+            ingredients_batch.tolist(),
+            padding="longest",
+            max_length=512,
+            truncation=True,
+            return_tensors="pt",
+        )
+    except Exception as e:
+        print("Exception: ", e)
+        continue
 
     input_ids, attention_mask = encoding["input_ids"], encoding.attention_mask
-
+  
     target_encoding = tokenizer(
         title_directions_batch.tolist(),
         padding="longest",
@@ -48,5 +52,6 @@ for batch_idx in range(num_batches):
     loss = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels).loss
     print(f"Batch {batch_idx + 1}/{num_batches} - Loss: {loss.item()}")
 
-# Note: You can further customize the training loop, add optimizer, scheduler, etc.
-# This example demonstrates batch processing; adapt it to your specific use case.
+# Save model
+model.save_pretrained("server/recipe_recommendation/t5/trained_models/t5small_model")
+tokenizer.save_pretrained("server/recipe_recommendation/t5/trained_models/t5small_tokenizer")
