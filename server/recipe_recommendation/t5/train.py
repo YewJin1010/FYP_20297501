@@ -35,7 +35,7 @@ for batch_idx in range(num_batches):
         print("Exception: ", e)
         continue
 
-    input_ids, attention_mask = encoding["input_ids"], encoding.attention_mask
+    input_ids, attention_mask = encoding.input_ids, encoding.attention_mask
   
     target_encoding = tokenizer(
         title_directions_batch.tolist(),
