@@ -55,3 +55,18 @@ for batch_idx in range(num_batches):
 # Save model
 model.save_pretrained("server/recipe_recommendation/t5/trained_models/t5small_model")
 tokenizer.save_pretrained("server/recipe_recommendation/t5/trained_models/t5small_tokenizer")
+
+# Inference
+input_prompt = "1 cup of flour, 2 eggs, 1 cup of milk"
+
+# Tokenize input prompt
+input_ids = tokenizer(input_prompt, return_tensors="pt").input_ids
+
+# Generate text using the loaded model
+output = model.generate(input_ids)
+
+# Decode generated output
+decoded_output = tokenizer.decode(output[0], skip_special_tokens=True)
+
+print("Output: ", decoded_output)
+
