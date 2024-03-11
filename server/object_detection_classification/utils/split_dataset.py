@@ -73,10 +73,10 @@ def create_classes_csv(directory):
     print(f"Created _classes.csv file: {csv_path}")
 
 # Directory Paths
-data_dir = "C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection/dataset/raw_data"
-train_dir = "C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection/dataset/train"
-valid_dir = "C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection/dataset/valid"
-test_dir = "C:/Users/miku/Documents/Yew Jin/FYP_20297501/server/object_detection/dataset/test"
+data_dir = "server/object_detection_classification/dataset/raw_data"
+train_dir = "server/object_detection_classification/dataset/train"
+valid_dir = "server/object_detection_classification/dataset/valid"
+test_dir = "server/object_detection_classification/dataset/test"
 
 split_ratios = (0.7, 0.2, 0.1)
 

@@ -24,18 +24,8 @@ server/object_detection_classification/dataset/train/*
 server/object_detection_classification/dataset/test/*
 server/object_detection_classification/dataset/raw_data/*
 
-server/object_detection_classification/dataset/*
-server/object_detection_classification/dataset/test/*
-
 # do not commit chatbot
 server/chatbot_cnn
-
-# do not commit yolov5 images
-server/object_detection_classification/dataset/Detection of ingr v3i/test/*
-server/object_detection_classification/dataset/Detection of ingr v3i/train/*
-server/object_detection_classification/dataset/Detection of ingr v3i/valid/*
-server/object_detection_classification/dataset/Detection of ingr v3i/README.dataset.txt
-server/object_detection_classification/dataset/Detection of ingr v3i/README.roboflow.txt
 
 # do not commit tensorflow files
 server/object_detection_classification/tensorflow/models/*
@@ -43,7 +33,6 @@ server/object_detection_classification/tensorflow/protoc/*
 server/object_detection_classification/tensorflow/pretrained_models/faster_rcnn_resnet50_v1_640x640_coco17_tpu-8/checkpoint/ckpt-0.data-00000-of-00001
 server/object_detection_classification/tensorflow/pretrained_models/faster_rcnn_resnet50_v1_640x640_coco17_tpu-8/saved_model/variables/variables.data-00000-of-00001
 
-server/object_detection_classification/object_detection_classification/*
 server/recipe_recommendation/bert/saved_models/bert_model.pth
 server/recipe_recommendation/bert/tutorial _delete this.docx
 server/recipe_recommendation/bert/saved_models/bert_model_2.pth
