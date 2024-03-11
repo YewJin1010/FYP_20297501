@@ -10,6 +10,7 @@ from keras.callbacks import History
 from keras.applications.imagenet_utils import preprocess_input
 from keras.callbacks import ModelCheckpoint, EarlyStopping, History, ReduceLROnPlateau
 import glob, os, shutil
+from keras.optimizers import Adam
 
 def read_csv(file_path):
     return pd.read_csv(file_path)
@@ -46,7 +47,7 @@ def create_data_generators(data_generator, directory, df, classes):
         y_col=classes,
         batch_size=32,
         class_mode="raw",
-        target_size=(224, 224)
+        target_size=(64, 64)
     )
     return df, data_flow
 
@@ -76,6 +77,21 @@ def create_resnet50_model(input_shape, num_classes):
     model = Model(inputs=base_model.input, outputs=x)
     model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
     
+    return model
+
+def create_resnet50_base_model(input_shape, num_classes): 
+    base_model = ResNet50(weights='imagenet', include_top=False, input_shape = input_shape)
+
+    x = base_model.output
+    x = GlobalAveragePooling2D()(x)
+    x = Dense(128, activation= 'elu')(x)
+    predictions = Dense(num_classes, activation = 'sigmoid')(x)
+
+    model = Model(inputs = base_model.input, outputs = predictions)
+    for layer in base_model.layers: 
+        layer.trainable = False
+    
+    model.compile(optimizer=Adam(lr=0.0001), loss='categorical_crossentropy', metrics=['accuracy'])
     return model
 
 def train_model(model, train_generator, valid_generator, epochs):
@@ -145,19 +161,20 @@ elif choice == "n":
 else:
     print("Invalid choice. Please enter a valid option (y/n).")
 
-model = create_resnet50_model(input_shape=(224, 224, 3), num_classes=len(classes))
+#model = create_resnet50_model(input_shape=(224, 224, 3), num_classes=len(classes))
+model = create_resnet50_base_model(input_shape=(64, 64, 3),num_classes=len(classes) )
 model.summary()
 
 callbacks = [
     ModelCheckpoint(
-        filepath=os.path.join(checkpoint_save_path, 'best_resnet50_binary_model.h5'),
+        filepath=os.path.join(checkpoint_save_path, 'best_resnet50_base_model.h5'),
         save_best_only=True
     ),
     History()
 ]
 
 model = train_model(model, train_generator, valid_generator, train_epochs)
-model_path = os.path.join(model_save_path, 'resnet50_110324.h5')
+model_path = os.path.join(model_save_path, 'resnet50_base_model.h5')
 model.save(model_path)
 
 history = callbacks[-1]
