@@ -24,6 +24,7 @@ server/object_detection_classification/dataset/train/*
 server/object_detection_classification/dataset/raw_data/*
 
 server/object_detection_classification/dataset/*
+server/object_detection_classification/dataset/test/*
 
 # do not commit chatbot
 server/chatbot_cnn
