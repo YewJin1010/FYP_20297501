@@ -61,8 +61,23 @@ def plot_images_per_class(class_counts, title):
     plt.xticks(rotation=45, ha='right')
     plt.show()
 
+def create_resnet50_base_model(input_shape, num_classes): 
+    base_model = ResNet50(weights='imagenet', include_top=False, input_shape = input_shape)
+
+    x = base_model.output
+    x = GlobalAveragePooling2D()(x)
+    x = Dense(128, activation= 'elu')(x)
+    predictions = Dense(num_classes, activation = 'sigmoid')(x)
+
+    model = Model(inputs = base_model.input, outputs = predictions)
+    for layer in base_model.layers: 
+        layer.trainable = False
+    
+    model.compile(optimizer=Adam(lr=0.0001), loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+
 def create_resnet50_model(input_shape, num_classes):
-    base_model = ResNet50(weights='imagenet', include_top=False)
+    base_model = ResNet50(weights='imagenet', include_top=False, input_shape=input_shape)
     for layer in base_model.layers:
         layer.trainable = False
     # Get base model output 
@@ -77,21 +92,6 @@ def create_resnet50_model(input_shape, num_classes):
     model = Model(inputs=base_model.input, outputs=x)
     model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
     
-    return model
-
-def create_resnet50_base_model(input_shape, num_classes): 
-    base_model = ResNet50(weights='imagenet', include_top=False, input_shape = input_shape)
-
-    x = base_model.output
-    x = GlobalAveragePooling2D()(x)
-    x = Dense(128, activation= 'elu')(x)
-    predictions = Dense(num_classes, activation = 'sigmoid')(x)
-
-    model = Model(inputs = base_model.input, outputs = predictions)
-    for layer in base_model.layers: 
-        layer.trainable = False
-    
-    model.compile(optimizer=Adam(lr=0.0001), loss='categorical_crossentropy', metrics=['accuracy'])
     return model
 
 def train_model(model, train_generator, valid_generator, epochs):
@@ -118,6 +118,7 @@ def evaluate_model(model, test_generator):
     print("The test loss is: ", test_loss)
     print("The best accuracy is: ", test_acc * 100)
 
+file_name = "resnet50_base"
 # Read CSVs
 train_data = read_csv('server/object_detection_classification/dataset/train/_classes.csv')
 valid_data = read_csv('server/object_detection_classification/dataset/valid/_classes.csv')
@@ -167,14 +168,14 @@ model.summary()
 
 callbacks = [
     ModelCheckpoint(
-        filepath=os.path.join(checkpoint_save_path, 'best_resnet50_base_model.h5'),
+        filepath=os.path.join(checkpoint_save_path, 'base_{name}.h5'),
         save_best_only=True
     ),
     History()
 ]
 
 model = train_model(model, train_generator, valid_generator, train_epochs)
-model_path = os.path.join(model_save_path, 'resnet50_base_model.h5')
+model_path = os.path.join(model_save_path, f'{file_name}_model.h5')
 model.save(model_path)
 
 history = callbacks[-1]
@@ -188,4 +189,4 @@ plt.title('Training and Validation Accuracy and Loss over Epochs')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.legend()
-plt.savefig(os.path.join(plot_path, 'resnet50.png'))
+plt.savefig(os.path.join(plot_path, f'{file_name}.png'))
