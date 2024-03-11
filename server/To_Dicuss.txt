@@ -30,9 +30,57 @@ Experiments:
     Epoch 10/10
     596/596 [==============================] - 112s 188ms/step - loss: 0.3974 - accuracy: 0.8834 - val_loss: 0.6256 - val_accuracy: 0.8263
         
-    2. 701020 Train Valid Test with Base code + 10 epochs
+    2. 702010 Train Valid Test with current code + 10 epochs
+    Training generator samples: 19072
+    Validation generator samples: 5459
+    Epoch 1/10
+    146/596 [======>.......................] - ETA: 1:10 - loss: 2.7881 - accuracy: 0.3739C:\Users\miku\AppData\Local\Programs\Python\Python310\lib\site-packages\PIL\Image.py:975: UserWarning: Palette images with Transparency expressed in bytes should be converted to RGBA images
+    warnings.warn(
+    596/596 [==============================] - 115s 190ms/step - loss: 1.7035 - accuracy: 0.5704 - val_loss: 1.0938 - val_accuracy: 0.6853
+    Epoch 2/10
+    596/596 [==============================] - 111s 186ms/step - loss: 0.8243 - accuracy: 0.7581 - val_loss: 0.8276 - val_accuracy: 0.7636
+    Epoch 3/10
+    596/596 [==============================] - 111s 186ms/step - loss: 0.5931 - accuracy: 0.8244 - val_loss: 0.7367 - val_accuracy: 0.7917
+    Epoch 4/10
+    596/596 [==============================] - 111s 186ms/step - loss: 0.4792 - accuracy: 0.8545 - val_loss: 0.6462 - val_accuracy: 0.8094
+    Epoch 5/10
+    596/596 [==============================] - 114s 192ms/step - loss: 0.3932 - accuracy: 0.8820 - val_loss: 0.5807 - val_accuracy: 0.8300
+    Epoch 6/10
+    596/596 [==============================] - 128s 215ms/step - loss: 0.3399 - accuracy: 0.8964 - val_loss: 0.5614 - val_accuracy: 0.8368
+    Epoch 7/10
+    596/596 [==============================] - 137s 230ms/step - loss: 0.2928 - accuracy: 0.9125 - val_loss: 0.5302 - val_accuracy: 0.8471
+    Epoch 8/10
+    596/596 [==============================] - 118s 198ms/step - loss: 0.2589 - accuracy: 0.9215 - val_loss: 0.5174 - val_accuracy: 0.8570
+    Epoch 9/10
+    596/596 [==============================] - 111s 185ms/step - loss: 0.2319 - accuracy: 0.9299 - val_loss: 0.5059 - val_accuracy: 0.8592
+    Epoch 10/10
+    596/596 [==============================] - 111s 186ms/step - loss: 0.2116 - accuracy: 0.9364 - val_loss: 0.4869 - val_accuracy: 0.8658
 
-    3. 702010 Train Valid Test with current code + 10 epochs
+    3. 701020 Train Valid Test with Base code + 10 epochs
+    Training generator samples: 19072
+    Validation generator samples: 2729
+    Epoch 1/10
+    29/596 [>.............................] - ETA: 1:33 - loss: 6.1683 - accuracy: 0.0291C:\Users\miku\AppData\Local\Programs\Python\Python310\lib\site-packages\PIL\Image.py:975: UserWarning: Palette images with Transparency expressed in bytes should be converted to RGBA images
+    warnings.warn(
+    596/596 [==============================] - 109s 180ms/step - loss: 2.8715 - accuracy: 0.3539 - val_loss: 1.7887 - val_accuracy: 0.5309
+    Epoch 2/10
+    596/596 [==============================] - 101s 170ms/step - loss: 1.4437 - accuracy: 0.6138 - val_loss: 1.2761 - val_accuracy: 0.6507
+    Epoch 3/10
+    596/596 [==============================] - 100s 168ms/step - loss: 1.0566 - accuracy: 0.7071 - val_loss: 1.0512 - val_accuracy: 0.7040
+    Epoch 4/10
+    596/596 [==============================] - 101s 169ms/step - loss: 0.8466 - accuracy: 0.7568 - val_loss: 0.9360 - val_accuracy: 0.7371
+    Epoch 5/10
+    596/596 [==============================] - 100s 168ms/step - loss: 0.7134 - accuracy: 0.7917 - val_loss: 0.8503 - val_accuracy: 0.7673
+    Epoch 6/10
+    596/596 [==============================] - 103s 172ms/step - loss: 0.6155 - accuracy: 0.8178 - val_loss: 0.7938 - val_accuracy: 0.7805
+    Epoch 7/10
+    596/596 [==============================] - 102s 171ms/step - loss: 0.5366 - accuracy: 0.8417 - val_loss: 0.7223 - val_accuracy: 0.7956
+    Epoch 8/10
+    596/596 [==============================] - 103s 173ms/step - loss: 0.4717 - accuracy: 0.8605 - val_loss: 0.6850 - val_accuracy: 0.8118
+    Epoch 9/10
+    596/596 [==============================] - 101s 169ms/step - loss: 0.4347 - accuracy: 0.8724 - val_loss: 0.6565 - val_accuracy: 0.8180
+    Epoch 10/10
+    596/596 [==============================] - 102s 171ms/step - loss: 0.3906 - accuracy: 0.8839 - val_loss: 0.6494 - val_accuracy: 0.8202
 
     4. 701020 Train Valid Test with current code + 10 epochs
 

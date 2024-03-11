@@ -118,7 +118,7 @@ def evaluate_model(model, test_generator):
     print("The test loss is: ", test_loss)
     print("The best accuracy is: ", test_acc * 100)
 
-file_name = "resnet50_new_702010"
+file_name = "resnet50_new_701020"
 
 # Read CSVs
 train_data = read_csv('server/object_detection_classification/dataset/train/_classes.csv')
