@@ -118,7 +118,8 @@ def evaluate_model(model, test_generator):
     print("The test loss is: ", test_loss)
     print("The best accuracy is: ", test_acc * 100)
 
-file_name = "resnet50_base"
+file_name = "resnet50_new_702010"
+
 # Read CSVs
 train_data = read_csv('server/object_detection_classification/dataset/train/_classes.csv')
 valid_data = read_csv('server/object_detection_classification/dataset/valid/_classes.csv')
@@ -163,12 +164,14 @@ else:
     print("Invalid choice. Please enter a valid option (y/n).")
 
 #model = create_resnet50_model(input_shape=(224, 224, 3), num_classes=len(classes))
-model = create_resnet50_base_model(input_shape=(64, 64, 3),num_classes=len(classes) )
+model = create_resnet50_model(input_shape=(64, 64, 3), num_classes=len(classes))
+
+#model = create_resnet50_base_model(input_shape=(64, 64, 3),num_classes=len(classes))
 model.summary()
 
 callbacks = [
     ModelCheckpoint(
-        filepath=os.path.join(checkpoint_save_path, 'base_{name}.h5'),
+        filepath=os.path.join(checkpoint_save_path, f'base_{file_name}.h5'),
         save_best_only=True
     ),
     History()
