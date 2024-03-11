@@ -56,7 +56,7 @@ def plot_image_counts(dir_paths):
     plt.xlabel('Subdirectories (Classes)')
     plt.tight_layout()
     plt.show()
-    plt.savefig('server/object_detection_classification/dataset/img_counts.png')
+    plt.savefig('server/object_detection_classification/dataset/img_counts.jpg')
 
 # Function to count subfolders and images in each subfolder for each directory
 def analyse_directories(dir_paths):

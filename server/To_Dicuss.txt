@@ -3,6 +3,8 @@ Report Writing:
     https://arxiv.org/ftp/arxiv/papers/2203/2203.06721.pdf
     https://www.mdpi.com/1424-8220/22/21/8290
 
+2. Test Results using confusion matrix:
+
 Experiments: 
     1. 702010 Train Valid Test with Base code + 10 epochs
     Training generator samples: 19072
@@ -83,8 +85,32 @@ Experiments:
     596/596 [==============================] - 102s 171ms/step - loss: 0.3906 - accuracy: 0.8839 - val_loss: 0.6494 - val_accuracy: 0.8202
 
     4. 701020 Train Valid Test with current code + 10 epochs
+    Training generator samples: 19072
+    Validation generator samples: 2729
+    Epoch 1/10
+    139/596 [=====>........................] - ETA: 1:10 - loss: 2.9405 - accuracy: 0.3604C:\Users\miku\AppData\Local\Programs\Python\Python310\lib\site-packages\PIL\Image.py:975: UserWarning: Palette images with Transparency expressed in bytes should be converted to RGBA images
+    warnings.warn(
+    596/596 [==============================] - 105s 173ms/step - loss: 1.7479 - accuracy: 0.5627 - val_loss: 1.1515 - val_accuracy: 0.6695
+    Epoch 2/10
+    596/596 [==============================] - 102s 172ms/step - loss: 0.8433 - accuracy: 0.7515 - val_loss: 0.8804 - val_accuracy: 0.7452
+    Epoch 3/10
+    596/596 [==============================] - 103s 173ms/step - loss: 0.6112 - accuracy: 0.8174 - val_loss: 0.7207 - val_accuracy: 0.7926
+    Epoch 4/10
+    596/596 [==============================] - 103s 172ms/step - loss: 0.4930 - accuracy: 0.8496 - val_loss: 0.6823 - val_accuracy: 0.8077
+    Epoch 5/10
+    596/596 [==============================] - 102s 171ms/step - loss: 0.4080 - accuracy: 0.8758 - val_loss: 0.6194 - val_accuracy: 0.8313
+    Epoch 6/10
+    596/596 [==============================] - 102s 171ms/step - loss: 0.3429 - accuracy: 0.8960 - val_loss: 0.5848 - val_accuracy: 0.8397
+    Epoch 7/10
+    596/596 [==============================] - 102s 172ms/step - loss: 0.2980 - accuracy: 0.9092 - val_loss: 0.5553 - val_accuracy: 0.8500
+    Epoch 8/10
+    596/596 [==============================] - 102s 171ms/step - loss: 0.2674 - accuracy: 0.9191 - val_loss: 0.5508 - val_accuracy: 0.8607
+    Epoch 9/10
+    596/596 [==============================] - 102s 171ms/step - loss: 0.2374 - accuracy: 0.9279 - val_loss: 0.5373 - val_accuracy: 0.8588
+    Epoch 10/10
+    596/596 [==============================] - 103s 172ms/step - loss: 0.2184 - accuracy: 0.9337 - val_loss: 0.5012 - val_accuracy: 0.8629
 
-    5. 70X0X0 Train Valid Test with current code + X epochs + 224 224 size
+    5. 702010 Train Valid Test with current code + 5 epochs + 224 224 size
 
 
     2. resnet50 current vs resnet50 base: 

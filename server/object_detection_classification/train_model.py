@@ -47,7 +47,7 @@ def create_data_generators(data_generator, directory, df, classes):
         y_col=classes,
         batch_size=32,
         class_mode="raw",
-        target_size=(64, 64)
+        target_size=(224, 224)
     )
     return df, data_flow
 
@@ -118,7 +118,7 @@ def evaluate_model(model, test_generator):
     print("The test loss is: ", test_loss)
     print("The best accuracy is: ", test_acc * 100)
 
-file_name = "resnet50_new_701020"
+file_name = "resnet50_new_702010_5epochs"
 
 # Read CSVs
 train_data = read_csv('server/object_detection_classification/dataset/train/_classes.csv')
@@ -163,8 +163,8 @@ elif choice == "n":
 else:
     print("Invalid choice. Please enter a valid option (y/n).")
 
-#model = create_resnet50_model(input_shape=(224, 224, 3), num_classes=len(classes))
-model = create_resnet50_model(input_shape=(64, 64, 3), num_classes=len(classes))
+model = create_resnet50_model(input_shape=(224, 224, 3), num_classes=len(classes))
+#model = create_resnet50_model(input_shape=(64, 64, 3), num_classes=len(classes))
 
 #model = create_resnet50_base_model(input_shape=(64, 64, 3),num_classes=len(classes))
 model.summary()

@@ -78,7 +78,7 @@ train_dir = "server/object_detection_classification/dataset/train"
 valid_dir = "server/object_detection_classification/dataset/valid"
 test_dir = "server/object_detection_classification/dataset/test"
 
-split_ratios = (0.7, 0.1, 0.2)
+split_ratios = (0.7, 0.2, 0.1)
 
 print("1. Split dataset\n2. Create CSV")
 selection = input("Selection: ")
