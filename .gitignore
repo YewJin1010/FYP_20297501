@@ -45,3 +45,5 @@ server/recipe_recommendation/bert/tutorial _delete this.docx
 server/recipe_recommendation/bert/saved_models/bert_model_2.pth
 
 logs/*
+
+server/recipe_recommendation/t5/fine_tuned_model/model.safetensors
