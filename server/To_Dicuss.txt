@@ -1,3 +1,10 @@
+Report Writing: 
+1. 70 20 10 split: 
+    https://arxiv.org/ftp/arxiv/papers/2203/2203.06721.pdf
+    https://www.mdpi.com/1424-8220/22/21/8290
+
+
+
 7/3/2024: 
 - Focus on refining
 - Question: how does it fare with similar apps out there? 
