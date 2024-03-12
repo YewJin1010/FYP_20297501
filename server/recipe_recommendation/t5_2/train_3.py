@@ -10,18 +10,18 @@ model = T5ForConditionalGeneration.from_pretrained("t5-small")
 
 # Example DataFrame with "a" and "b" columns
 df = pd.read_csv('server/recipe_recommendation/t5/csv/new_data.csv')
-df['a'] = df['a'].fillna('')
+df['ingredients'] = df['ingredients'].fillna('')
 df = df[:10]  # Select first 10 rows for demonstration
 
 
 # Tokenize "ingredients" column
-ingredients_tokens = tokenizer(df["a"].tolist(), return_tensors="pt", padding=True, truncation=True)
+ingredients_tokens = tokenizer(df["ingredients"].tolist(), return_tensors="pt", padding=True, truncation=True)
 
 # Tokenize "title_directions" column for inputs
-title_directions_tokens_input = tokenizer(df["b"].tolist(), return_tensors="pt", padding=True, truncation=True)
+title_directions_tokens_input = tokenizer(df["directions"].tolist(), return_tensors="pt", padding=True, truncation=True)
 
 # Tokenize "title_directions" column for labels
-title_directions_tokens_label = tokenizer(df["b"].tolist(), return_tensors="pt", padding=True, truncation=True)
+title_directions_tokens_label = tokenizer(df["directions"].tolist(), return_tensors="pt", padding=True, truncation=True)
 
 # Define your tokenized inputs
 inputs = {
@@ -57,4 +57,7 @@ for epoch in range(num_epochs):
     print(f"Epoch {epoch+1}/{num_epochs}, Loss: {batch_loss.item()}")
 
 # Save the fine-tuned model
-model.save_pretrained("fine_tuned_model")
+model_path = "server/recipe_recommendation/t5/fine_tuned_model" 
+tokenizer_path = "server/recipe_recommendation/t5/fine_tuned_tokenizer"
+model.save_pretrained(model_path)
+tokenizer.save_pretrained(tokenizer_path)

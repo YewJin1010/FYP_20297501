@@ -4,7 +4,6 @@ import pandas as pd
 
 # Load dataset
 df = pd.read_csv('server/recipe_recommendation/t5/csv/recipes_t5.csv')
-print(df.info())
 
 # Define tokenizer and model
 tokenizer = T5Tokenizer.from_pretrained('t5-small')
@@ -25,21 +24,19 @@ for epoch in range(num_epochs):
         batch = df.iloc[i:i+batch_size]
         
         input_text = batch['ingredients'].tolist()
-        target_text = batch['title_directions'].tolist()
-        try: 
-            input_encodings = tokenizer(input_text, padding=True, truncation=True, return_tensors='pt')
-            target_encodings = tokenizer(target_text, padding=True, truncation=True, return_tensors='pt')
-        except Exception as e: 
-            print("Exception: ", e)
-            continue
+        target_text = batch['directions'].tolist()
+        
+        input_encodings = tokenizer(input_text, padding=True, truncation=True, return_tensors='pt')
+        target_encodings = tokenizer(target_text, padding=True, truncation=True, return_tensors='pt')
         
         input_ids = input_encodings['input_ids']
         attention_mask = input_encodings['attention_mask']
         labels = target_encodings['input_ids']
+        labels_attention_mask = target_encodings['attention_mask']
         
         optimizer.zero_grad()
         
-        outputs = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)
+        outputs = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels, decoder_attention_mask=labels_attention_mask)
         loss = outputs.loss
         
         loss.backward()
