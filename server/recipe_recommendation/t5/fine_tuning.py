@@ -4,6 +4,7 @@ import pandas as pd
 
 # Load dataset
 df = pd.read_csv('server/recipe_recommendation/t5/csv/recipes_t5.csv')
+print(df.info())
 
 # Define tokenizer and model
 tokenizer = T5Tokenizer.from_pretrained('t5-small')
