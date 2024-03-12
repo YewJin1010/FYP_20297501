@@ -4,7 +4,7 @@ from collections import Counter
 import os
 
 # Load the data from baking.json
-with open('recipes.json', 'r') as json_file:
+with open('server/object_detection_classification/cakes/dataset/cake.json', 'r') as json_file:
     data = json.load(json_file)
 
 def extract_data_to_file(criteria):
@@ -15,14 +15,14 @@ def extract_data_to_file(criteria):
         # Extract the specified criteria from each recipe
         item_list.append({criteria: recipe[criteria]})
 
-    # Create a file name based on the provided criteria
-    file_name = f'{criteria}_list.json'
+    # Output file
+    output_file = f'server/object_detection_classification/cakes/{criteria}_list.json'
 
     # Write the extracted data to the file
-    with open(file_name, 'w') as output_file:
+    with open(output_file, 'w') as output_file:
         json.dump(item_list, output_file, indent=4)
     
-    print(f'Data extracted and saved to {file_name}')
+    print(f'Data extracted and saved to {output_file}')
 
 def open_url_by_range(start_index, end_index):
     # Open URLs within the specified range
