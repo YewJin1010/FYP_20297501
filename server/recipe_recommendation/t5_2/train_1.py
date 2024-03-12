@@ -9,9 +9,9 @@ tokenizer = T5Tokenizer.from_pretrained("t5-small")
 model = T5ForConditionalGeneration.from_pretrained("t5-small")
 
 # Example DataFrame with "a" and "b" columns
-df = pd.read_csv('server/recipe_recommendation/t5/csv/new_data.csv')
-df['a'] = df['a'].fillna('')
-df = df[:50]  # Select first 10 rows for demonstration
+df = pd.read_csv('server/recipe_recommendation/t5_2/new_data.csv')
+df['ingredients'] = df['ingredients'].fillna('')
+df = df[:10]  # Select first 10 rows for demonstration
 
 # Define batch size
 batch_size = 2
@@ -24,13 +24,13 @@ for i in range(0, len(df), batch_size):
     batch_df = df.iloc[i:i+batch_size]
 
     # Tokenize "ingredients" column
-    ingredients_tokens = tokenizer(batch_df["a"].tolist(), return_tensors="pt", padding=True, truncation=True)
+    ingredients_tokens = tokenizer(batch_df["ingredients"].tolist(), return_tensors="pt", padding=True, truncation=True)
 
     # Tokenize "title_directions" column for inputs
-    title_directions_tokens_input = tokenizer(batch_df["b"].tolist(), return_tensors="pt", padding=True, truncation=True)
+    title_directions_tokens_input = tokenizer(batch_df["directions"].tolist(), return_tensors="pt", padding=True, truncation=True)
 
     # Tokenize "title_directions" column for labels
-    title_directions_tokens_label = tokenizer(batch_df["b"].tolist(), return_tensors="pt", padding=True, truncation=True)
+    title_directions_tokens_label = tokenizer(batch_df["directions"].tolist(), return_tensors="pt", padding=True, truncation=True)
 
     # Add tokenized inputs and labels to the list
     inputs.append({
@@ -69,5 +69,7 @@ for epoch in range(num_epochs):
     print(f"Epoch {epoch+1}/{num_epochs}, Average Loss: {total_loss / len(inputs)}")
 
 # Save the fine-tuned model
-model.save_pretrained("fine_tuned_model")
-tokenizer.save_pretrained("fine_tuned_tokenizer")
+model_path = "server/recipe_recommendation/t5_2/fine_tuned_model" 
+tokenizer_path = "server/recipe_recommendation/t5_2/fine_tuned_tokenizer"
+model.save_pretrained(model_path)
+tokenizer.save_pretrained(tokenizer_path)

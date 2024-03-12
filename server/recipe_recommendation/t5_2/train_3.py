@@ -9,7 +9,7 @@ tokenizer = T5Tokenizer.from_pretrained("t5-small")
 model = T5ForConditionalGeneration.from_pretrained("t5-small")
 
 # Example DataFrame with "a" and "b" columns
-df = pd.read_csv('server/recipe_recommendation/t5/csv/new_data.csv')
+df = pd.read_csv('server/recipe_recommendation/t5_2/new_data.csv')
 df['ingredients'] = df['ingredients'].fillna('')
 df = df[:10]  # Select first 10 rows for demonstration
 
