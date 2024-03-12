@@ -11,7 +11,7 @@ model = T5ForConditionalGeneration.from_pretrained("t5-small")
 # Example DataFrame with "a" and "b" columns
 df = pd.read_csv('server/recipe_recommendation/t5_2/new_data.csv')
 df['ingredients'] = df['ingredients'].fillna('')
-df = df[:10]  # Select first 10 rows for demonstration
+df = df[:50]  # Select first 10 rows for demonstration
 
 # Define batch size
 batch_size = 2
@@ -73,3 +73,11 @@ model_path = "server/recipe_recommendation/t5_2/fine_tuned_model"
 tokenizer_path = "server/recipe_recommendation/t5_2/fine_tuned_tokenizer"
 model.save_pretrained(model_path)
 tokenizer.save_pretrained(tokenizer_path)
+
+# Inferencing with the fine-tuned model
+input_text = "1 cup flour, 1 cup sugar, 1 egg"
+input_encodings = tokenizer(input_text, return_tensors="pt", padding=True, truncation=True)
+output_ids = model.generate(input_encodings["input_ids"], attention_mask=input_encodings["attention_mask"], max_length=64, num_beams=4)
+output_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
+print(output_text)
+
