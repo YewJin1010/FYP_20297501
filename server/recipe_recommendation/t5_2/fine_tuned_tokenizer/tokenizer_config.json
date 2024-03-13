@@ -1,4 +1,5 @@
 {
+  "add_prefix_space": true,
   "added_tokens_decoder": {
     "0": {
       "content": "<pad>",
