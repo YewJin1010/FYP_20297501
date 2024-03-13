@@ -41,4 +41,4 @@ logs/*
 
 server/recipe_recommendation/t5/fine_tuned_model/model.safetensors
 
-server/object_detection_classification/cakes/index/*
+server/database/cakes/*

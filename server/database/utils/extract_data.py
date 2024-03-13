@@ -54,7 +54,7 @@ def extract_data_csv(criteria_list):
     print(f'Data extracted and saved to {csv_file}')
 
 # User input for the criteria
-print("Enter criteria separated by commas (e.g., ingredients, url, title, directions):")
+print("Enter criteria separated by commas (directions, ingredients, source, title, url):")
 criteria_input = input("Enter criteria: ")
 
 print("Enter format (json or csv):")

@@ -3,7 +3,7 @@ import pandas as pd
 import json 
 
 base_directory = 'server/database/cakes/index/c/'
-md_file_path = 'server/database/index/c/cake.md'
+md_file_path = 'server/database/dataset/cake.md'
 js_file_path = 'server/database/dataset/cake.json'
 csv_file_path = 'server/database/dataset/cake.csv'
 
