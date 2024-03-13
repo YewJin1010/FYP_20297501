@@ -16,8 +16,11 @@ def extract_data_to_json(criteria_list):
             recipe_data[criteria] = recipe.get(criteria, "")
         combined_data.append(recipe_data)
 
-    # Output file
-    output_file = 'server/object_detection_classification/cakes/data.json'
+    # Determine the output file name based on the number of criteria
+    if len(criteria_list) == 1:
+        output_file = f'server/object_detection_classification/cakes/{criteria_list[0]}_list.json'
+    else:
+        output_file = 'server/object_detection_classification/cakes/combined_data.json'
 
     # Write the combined data to the file
     with open(output_file, 'w') as file:
@@ -39,13 +42,17 @@ def extract_data_csv(criteria_list):
     # Create a DataFrame from the extracted data
     df = pd.DataFrame(extracted_data)
     
-    csv_file = 'server/object_detection_classification/cakes/data.csv'
+    # Determine the output file name based on the number of criteria
+    if len(criteria_list) == 1:
+        csv_file = f'server/object_detection_classification/cakes/{criteria_list[0]}_list.csv'
+    else:
+        csv_file = 'server/object_detection_classification/cakes/combined_data.csv'
+    
     # Write DataFrame to CSV file
     df.to_csv(csv_file, index=False)
     
     print(f'Data extracted and saved to {csv_file}')
 
-  
 # User input for the criteria
 print("Enter criteria separated by commas (e.g., ingredients, url, title, directions):")
 criteria_input = input("Enter criteria: ")
