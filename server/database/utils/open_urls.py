@@ -2,7 +2,7 @@ import json
 import webbrowser
 
 # Load the data from baking.json
-with open('server/object_detection_classification/cakes/dataset/cake.json', 'r') as json_file:
+with open('server/database/dataset/cake.json', 'r') as json_file:
     data = json.load(json_file)
 
 def open_url_by_range(start_index, end_index):

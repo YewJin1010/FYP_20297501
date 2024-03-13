@@ -2,7 +2,7 @@ import json
 import pandas as pd
 
 # Load the data from cake.json
-with open('server/object_detection_classification/cakes/unique_ingredients.json', 'r') as json_file:
+with open('server/database/unique_ingredients.json', 'r') as json_file:
     data = json.load(json_file)
 
 def categorise_ingredients(ingredients): 
@@ -36,7 +36,7 @@ def write_to_csv(primary, secondary, tertiary):
     })
     
     # Write DataFrame to CSV file
-    df.to_csv('server/object_detection_classification/cakes/sorted_ingredients.csv', index=False)
+    df.to_csv('server/database/sorted_ingredients.csv', index=False)
     
 
 primary, secondary, tertiary = categorise_ingredients(data)

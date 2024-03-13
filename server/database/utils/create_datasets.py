@@ -2,10 +2,10 @@ import os
 import pandas as pd
 import json 
 
-base_directory = 'server/object_detection_classification/cakes/index/c/'
-md_file_path = 'server/object_detection_classification/cakes/index/c/cake.md'
-js_file_path = 'server/object_detection_classification/cakes/dataset/cake.json'
-csv_file_path = 'server/object_detection_classification/cakes/dataset/cake.csv'
+base_directory = 'server/database/cakes/index/c/'
+md_file_path = 'server/database/index/c/cake.md'
+js_file_path = 'server/database/dataset/cake.json'
+csv_file_path = 'server/database/dataset/cake.csv'
 
 def md_to_js(md_file_path, base_directory, js_file_path):
     # Open the Markdown file
