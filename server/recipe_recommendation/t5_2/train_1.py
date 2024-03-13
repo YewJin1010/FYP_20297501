@@ -45,7 +45,7 @@ for i in range(0, len(df), batch_size):
 
 # Define the loss function and optimizer
 loss = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
+optimizer = torch.optim.Adam(model.parameters(), lr=2e-4)
 
 # Fine-tuning loop
 num_epochs = 3
