@@ -81,16 +81,16 @@ model_name = "t5-small-medium-title-generation"
 model_dir = "server/recipe_recommendation/t5_2/models/" + model_name
 
 print(model_dir)
-
+# 1e-3 - 1e-7 and 2e-3 to 2e-7
 training_args = Seq2SeqTrainingArguments(
     output_dir = model_dir,
     evaluation_strategy="steps",
-    eval_steps=100,
+    eval_steps=20,
     logging_strategy="steps",
     logging_steps=100,
     save_strategy="steps",
     save_steps=200,
-    learning_rate=1e-5,
+    learning_rate=1e-3,
     per_device_train_batch_size=batch_size,
     per_device_eval_batch_size=batch_size,
     weight_decay=0.01,
@@ -111,7 +111,7 @@ def compute_metrics(eval_pred):
     predictions, labels = eval_pred
     decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
 
-    # Replace -100 in the labels as we ca n't decode them.
+    # Replace -100 in the labels as we can't decode them.
     labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
     decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
 
