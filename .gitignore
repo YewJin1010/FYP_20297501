@@ -42,3 +42,6 @@ logs/*
 server/recipe_recommendation/t5/fine_tuned_model/model.safetensors
 
 server/database/cakes/*
+
+# T5 Igmpre
+server/recipe_recommendation/t5_2/models/*
