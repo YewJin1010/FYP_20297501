@@ -9,7 +9,7 @@ tokenizer = T5Tokenizer.from_pretrained("t5-small")
 model = T5ForConditionalGeneration.from_pretrained("t5-small")
 
 # Example DataFrame with "a" and "b" columns
-df = pd.read_csv('server/recipe_recommendation/t5_2/new_data.csv')
+df = pd.read_csv('server/recipe_recommendation/t5/dataset/new_data.csv')
 df['ingredients'] = df['ingredients'].fillna('')
 df = df[:100]  # Select first 10 rows for demonstration
 
@@ -50,7 +50,7 @@ for i in range(0, len(df), batch_size):
 
 # Define the loss function and optimizer
 loss = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=2e-4)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
 # Fine-tuning loop
 num_epochs = 10
@@ -74,8 +74,8 @@ for epoch in range(num_epochs):
     print(f"Epoch {epoch+1}/{num_epochs}, Average Loss: {total_loss / len(inputs)}")
 
 # Save the fine-tuned model
-model_path = "server/recipe_recommendation/t5_2/fine_tuned_model" 
-tokenizer_path = "server/recipe_recommendation/t5_2/fine_tuned_tokenizer"
+model_path = "server/recipe_recommendation/t5/models" 
+tokenizer_path = "server/recipe_recommendation/t5/models"
 model.save_pretrained(model_path)
 tokenizer.save_pretrained(tokenizer_path)
 

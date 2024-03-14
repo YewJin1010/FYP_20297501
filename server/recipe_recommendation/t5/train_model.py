@@ -1,18 +1,25 @@
-import nltk
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, DataCollatorForSeq2Seq, Seq2SeqTrainingArguments, Seq2SeqTrainer
+"""
+!pip install datasets
+!pip install transformers
+!pip install sentencepiece
+!pip install rouge_score # for model evaluation
+!pip install sacrebleu
+!pip install meteor
+!pip install evaluate
+!pip install sentence_transformers
+!pip install accelerate
+!pip install nltk
+"""
+import transformers
 from datasets import load_dataset, load_metric
+import pandas as pd
+import nltk
+nltk.download('punkt')
 import string
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, DataCollatorForSeq2Seq, Seq2SeqTrainingArguments, Seq2SeqTrainer
 import numpy as np
 
-model_name = "t5-small-medium-title-generation/checkpoint-1600"
-model_dir = "server/recipe_recommendation/t5_2/models/" + model_name
-
-tokenizer = AutoTokenizer.from_pretrained(model_dir)
-model = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
-
-max_input_length = 512
-
-dataset_path = 'server/recipe_recommendation/t5_2/dataset/'
+dataset_path = 'server/recipe_recommendation/t5/dataset/'
 dataset = load_dataset(dataset_path)
 print(dataset)
 
@@ -24,12 +31,11 @@ dataset['train'] = dataset_train_validation['train']
 dataset['validation'] = dataset_train_validation['test']
 dataset['test'] = dataset_train_test['test']
 
-print("Number of rows in the train split:", len(dataset['train']))
+print("Number of rows in the train split:", len( dataset['train']))
 print("Number of rows in the validation split:", len(dataset['validation']))
 print("Number of rows in the test split:", len(dataset['test']))
 
-print(dataset['train'][0])
-print(dataset)
+print(dataset['train'][7])
 
 # Preprocess
 model_checkpoint = "t5-small"
@@ -70,34 +76,40 @@ def preprocess_data(examples):
 tokenized_datasets = dataset_cleaned.map(preprocess_data, batched=True)
 print(tokenized_datasets)
 
-# Test 1
-text = dataset['test'][30]['ingredients']
-print("Text: ", text)
-inputs = ["ingredients: " + text]
+batch_size = 8
+model_name = "t5-small-medium-title-generation"
+model_dir = "server/recipe_recommendation/t5/models/" + model_name
 
-inputs = tokenizer(inputs, max_length=max_input_length, truncation=True, return_tensors="pt")
-output = model.generate(**inputs, num_beams=8, do_sample=True, min_length=10, max_length=64)
-decoded_output = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
-predicted_title = nltk.sent_tokenize(decoded_output.strip())[0]
+print(model_dir)
+# 1e-3 - 1e-7 and 2e-3 to 2e-7
+training_args = Seq2SeqTrainingArguments(
+    output_dir = model_dir,
+    evaluation_strategy="steps",
+    eval_steps=20,
+    logging_strategy="steps",
+    logging_steps=100,
+    save_strategy="steps",
+    save_steps=200,
+    learning_rate=1e-3,
+    per_device_train_batch_size=batch_size,
+    per_device_eval_batch_size=batch_size,
+    weight_decay=0.01, #0.01 0.02 ++
+    save_total_limit=3,
+    num_train_epochs=5,
+    predict_with_generate=True,
+    fp16=False,
+    load_best_model_at_end=True,
+    metric_for_best_model="rouge1",
+    report_to="tensorboard"
+)
+## Add optimiser 
+## AdamW 
 
-print("Prediction: ", predicted_title)
 
-# Test 2
-#text = """1 cup of milk, 2 cups of sugar, 1 chocolate"""
-#text = "1 banana, cream, 1 cup of cinnamon"
-inputs = ["ingredients: " + text]
+data_collator = DataCollatorForSeq2Seq(tokenizer)
 
-inputs = tokenizer(inputs, max_length=max_input_length, truncation=True, return_tensors="pt")
-output = model.generate(**inputs, num_beams=8, do_sample=True, min_length=10, max_length=64)
-decoded_output = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
-predicted_title = nltk.sent_tokenize(decoded_output.strip())[0]
-
-print(predicted_title)
-
-# Commented out IPython magic to ensure Python compatibility.
-# %load_ext tensorboard
-# %tensorboard --logdir '{model_dir}'/runs
 metric = load_metric("rouge")
+
 def compute_metrics(eval_pred):
     predictions, labels = eval_pred
     decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
@@ -126,39 +138,26 @@ def compute_metrics(eval_pred):
 
     return {k: round(v, 4) for k, v in result.items()}
 
-import torch
+print("Model checkpoint: ", model_checkpoint)
 
-# get test split
-test_tokenized_dataset = tokenized_datasets["test"]
+# Function that returns an untrained model to be trained
+def model_init():
+    return AutoModelForSeq2SeqLM.from_pretrained(model_checkpoint)
 
-# pad texts to the same length
-def preprocess_test(examples):
-  inputs = [prefix + text for text in examples["ingredients"]]
-  model_inputs = tokenizer(inputs, max_length=max_input_length, truncation=True,
-                           padding="max_length")
-  return model_inputs
+trainer = Seq2SeqTrainer(
+    model_init=model_init,
+    args=training_args ,
+    train_dataset=tokenized_datasets["train"],
+    eval_dataset=tokenized_datasets["validation"],
+    data_collator=data_collator,
+    tokenizer=tokenizer,
+    compute_metrics=compute_metrics
+)
 
-test_tokenized_dataset = test_tokenized_dataset.map(preprocess_test, batched=True)
+trainer.train()
 
-# prepare dataloader
-test_tokenized_dataset.set_format(type='torch', columns=['input_ids', 'attention_mask'])
-dataloader = torch.utils.data.DataLoader(test_tokenized_dataset, batch_size=32)
+save_dir = "server/recipe_recommendation/t5/models/" + model_name
 
-# generate text for each batch
-all_predictions = []
-for i,batch in enumerate(dataloader):
-  predictions = model.generate(**batch)
-  all_predictions.append(predictions)
-
-# flatten predictions
-all_predictions_flattened = [pred for preds in all_predictions for pred in preds]
-
-# tokenize and pad titles
-all_titles = tokenizer(test_tokenized_dataset["directions"], max_length=max_target_length,
-                       truncation=True, padding="max_length")["input_ids"]
-
-
-# compute metrics
-predictions_labels = [all_predictions_flattened, all_titles]
-compute_metrics(predictions_labels)
+trainer.save_model(save_dir)
+print("Saved model to:", save_dir)
 
