@@ -23,17 +23,15 @@ dataset_path = 'server/recipe_recommendation/t5/dataset/'
 dataset = load_dataset(dataset_path)
 print(dataset)
 
-dataset_train_test = dataset['train'].train_test_split(test_size = 100)
-dataset_train_validation = dataset_train_test['train'].train_test_split(test_size=200)
+# Splitting dataset into train and validation sets with an 80-20 split
+dataset_train_validation = dataset['train'].train_test_split(test_size=0.2)
 
-# Assign the split datasets to train, validation, and test sets
+# Assign the split datasets to train and validation sets
 dataset['train'] = dataset_train_validation['train']
 dataset['validation'] = dataset_train_validation['test']
-dataset['test'] = dataset_train_test['test']
 
-print("Number of rows in the train split:", len( dataset['train']))
+print("Number of rows in the train split:", len(dataset['train']))
 print("Number of rows in the validation split:", len(dataset['validation']))
-print("Number of rows in the test split:", len(dataset['test']))
 
 print(dataset['train'][7])
 
@@ -62,6 +60,8 @@ def clean_text(text):
 
 def preprocess_data(examples):
   texts_cleaned = [clean_text(text) for text in examples["ingredients"]]
+  print(texts_cleaned[:5])
+  exit()
   inputs = [prefix + text for text in texts_cleaned]
   model_inputs = tokenizer(inputs, max_length=max_input_length, truncation=True)
 
@@ -100,10 +100,8 @@ training_args = Seq2SeqTrainingArguments(
     fp16=False,
     load_best_model_at_end=True,
     metric_for_best_model="rouge1",
-    report_to="tensorboard"
+    report_to="tensorboard",
 )
-## Add optimiser 
-## AdamW 
 
 data_collator = DataCollatorForSeq2Seq(tokenizer)
 
@@ -150,7 +148,7 @@ trainer = Seq2SeqTrainer(
     eval_dataset=tokenized_datasets["validation"],
     data_collator=data_collator,
     tokenizer=tokenizer,
-    compute_metrics=compute_metrics
+    compute_metrics=compute_metrics,
 )
 
 trainer.train()

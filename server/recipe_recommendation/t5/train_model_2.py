@@ -26,19 +26,9 @@ for i in range(0, len(df), batch_size):
     # Tokenize "ingredients" column
     ingredients_tokens = tokenizer(batch_df["ingredients"].tolist(), return_tensors="pt", padding=True, truncation=True)
 
-    # Tokenize "title_directions" column for inputs
-    #title_directions_tokens_input = tokenizer(batch_df["directions"].tolist(), return_tensors="pt", padding=True, truncation=True)
-
     # Tokenize "title_directions" column for labels
     title_directions_tokens_label = tokenizer(batch_df["directions"].tolist(), return_tensors="pt", padding=True, truncation=True)
 
-    # Add tokenized inputs and labels to the list
-    """
-    inputs.append({
-        "input_ids": torch.cat([ingredients_tokens["input_ids"], title_directions_tokens_input["input_ids"]], dim=1),
-        "attention_mask": torch.cat([ingredients_tokens["attention_mask"], title_directions_tokens_input["attention_mask"]], dim=1)
-    })
-    """ 
     inputs.append({
         "input_ids": ingredients_tokens["input_ids"],
         "attention_mask": ingredients_tokens["attention_mask"]
@@ -74,8 +64,8 @@ for epoch in range(num_epochs):
     print(f"Epoch {epoch+1}/{num_epochs}, Average Loss: {total_loss / len(inputs)}")
 
 # Save the fine-tuned model
-model_path = "server/recipe_recommendation/t5/models" 
-tokenizer_path = "server/recipe_recommendation/t5/models"
+model_path = "server/recipe_recommendation/t5/models/t5-small-conditional-generation" 
+tokenizer_path = "server/recipe_recommendation/t5/models/t5-small-conditional-generation"
 model.save_pretrained(model_path)
 tokenizer.save_pretrained(tokenizer_path)
 
