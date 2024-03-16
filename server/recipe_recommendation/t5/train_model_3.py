@@ -62,9 +62,9 @@ for epoch in range(num_epochs):
         attention_mask = torch.tensor(batch["attention_mask"]).unsqueeze(0)
         labels = torch.tensor(batch["labels"]).unsqueeze(0)
 
-        print("Input shape:", input_ids.shape)
-        print("Attention mask shape:", attention_mask.shape)
-        print("Labels shape:", labels.shape)
+        #print("Input shape:", input_ids.shape)
+        #print("Attention mask shape:", attention_mask.shape)
+        #print("Labels shape:", labels.shape)
 
         # Forward pass
         outputs = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)

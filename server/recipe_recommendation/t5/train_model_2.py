@@ -11,53 +11,49 @@ model = T5ForConditionalGeneration.from_pretrained("t5-small")
 # Example DataFrame with "a" and "b" columns
 df = pd.read_csv('server/recipe_recommendation/t5/dataset/new_data.csv')
 df['ingredients'] = df['ingredients'].fillna('')
-df = df[:100]  # Select first 10 rows for demonstration
+df = df[:100]  
 
 # Define batch size
 batch_size = 4
 
-# Tokenize "a" and "b" columns in batches
-inputs = []
-labels = []
+# Tokenize ingredients
+inputs = df['ingredients'].tolist()
+input_encodings = tokenizer(inputs, truncation=True, padding='max_length', max_length=512, return_tensors='pt')
 
-for i in range(0, len(df), batch_size):
-    batch_df = df.iloc[i:i+batch_size]
+# Tokenize directions (labels)
+targets = df['directions'].tolist()
+target_encodings = tokenizer(targets, truncation=True, padding='max_length', max_length=512, return_tensors='pt')
 
-    # Tokenize "ingredients" column
-    ingredients_tokens = tokenizer(batch_df["ingredients"].tolist(), return_tensors="pt", padding=True, truncation=True)
+# Create input IDs, attention masks, and labels
+input_ids = input_encodings['input_ids']
+attention_mask = input_encodings['attention_mask']
+labels = target_encodings['input_ids']
 
-    # Tokenize "title_directions" column for labels
-    title_directions_tokens_label = tokenizer(batch_df["directions"].tolist(), return_tensors="pt", padding=True, truncation=True)
-
-    inputs.append({
-        "input_ids": ingredients_tokens["input_ids"],
-        "attention_mask": ingredients_tokens["attention_mask"]
-    })
-    labels.append({
-        "input_ids": title_directions_tokens_label["input_ids"],
-        "attention_mask": title_directions_tokens_label["attention_mask"]
-    })
+# Print shapes for verification
+print("Input IDs shape:", input_ids.shape)
+print("Attention mask shape:", attention_mask.shape)
+print("Labels shape:", labels.shape)
 
 # Define the loss function and optimizer
 loss = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
-# Fine-tuning loop
 num_epochs = 10
 for epoch in range(num_epochs):
     total_loss = 0.0
-    for input_batch, label_batch in zip(inputs, labels):
+    for i in range(0, len(input_ids), batch_size):
+        batch_input_ids = input_ids[i : i + batch_size]
+        batch_attention_mask = attention_mask[i : i + batch_size]
+        batch_labels = labels[i : i + batch_size]
+
         # Forward pass
-        outputs = model(input_ids=input_batch["input_ids"], attention_mask=input_batch["attention_mask"], labels=label_batch["input_ids"])
-        logits = outputs.logits
+        outputs = model(input_ids=batch_input_ids, attention_mask=batch_attention_mask, labels=batch_labels)
+        loss = outputs.loss
+        total_loss += loss.item()
 
-        # Compute loss
-        batch_loss = loss(logits.view(-1, logits.shape[-1]), label_batch["input_ids"].view(-1))
-        total_loss += batch_loss.item()
-
-        # Backward pass
+        # Backward pass and optimization
         optimizer.zero_grad()
-        batch_loss.backward()
+        loss.backward()
         optimizer.step()
 
     # Print average loss for the epoch
@@ -68,11 +64,4 @@ model_path = "server/recipe_recommendation/t5/models/t5-small-conditional-genera
 tokenizer_path = "server/recipe_recommendation/t5/models/t5-small-conditional-generation"
 model.save_pretrained(model_path)
 tokenizer.save_pretrained(tokenizer_path)
-
-# Inferencing with the fine-tuned model
-input_text = "1 cup flour, 1 cup sugar, 1 egg"
-input_encodings = tokenizer(input_text, return_tensors="pt", padding=True, truncation=True)
-output_ids = model.generate(input_encodings["input_ids"], attention_mask=input_encodings["attention_mask"], max_length=500, num_beams=8)
-output_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
-print(output_text)
 

@@ -60,8 +60,6 @@ def clean_text(text):
 
 def preprocess_data(examples):
   texts_cleaned = [clean_text(text) for text in examples["ingredients"]]
-  print(texts_cleaned[:5])
-  exit()
   inputs = [prefix + text for text in texts_cleaned]
   model_inputs = tokenizer(inputs, max_length=max_input_length, truncation=True)
 
