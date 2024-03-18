@@ -11,10 +11,10 @@ model = T5ForConditionalGeneration.from_pretrained("t5-small")
 # Example DataFrame with "a" and "b" columns
 df = pd.read_csv('server/recipe_recommendation/t5/dataset/new_data.csv')
 df['ingredients'] = df['ingredients'].fillna('')
-df = df[:100]  
+#df = df[:100]  
 
 # Define batch size
-batch_size = 4
+batch_size = 8
 
 # Tokenize ingredients
 inputs = df['ingredients'].tolist()
@@ -60,8 +60,8 @@ for epoch in range(num_epochs):
     print(f"Epoch {epoch+1}/{num_epochs}, Average Loss: {total_loss / len(inputs)}")
 
 # Save the fine-tuned model
-model_path = "server/recipe_recommendation/t5/models/t5-small-conditional-generation" 
-tokenizer_path = "server/recipe_recommendation/t5/models/t5-small-conditional-generation"
+model_path = "server/recipe_recommendation/t5/models/t5-small-conditional-generation_2" 
+tokenizer_path = "server/recipe_recommendation/t5/models/t5-small-conditional-generation_2"
 model.save_pretrained(model_path)
 tokenizer.save_pretrained(tokenizer_path)
 

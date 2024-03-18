@@ -79,7 +79,6 @@ model_name = "t5-small-medium-title-generation"
 model_dir = "server/recipe_recommendation/t5/models/" + model_name
 
 print(model_dir)
-# 1e-3 - 1e-7 and 2e-3 to 2e-7
 training_args = Seq2SeqTrainingArguments(
     output_dir = model_dir,
     evaluation_strategy="steps",
@@ -91,7 +90,7 @@ training_args = Seq2SeqTrainingArguments(
     learning_rate=1e-3,
     per_device_train_batch_size=batch_size,
     per_device_eval_batch_size=batch_size,
-    weight_decay=0.01, #0.01 0.02 ++
+    weight_decay=0.01, 
     save_total_limit=3,
     num_train_epochs=5,
     predict_with_generate=True,
