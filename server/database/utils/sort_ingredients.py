@@ -5,22 +5,7 @@ import pandas as pd
 with open('server/database/unique_ingredients.json', 'r') as json_file:
     data = json.load(json_file)
 
-def categorise_ingredients(ingredients): 
-    primary = []
-    secondary = []
-    tertiary = []
-
-    for ingredient, count in ingredients:
-        if count > 100:
-            primary.append(ingredient)
-        elif count > 1:
-            secondary.append(ingredient)
-        else:
-            tertiary.append(ingredient)
-    
-    return primary, secondary, tertiary
-
-def write_to_csv(primary, secondary, tertiary):
+def create_dataframe(primary, secondary, tertiary):
     max_length = max(len(primary), len(secondary), len(tertiary))
     
     # Fill arrays with empty strings to ensure equal length
@@ -35,8 +20,26 @@ def write_to_csv(primary, secondary, tertiary):
         'Tertiary': tertiary
     })
     
+    return df
+
+def sort_data(ingredients): 
+    primary = []
+    secondary = []
+    tertiary = []
+
+    for ingredient, count in ingredients:
+        if count > 100:
+            primary.append(ingredient)
+        elif count > 1:
+            secondary.append(ingredient)
+        else:
+            tertiary.append(ingredient)
+    
+    df = create_dataframe(primary, secondary, tertiary)
+
     # Write DataFrame to CSV file
     df.to_csv('server/database/sorted_ingredients.csv', index=False)
+
     return df
 
 def clean_data(df):
@@ -69,9 +72,6 @@ def clean_data(df):
             # Remove ingredient from Secondary and Tertiary columns
             df['Secondary'] = df['Secondary'].replace(ingredient, '')
             df['Tertiary'] = df['Tertiary'].replace(ingredient, '')
-        
-        # Remove duplicates in primary
-        primary = list(dict.fromkeys(primary))
 
     # Iterate over Secondary column
     for ingredient in df['Secondary']:
@@ -89,24 +89,11 @@ def clean_data(df):
     secondary = list(filter(None, secondary))
     tertiary = list(filter(None, tertiary))
 
-    max_length = max(len(primary), len(secondary), len(tertiary))
-    
-    # Fill arrays with empty strings to ensure equal length
-    primary += [''] * (max_length - len(primary))
-    secondary += [''] * (max_length - len(secondary))
-    tertiary += [''] * (max_length - len(tertiary))
-    
-    # Create a DataFrame from the extracted data
-    df = pd.DataFrame({
-        'Primary': primary,
-        'Secondary': secondary,
-        'Tertiary': tertiary
-    })
+    df = create_dataframe(primary, secondary, tertiary)
     
     # Write the cleaned DataFrame to a new CSV file
     df.to_csv('server/database/cleaned_ingredients.csv', index=False)
     return df
 
-primary, secondary, tertiary = categorise_ingredients(data)
-df = write_to_csv(primary, secondary, tertiary)
+df = sort_data(data)
 df = clean_data(df)
