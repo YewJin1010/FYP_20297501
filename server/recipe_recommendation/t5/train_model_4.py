@@ -11,43 +11,89 @@ model = T5ForConditionalGeneration.from_pretrained("t5-small")
 
 df = pd.read_csv('server/recipe_recommendation/t5/dataset/new_data.csv')
 
-df = df.rename(columns={ "ingredients": "source_text", "directions": "target_text"})
-df = df[['source_text', 'target_text']]
-df['source_text'] = df['source_text'].fillna('')
+print("Ingredients data type:", type(df["ingredients"][0]))
+print("Directions data type:", type(df["directions"][0]))
 
-df['source_text'] = "ingredients: " + df['source_text']
+# Preprocess the DataFrame
+df['source_text'] = "ingredients: " + df['ingredients']
+df['target_text'] = df['directions']
 
-print(df.head())
+# Drop rows with NaN values
+df.dropna(inplace=True)
 
-train_df, test_df = train_test_split(df, test_size=0.2)
+# Split the DataFrame into train and test sets
+train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
+df.reset_index(drop=True)
+print("Train set size:", len(train_df)) 
+print("Train set shape:", train_df.shape)
+print("Test set size:", len(test_df))
+print("Test set shape:", test_df.shape)
+
+# Tokenize datasets
+def tokenize_data(data_frame): 
+    tokenized_data = None
+    try:
+        tokenized_data = tokenizer(
+            list(data_frame["source_text"]),
+            text_pair=list(data_frame["target_text"]),
+            padding=True,
+            truncation=True,
+            return_tensors="pt",
+        )
+    except Exception as e:
+        print("Exception occurred during tokenization:")
+        print(e)
+        index = 0
+        for index, row in data_frame.iterrows():
+            try:
+                tokenizer(
+                    row["source_text"],
+                    text_pair=row["target_text"],
+                    padding=True,
+                    truncation=True,
+                    return_tensors="pt",
+                )
+            except Exception as e:
+                print(f"Index {index}:")
+                print("Ingredients:", row["ingredients"])
+                print("Directions:", row["directions"])
+                print("Error:", e)
+                print()
+                break
+        return None
+    return tokenized_data
+
+train_data = tokenize_data(train_df)
+test_data = tokenize_data(test_df)
+
+print("Train data:", train_data)
+print("Test data:", test_data)
 
 output_dir = "server/recipe_recommendation/t5/models/t5-small-medium-conditional_generation_tm4"
-# Define the training arguments
+# Define training arguments
 training_args = TrainingArguments(
-    per_device_train_batch_size=8,
-    per_device_eval_batch_size=8,
-    num_train_epochs=10,
-    learning_rate=1e-3,
-    logging_dir='./logs',
-    logging_steps=100,
-    evaluation_strategy="epoch",
     output_dir = output_dir,
+    num_train_epochs=3,
+    per_device_train_batch_size=8,
+    save_steps=1000,
+    save_total_limit=2,
+    evaluation_strategy="steps",
+    eval_steps=500,
+    logging_dir=output_dir
 )
 
-# Define the Trainer
+# Fine-tune the model
 trainer = Trainer(
     model=model,
     args=training_args,
     train_dataset=train_df,
     eval_dataset=test_df,
-    tokenizer=tokenizer,
 )
 
-# Train the model
 trainer.train()
 
-# Save the fine-tuned model
-model.save_pretrained("server/recipe_recommendation/t5/models/t5-small-medium-conditional_generation_tm4")
+# Save the trained model
+model.save_pretrained(output_dir)
 
 # Load the fine-tuned model
 model = T5ForConditionalGeneration.from_pretrained("server/recipe_recommendation/t5/models/t5-small-medium-conditional_generation_tm4")
