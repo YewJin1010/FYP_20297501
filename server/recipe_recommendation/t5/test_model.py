@@ -6,7 +6,7 @@ from datasets import load_dataset, load_metric
 import torch
 
 # Load model and tokenizer
-model_name = "t5-small-medium-title-generation/checkpoint-1600"
+model_name = "t5-small-conditional-generation_5/checkpoint-1400"
 model_dir = "server/recipe_recommendation/t5/models/" + model_name
 tokenizer = AutoTokenizer.from_pretrained(model_dir)
 model = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
@@ -67,11 +67,27 @@ inputs = ["ingredients: " + text]
 
 inputs = tokenizer(inputs, max_length=max_input_length, truncation=True, return_tensors="pt")
 output = model.generate(**inputs, num_beams=8, do_sample=True, min_length=10, max_length=64)
+print("Output: ", output)
 decoded_output = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
+print("Decoded output: ", decoded_output)
 predicted_title = nltk.sent_tokenize(decoded_output.strip())[0]
 print("Prediction: ", predicted_title)
 
 # Test 2
+print("TEST 2")
+text = "flour, sugar, eggs, chocolate"
+inputs = ["ingredients: " + text]
+
+inputs = tokenizer(inputs, max_length=max_input_length, truncation=True, return_tensors="pt")
+output = model.generate(**inputs, num_beams=8, do_sample=True, min_length=10, max_length=64)
+print("Output: ", output)
+decoded_output = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
+print("Decoded output: ", decoded_output)
+predicted_title = nltk.sent_tokenize(decoded_output.strip())[0]
+print("Prediction: ", predicted_title)
+
+# Test 3
+print("TEST 3")
 # text = """1 cup of milk, 2 cups of sugar, 1 chocolate"""
 # text = "1 banana, cream, 1 cup of cinnamon"
 inputs = ["ingredients: " + text]
@@ -80,7 +96,7 @@ inputs = tokenizer(inputs, max_length=max_input_length, truncation=True, return_
 output = model.generate(**inputs, num_beams=8, do_sample=True, min_length=10, max_length=64)
 decoded_output = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
 predicted_title = nltk.sent_tokenize(decoded_output.strip())[0]
-print(predicted_title)
+print("Predicted text: ", predicted_title)
 
 # Compute Metrics
 metric = load_metric("rouge")
@@ -126,3 +142,5 @@ predictions_labels = [all_predictions_flattened, all_titles]
 
 # Compute Metrics
 compute_metrics(predictions_labels)
+
+                                     

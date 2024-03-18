@@ -1,6 +1,7 @@
 import torch
 import pandas as pd
 from transformers import T5ForConditionalGeneration, T5Tokenizer
+from rouge_score import rouge_scorer
 
 # Load the T5 tokenizer
 tokenizer = T5Tokenizer.from_pretrained("t5-small")
@@ -11,7 +12,6 @@ model = T5ForConditionalGeneration.from_pretrained("t5-small")
 # Example DataFrame with "a" and "b" columns
 df = pd.read_csv('server/recipe_recommendation/t5/dataset/new_data.csv')
 df['ingredients'] = df['ingredients'].fillna('')
-#df = df[:100]  
 
 # Define batch size
 batch_size = 8
@@ -29,16 +29,14 @@ input_ids = input_encodings['input_ids']
 attention_mask = input_encodings['attention_mask']
 labels = target_encodings['input_ids']
 
-# Print shapes for verification
-print("Input IDs shape:", input_ids.shape)
-print("Attention mask shape:", attention_mask.shape)
-print("Labels shape:", labels.shape)
-
 # Define the loss function and optimizer
-loss = torch.nn.CrossEntropyLoss()
+loss_fn = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
-num_epochs = 10
+# Define ROUGE scorer
+scorer = rouge_scorer.RougeScorer(['rouge1', 'rougeL'], use_stemmer=True)
+
+num_epochs = 2
 for epoch in range(num_epochs):
     total_loss = 0.0
     for i in range(0, len(input_ids), batch_size):
@@ -59,9 +57,17 @@ for epoch in range(num_epochs):
     # Print average loss for the epoch
     print(f"Epoch {epoch+1}/{num_epochs}, Average Loss: {total_loss / len(inputs)}")
 
+    # Evaluation using ROUGE
+    with torch.no_grad():
+        predictions = model.generate(input_ids=input_ids, attention_mask=attention_mask)
+        prediction_texts = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+        labels_texts = tokenizer.batch_decode(labels, skip_special_tokens=True)
+
+        rouge_scores = scorer.score(prediction_texts, labels_texts)
+        print(f"ROUGE-1: {rouge_scores['rouge1'].fmeasure}, ROUGE-L: {rouge_scores['rougeL'].fmeasure}")
+
 # Save the fine-tuned model
 model_path = "server/recipe_recommendation/t5/models/t5-small-conditional-generation_2" 
 tokenizer_path = "server/recipe_recommendation/t5/models/t5-small-conditional-generation_2"
 model.save_pretrained(model_path)
 tokenizer.save_pretrained(tokenizer_path)
-
