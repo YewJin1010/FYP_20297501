@@ -6,14 +6,14 @@ from datasets import load_dataset, load_metric
 import torch
 
 # Load model and tokenizer
-model_name = "t5-small-conditional-generation_5/checkpoint-1400"
+model_name = "t5-small-conditional-generation_nolimit/checkpoint-1400"
 model_dir = "server/recipe_recommendation/t5/models/" + model_name
 tokenizer = AutoTokenizer.from_pretrained(model_dir)
 model = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
 
 # Constants
-max_input_length = 1024
-max_target_length = 1024
+max_input_length = None
+max_target_length = None
 
 # Load dataset
 dataset_path = 'server/recipe_recommendation/t5/dataset/'

@@ -5,10 +5,10 @@ from sklearn.model_selection import train_test_split
 from datasets import load_dataset, Dataset, load_metric
 
 # Load the T5 tokenizer
-tokenizer = T5Tokenizer.from_pretrained("t5-small")
+tokenizer = T5Tokenizer.from_pretrained("t5-base")
 
 # Load the pre-trained T5 model
-model = T5ForConditionalGeneration.from_pretrained("t5-small")
+model = T5ForConditionalGeneration.from_pretrained("t5-base")
 
 dataset_path = 'server/recipe_recommendation/t5/dataset/'
 dataset = load_dataset(dataset_path)
@@ -23,10 +23,10 @@ print("Number of rows in the validation split:", len(dataset['validation']))
 prefix = "ingredients: "
 def preprocess_data(examples):
     inputs = [prefix + text for text in examples["ingredients"]]
-    model_inputs = tokenizer(inputs, max_length=512, truncation=True, padding="max_length")
+    model_inputs = tokenizer(inputs, max_length=None, truncation=True, padding="max_length")
 
     with tokenizer.as_target_tokenizer():
-        labels = tokenizer(examples["directions"], max_length=512, truncation=True, padding="max_length")
+        labels = tokenizer(examples["directions"], max_length=None, truncation=True, padding="max_length")
 
     model_inputs["labels"] = labels["input_ids"]
     return model_inputs
@@ -36,7 +36,7 @@ tokenized_datasets = dataset.map(preprocess_data, batched=True)
 print("tokenized dataset: ", tokenized_datasets)
 
 batch_size = 8
-output_dir = "server/recipe_recommendation/t5/models/t5-small-conditional-generation"
+output_dir = "server/recipe_recommendation/t5/models/t5-base-conditional-generation-nolimit"
 
 training_args = Seq2SeqTrainingArguments(
     output_dir = output_dir,
@@ -61,7 +61,7 @@ training_args = Seq2SeqTrainingArguments(
 data_collator = DataCollatorForSeq2Seq(tokenizer)
 
 def model_init():
-    return AutoModelForSeq2SeqLM.from_pretrained("t5-small")
+    return AutoModelForSeq2SeqLM.from_pretrained("t5-base")
 
 trainer = Seq2SeqTrainer(
     model_init=model_init,
