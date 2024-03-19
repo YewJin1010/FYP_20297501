@@ -35,7 +35,7 @@ dataset = dataset.filter(lambda example: example['ingredients'] is not None and 
 tokenized_datasets = dataset.map(preprocess_data, batched=True)
 print("tokenized dataset: ", tokenized_datasets)
 
-batch_size = 8
+batch_size = 2
 output_dir = "server/recipe_recommendation/t5/models/t5-base-conditional-generation-nolimit"
 
 training_args = Seq2SeqTrainingArguments(

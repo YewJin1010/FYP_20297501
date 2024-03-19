@@ -17,8 +17,8 @@ dataset['train'] = dataset_train_validation['train']
 dataset['validation'] = dataset_train_validation['test']
 
 def preprocess_data(batch):
-  inputs = tokenizer(batch["ingredients"], padding="max_length", truncation=True, max_length=512)
-  outputs = tokenizer(batch["directions"], padding="max_length", truncation=True, max_length=512)
+  inputs = tokenizer(batch["ingredients"], padding="max_length", truncation=True, max_length=512, add_special_tokens=True, return_tensors='np' )
+  outputs = tokenizer(batch["directions"], padding="max_length", truncation=True, max_length=512, add_special_tokens=True, return_tensors='np')
 
   batch["input_ids"] = inputs.input_ids
   batch["attention_mask"] = inputs.attention_mask
