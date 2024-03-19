@@ -2,8 +2,8 @@ import torch
 from transformers import BartForConditionalGeneration, BartTokenizer, DataCollatorForSeq2Seq, Seq2SeqTrainingArguments, Seq2SeqTrainer, AutoModelForSeq2SeqLM
 from datasets import load_dataset
 
-# Load the BERT tokenizer
-model_ckpt = "facebook/bart-base"
+# Load the BART tokenizer
+model_ckpt = "lucadiliello/bart-small"
 tokenizer = BartTokenizer.from_pretrained(model_ckpt)
 
 model = BartForConditionalGeneration.from_pretrained(model_ckpt)
