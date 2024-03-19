@@ -3,16 +3,19 @@ import pandas as pd
 from transformers import T5ForConditionalGeneration, T5Tokenizer, DataCollatorForSeq2Seq, Seq2SeqTrainingArguments, Seq2SeqTrainer, AutoModelForSeq2SeqLM
 from sklearn.model_selection import train_test_split
 from datasets import load_dataset, Dataset, load_metric
+import numpy as np
+import nltk
+nltk.download('punkt')
 
 # Use GPU if available
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Device:", device)
 
 # Load the T5 tokenizer
-tokenizer = T5Tokenizer.from_pretrained("t5-base")
+tokenizer = T5Tokenizer.from_pretrained("t5-small")
 
 # Load the pre-trained T5 model
-model = T5ForConditionalGeneration.from_pretrained("t5-base")
+model = T5ForConditionalGeneration.from_pretrained("t5-small")
 
 dataset_path = 'server/recipe_recommendation/t5/dataset/'
 dataset = load_dataset(dataset_path)
@@ -45,12 +48,15 @@ tokenized_datasets = dataset.map(preprocess_data, batched=True)
 print("tokenized dataset: ", tokenized_datasets)
 
 batch_size = 4
-output_dir = "server/recipe_recommendation/t5/models/t5-base-conditional-generation-nolimit"
+output_dir = "server/recipe_recommendation/t5/models/t5-small-conditional-generation-nolimit"
+
+# Load the ROUGE metric
+rouge_metric = load_metric("rouge")
 
 training_args = Seq2SeqTrainingArguments(
     output_dir = output_dir,
     evaluation_strategy="steps",
-    eval_steps=20,
+    eval_steps=100,
     logging_strategy="steps",
     logging_steps=100,
     save_strategy="steps",
@@ -69,21 +75,47 @@ training_args = Seq2SeqTrainingArguments(
 
 data_collator = DataCollatorForSeq2Seq(tokenizer)
 
-def model_init():
-    return AutoModelForSeq2SeqLM.from_pretrained("t5-base")
+metric = load_metric("rouge")
+
+def compute_metrics(eval_pred):
+    predictions, labels = eval_pred
+    decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+
+    # Replace -100 in the labels as we can't decode them.
+    labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
+    decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
+
+    # Rouge expects a newline after each sentence
+    decoded_preds = ["\n".join(nltk.sent_tokenize(pred.strip()))
+                      for pred in decoded_preds]
+    decoded_labels = ["\n".join(nltk.sent_tokenize(label.strip()))
+                      for label in decoded_labels]
+
+    # Compute ROUGE scores
+    result = metric.compute(predictions=decoded_preds, references=decoded_labels,
+                            use_stemmer=True)
+
+    # Extract ROUGE f1 scores
+    result = {key: value.mid.fmeasure * 100 for key, value in result.items()}
+
+    # Add mean generated length to metrics
+    prediction_lens = [np.count_nonzero(pred != tokenizer.pad_token_id)
+                      for pred in predictions]
+    result["gen_len"] = np.mean(prediction_lens)
+
+    return {k: round(v, 4) for k, v in result.items()}
 
 trainer = Seq2SeqTrainer(
-    model_init=model_init,
     model=model,
     args=training_args,
     train_dataset=tokenized_datasets['train'],
     eval_dataset=tokenized_datasets['validation'],
     data_collator=data_collator,
-    tokenizer=tokenizer
+    tokenizer=tokenizer,
+    compute_metrics=compute_metrics,
 )
 
 print("Training the model...")
-# Train the model
 trainer.train()
 
 # Save the model
