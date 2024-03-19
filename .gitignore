@@ -45,3 +45,5 @@ server/database/cakes/*
 
 # T5 Igmpre
 server/recipe_recommendation/t5/models/*
+
+server/recipe_recommendation/t5/t5-base

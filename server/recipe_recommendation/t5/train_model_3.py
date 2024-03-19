@@ -4,6 +4,10 @@ from transformers import T5ForConditionalGeneration, T5Tokenizer, DataCollatorFo
 from sklearn.model_selection import train_test_split
 from datasets import load_dataset, Dataset, load_metric
 
+# Use GPU if available
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("Device:", device)
+
 # Load the T5 tokenizer
 tokenizer = T5Tokenizer.from_pretrained("t5-base")
 
@@ -20,22 +24,27 @@ dataset['validation'] = dataset_train_validation['test']
 print("Number of rows in the train split:", len(dataset['train']))
 print("Number of rows in the validation split:", len(dataset['validation']))
 
+# Filter out examples with missing or empty ingredients
+dataset = dataset.filter(lambda example: example['ingredients'] is not None and len(example['ingredients']) > 0)
+
+# Tokenize inputs and targets separately
 prefix = "ingredients: "
 def preprocess_data(examples):
     inputs = [prefix + text for text in examples["ingredients"]]
-    model_inputs = tokenizer(inputs, max_length=None, truncation=True, padding="max_length")
+    model_inputs = tokenizer(inputs, max_length=300, truncation=True, padding="max_length")
 
     with tokenizer.as_target_tokenizer():
-        labels = tokenizer(examples["directions"], max_length=None, truncation=True, padding="max_length")
+        labels = tokenizer(examples["directions"], max_length=600, truncation=True, padding="max_length")
 
     model_inputs["labels"] = labels["input_ids"]
     return model_inputs
 
 dataset = dataset.filter(lambda example: example['ingredients'] is not None and len(example['ingredients']) > 0)
 tokenized_datasets = dataset.map(preprocess_data, batched=True)
+
 print("tokenized dataset: ", tokenized_datasets)
 
-batch_size = 2
+batch_size = 4
 output_dir = "server/recipe_recommendation/t5/models/t5-base-conditional-generation-nolimit"
 
 training_args = Seq2SeqTrainingArguments(
