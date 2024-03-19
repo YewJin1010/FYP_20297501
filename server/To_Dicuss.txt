@@ -1,3 +1,7 @@
+Todo: 
+1. remove ingredients from dataset to clean up the ingredients expected 
+2. add title to dataset
+
 Report Writing: 
 1. 70 20 10 split: 
     https://arxiv.org/ftp/arxiv/papers/2203/2203.06721.pdf
