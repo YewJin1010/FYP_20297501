@@ -1,11 +1,15 @@
 import torch
-import pandas as pd
-from transformers import LongformerForSequenceClassification, LongformerTokenizer, Trainer, TrainingArguments, DataCollatorForSeq2Seq, Seq2SeqTrainingArguments, Seq2SeqTrainer, AutoModelForSeq2SeqLM
+from transformers import LongformerForSequenceClassification, LongformerTokenizer, Trainer, TrainingArguments
 from sklearn.model_selection import train_test_split
-from datasets import load_dataset, Dataset, load_metric
+from datasets import load_dataset
 
-# model name
+# Check if GPU is available
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("Using device:", device)
+
+# Model name
 model_name = "allenai/longformer-base-4096"
+
 # Load the tokenizer
 tokenizer = LongformerTokenizer.from_pretrained(model_name)
 
@@ -58,10 +62,10 @@ trainer = Trainer(
     train_dataset=tokenized_datasets['train'],
     eval_dataset=tokenized_datasets['validation'],
 )
-
+print(" training device: ", training_args.device)
 print("Training the model...")
 # Train the model
 trainer.train()
 
 # Save the model
-trainer.save_model = output_dir
+trainer.save_model(output_dir)
