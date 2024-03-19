@@ -4,22 +4,17 @@ from transformers import T5ForConditionalGeneration, T5Tokenizer, DataCollatorFo
 from sklearn.model_selection import train_test_split
 from datasets import load_dataset, Dataset, load_metric
 import numpy as np
-import nltk
-nltk.download('punkt')
-from transformers import AdamW, get_linear_schedule_with_warmup, EarlyStoppingCallback
-from torch.optim.lr_scheduler import LambdaLR
-
 
 # Use GPU if available
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Device:", device)
 
 # Load the T5 tokenizer
-tokenizer = T5Tokenizer.from_pretrained("google/flan-t5-small")
+tokenizer = T5Tokenizer.from_pretrained("t5-small")
 
 # Load the pre-trained T5 model
 #model = T5ForConditionalGeneration.from_pretrained("t5-small")
-model = AutoModelForSeq2SeqLM.from_pretrained("google/flan-t5-small")
+model = AutoModelForSeq2SeqLM.from_pretrained("t5-small")
 
 dataset_path = 'server/recipe_recommendation/t5/dataset/'
 dataset = load_dataset(dataset_path)
@@ -52,10 +47,7 @@ tokenized_datasets = dataset.map(preprocess_data, batched=True)
 print("tokenized dataset: ", tokenized_datasets)
 
 batch_size = 4
-output_dir = "server/recipe_recommendation/t5/models/flan-t5-small"
-
-# Load the ROUGE metric
-rouge_metric = load_metric("rouge")
+output_dir = "server/recipe_recommendation/t5/models/t5-small-fine-tuned"
 
 training_args = Seq2SeqTrainingArguments(
     output_dir = output_dir,
@@ -80,52 +72,6 @@ training_args = Seq2SeqTrainingArguments(
 
 data_collator = DataCollatorForSeq2Seq(tokenizer)
 
-metric = load_metric("rouge")
-
-def compute_metrics(eval_pred):
-    predictions, labels = eval_pred
-    decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
-
-    # Replace -100 in the labels as we can't decode them.
-    labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
-    decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
-
-    # Rouge expects a newline after each sentence
-    decoded_preds = ["\n".join(nltk.sent_tokenize(pred.strip()))
-                      for pred in decoded_preds]
-    decoded_labels = ["\n".join(nltk.sent_tokenize(label.strip()))
-                      for label in decoded_labels]
-
-    # Compute ROUGE scores
-    result = metric.compute(predictions=decoded_preds, references=decoded_labels,
-                            use_stemmer=True)
-
-    # Extract ROUGE f1 scores
-    result = {key: value.mid.fmeasure * 100 for key, value in result.items()}
-
-    # Add mean generated length to metrics
-    prediction_lens = [np.count_nonzero(pred != tokenizer.pad_token_id)
-                      for pred in predictions]
-    result["gen_len"] = np.mean(prediction_lens)
-
-    return {k: round(v, 4) for k, v in result.items()}
-
-total_steps = len(tokenized_datasets['train']) // training_args.per_device_train_batch_size * training_args.num_train_epochs
-
-# Set up optimizer
-optimizer = AdamW(model.parameters(), lr=1e-3)
-
-# Define scheduler
-scheduler = get_linear_schedule_with_warmup(
-    optimizer,
-    num_warmup_steps=0,  # Adjust warmup steps as needed
-    num_training_steps= total_steps
-)
-
-# Define gradient clipping
-if training_args.max_grad_norm is not None:
-    torch.nn.utils.clip_grad_norm_(model.parameters(), training_args.max_grad_norm)
-
 trainer = Seq2SeqTrainer(
     model=model,
     args=training_args,
@@ -133,9 +79,6 @@ trainer = Seq2SeqTrainer(
     eval_dataset=tokenized_datasets['validation'],
     data_collator=data_collator,
     tokenizer=tokenizer,
-    compute_metrics=compute_metrics,
-    callbacks=[EarlyStoppingCallback(early_stopping_patience=3)],
-    optimizers=(optimizer, scheduler)
 )
 
 print("Training the model...")

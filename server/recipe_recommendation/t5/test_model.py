@@ -6,14 +6,14 @@ from datasets import load_dataset, load_metric
 import torch
 
 # Load model and tokenizer
-model_name = "t5-small-conditional-generation_nolimit/checkpoint-1400"
+model_name = "t5-small-fine-tuned/checkpoint-1400"
 model_dir = "server/recipe_recommendation/t5/models/" + model_name
 tokenizer = AutoTokenizer.from_pretrained(model_dir)
 model = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
 
 # Constants
-max_input_length = None
-max_target_length = None
+max_input_length = 300
+max_target_length = 600
 
 # Load dataset
 dataset_path = 'server/recipe_recommendation/t5/dataset/'
@@ -61,33 +61,64 @@ def preprocess_data(examples):
 tokenized_datasets = dataset_cleaned.map(preprocess_data, batched=True)
 
 # Testing
-print("TEST 1")
+print("TEST 1: Ingredients + measurements")
 text = dataset['test'][30]['ingredients']
+print("TEXT: ", text)
 inputs = ["ingredients: " + text]
 
 inputs = tokenizer(inputs, max_length=max_input_length, truncation=True, return_tensors="pt")
-output = model.generate(**inputs, num_beams=8, do_sample=True, min_length=10, max_length=64)
+output = model.generate(**inputs, num_beams=8, do_sample=True, min_length=10, max_length=600)
 print("Output: ", output)
+print("\n")
+
 decoded_output = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
 print("Decoded output: ", decoded_output)
+print("\n")
+
 predicted_title = nltk.sent_tokenize(decoded_output.strip())[0]
 print("Prediction: ", predicted_title)
+print("\n")
 
 # Test 2
-print("TEST 2")
-text = "flour, sugar, eggs, chocolate"
+print("TEST 2: no measurements + many ingredients")
+#text = "flour, sugar, eggs, chocolate, apple, banana"
+text = " brown sugar, raisins, water, shortening, baking soda, salt, ground cinnamon, nutmeg, cloves, flour"
 inputs = ["ingredients: " + text]
 
 inputs = tokenizer(inputs, max_length=max_input_length, truncation=True, return_tensors="pt")
-output = model.generate(**inputs, num_beams=8, do_sample=True, min_length=10, max_length=64)
+output = model.generate(**inputs, num_beams=8, do_sample=True, min_length=10, max_length=600)
 print("Output: ", output)
+print("\n")
+
 decoded_output = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
 print("Decoded output: ", decoded_output)
+print("\n")
+
 predicted_title = nltk.sent_tokenize(decoded_output.strip())[0]
 print("Prediction: ", predicted_title)
+print("\n")
 
 # Test 3
-print("TEST 3")
+print("TEST 3: no measurements + few ingredients")
+#text = "flour, sugar, eggs, chocolate, apple, banana"
+text = "flour, yeast, apple, banana"
+inputs = ["ingredients: " + text]
+
+inputs = tokenizer(inputs, max_length=max_input_length, truncation=True, return_tensors="pt")
+output = model.generate(**inputs, num_beams=8, do_sample=True, min_length=10, max_length=600)
+print("Output: ", output)
+print("\n")
+
+decoded_output = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
+print("Decoded output: ", decoded_output)
+print("\n")
+
+predicted_title = nltk.sent_tokenize(decoded_output.strip())[0]
+print("Prediction: ", predicted_title)
+print("\n")
+
+# Test 4
+print("TEST 4")
 # text = """1 cup of milk, 2 cups of sugar, 1 chocolate"""
 # text = "1 banana, cream, 1 cup of cinnamon"
 inputs = ["ingredients: " + text]
@@ -97,7 +128,7 @@ output = model.generate(**inputs, num_beams=8, do_sample=True, min_length=10, ma
 decoded_output = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
 predicted_title = nltk.sent_tokenize(decoded_output.strip())[0]
 print("Predicted text: ", predicted_title)
-
+print("\n")
 # Compute Metrics
 metric = load_metric("rouge")
 
