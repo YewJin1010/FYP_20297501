@@ -6,6 +6,9 @@ from datasets import load_dataset, Dataset, load_metric
 import numpy as np
 import nltk
 nltk.download('punkt')
+from transformers import AdamW, get_linear_schedule_with_warmup, EarlyStoppingCallback
+from torch.optim.lr_scheduler import LambdaLR
+
 
 # Use GPU if available
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -48,7 +51,7 @@ tokenized_datasets = dataset.map(preprocess_data, batched=True)
 print("tokenized dataset: ", tokenized_datasets)
 
 batch_size = 4
-output_dir = "server/recipe_recommendation/t5/models/t5-small-conditional-generation-nolimit"
+output_dir = "server/recipe_recommendation/t5/models/t5-small-conditional-generation"
 
 # Load the ROUGE metric
 rouge_metric = load_metric("rouge")
@@ -61,16 +64,17 @@ training_args = Seq2SeqTrainingArguments(
     logging_steps=100,
     save_strategy="steps",
     save_steps=200,
-    learning_rate=1e-3,
+    learning_rate=1e-1, # adjust
     per_device_train_batch_size=batch_size,
     per_device_eval_batch_size=batch_size,
     weight_decay=0.01, 
     save_total_limit=3,
-    num_train_epochs=5,
+    num_train_epochs=10, # adjust
     predict_with_generate=True,
     fp16=False,
-    load_best_model_at_end=False,
+    load_best_model_at_end=True,
     report_to="tensorboard",
+    gradient_accumulation_steps=2
 )
 
 data_collator = DataCollatorForSeq2Seq(tokenizer)
@@ -105,6 +109,22 @@ def compute_metrics(eval_pred):
 
     return {k: round(v, 4) for k, v in result.items()}
 
+total_steps = len(tokenized_datasets['train']) // training_args.per_device_train_batch_size * training_args.num_train_epochs
+
+# Set up optimizer
+optimizer = AdamW(model.parameters(), lr=1e-3)
+
+# Define scheduler
+scheduler = get_linear_schedule_with_warmup(
+    optimizer,
+    num_warmup_steps=0,  # Adjust warmup steps as needed
+    num_training_steps= total_steps
+)
+
+# Define gradient clipping
+if training_args.max_grad_norm is not None:
+    torch.nn.utils.clip_grad_norm_(model.parameters(), training_args.max_grad_norm)
+
 trainer = Seq2SeqTrainer(
     model=model,
     args=training_args,
@@ -113,6 +133,8 @@ trainer = Seq2SeqTrainer(
     data_collator=data_collator,
     tokenizer=tokenizer,
     compute_metrics=compute_metrics,
+    callbacks=[EarlyStoppingCallback(early_stopping_patience=3)],
+    optimizers=(optimizer, scheduler)
 )
 
 print("Training the model...")
