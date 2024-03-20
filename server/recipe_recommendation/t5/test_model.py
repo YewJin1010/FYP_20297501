@@ -6,7 +6,7 @@ from datasets import load_dataset, load_metric
 import torch
 
 # Load model and tokenizer
-model_name = "t5-small-fine-tuned_20-03-2024_13-55-06/checkpoint-1400"
+model_name = "t5-small-fine-tuned_20-03-2024_19-35-26/checkpoint-3000"
 model_dir = "server/recipe_recommendation/t5/models/" + model_name
 tokenizer = T5Tokenizer.from_pretrained(model_dir)
 model = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
@@ -86,7 +86,7 @@ decoded_output = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
 print("Decoded output: ", decoded_output)
 print("\n")
 
-predicted_title = nltk.sent_tokenize(decoded_output.strip())[0]
+predicted_title = nltk.sent_tokenize(decoded_output.strip())
 print("Prediction: ", predicted_title)
 print("\n")
 
@@ -107,7 +107,7 @@ decoded_output = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
 print("Decoded output: ", decoded_output)
 print("\n")
 
-predicted_title = nltk.sent_tokenize(decoded_output.strip())[0]
+predicted_title = nltk.sent_tokenize(decoded_output.strip())
 print("Prediction: ", predicted_title)
 print("\n")
 

@@ -198,6 +198,86 @@ Prediction:  Preheat oven to 350 degrees F (175 degrees C).
 TEST 4
 Predicted text:  Preheat oven to 350 degrees F (175 degrees C).
 
+20/3/24: 
+Satisfactory results:
+TEST 1: Ingredients + measurements
+Text:  '2 1/2 cups whole wheat pastry or spelt flour', '1 tablespoon baking powder', '2 teaspoons baking soda', '1 tablespoon cinnamon', '1/2 teaspoon ground ginger', '1/2 teaspoon ground cloves or allspice', '1 cup dark agave nectar or pure maple syrup, or half of each', '1 cup applesauce', '1/2 cup safflower oil', '2 teaspoons vanilla extract', '1/2 cup dark or golden raisins', '1/4 cup sliced almonds'
+Output:  tensor([[    0,  2233,    10,  2184,  7348,   565, 25727, 17031,  7943,    10,
+             3,    31,   345, 22777,  4836,    12, 10239,  4526,   377,  4077,
+          3072,  4526,   205,   137,  3796, 14608,    11,  7055,     3,     9,
+           335,  5913,  6100,    26,    17,  2131,     5,   180,    99,    17,
+           544,     8,   829, 13221, 20772,  7055,     6,  6506,  4926,     6,
+          6506, 12495,     6, 18684,     6, 15698,     6, 27577,     7,     6,
+            11,    66,     7,  6174,    15,     5,  2821,  5915,     5,    31,
+             6,     3,    31,  1570,     3,     9,   508,  3047,     6, 14242,
+           544,     8,     3,  4711,   162,  9705,  2046,     6, 22007, 15928,
+             6, 16981,   402,   565,     6,     3,     7,     9,    89, 14923,
+          1043,     6, 13478,     6,    11, 31078,     5, 14117,    16,     8,
+          7055,  4989, 13902,   120,    28,     8,  2192,  3018,     6,  1849,
+            11,  7784,    28,  7055,  4989,     5,  1474, 15839,   139,  2657,
+          2131,     5,    31,     6,     3,    31,   279,     9,  1050,    16,
+             8,   554,    88,   920,  4836,    21,   943,    12,  1640,   676,
+             6,    42,   552,     3,     9,  6290, 17967,     3, 19435,   139,
+             8,  1530,    13,     8,  4340,   639,    91,  1349,     5,  1563,
+          1633,    16,  2131,    21,   335,   676,     6,   258,   919,    91,
+          2400,     3,     9,  4107,  7782,    11,  1633,  1551,     5,    31,
+             1]])
+
+
+Decoded output:  title: Applesauce Spice Cake directions: 'Preheat oven to 350 degrees F (175 degrees C). Grease and flour a 10 inch Bundt pan. Sift together the whole wheat pastry flour, baking powder, baking soda, cinnamon, ginger, cloves, and allspice. Set aside.', 'In a large bowl, whisk together the agave nectar, maple syrup, applesauce, safflower oil, vanilla, and raisins. Beat in the flour mixture alternately with the dry ingredients, beginning and ending with flour mixture. Pour batter into prepared pan.', 'Bake in the preheated oven for 50 to 60 minutes, or until a toothpick inserted into the center of the cake comes out clean. Let cool in pan for 10 minutes, then turn out onto a wire rack and cool completely.'
+
+
+Prediction:  ["title: Applesauce Spice Cake directions: 'Preheat oven to 350 degrees F (175 degrees C).", 'Grease and flour a 10 inch Bundt pan.', 'Sift together the whole wheat pastry flour, baking powder, baking soda, cinnamon, ginger, cloves, and allspice.', 'Set aside.', "', 'In a large bowl, whisk together the agave nectar, maple syrup, applesauce, safflower oil, vanilla, and raisins.", 'Beat in the flour mixture alternately with the dry ingredients, beginning and ending with flour mixture.', 'Pour batter into prepared pan.', "', 'Bake in the preheated oven for 50 to 60 minutes, or until a toothpick inserted into the center of the cake comes out clean.", "Let cool in pan for 10 minutes, then turn out onto a wire rack and cool completely.'"]
+
+
+TEST 2: no measurements + many ingredients
+Text:   brown sugar, raisins, water, shortening, baking soda, salt, ground cinnamon, nutmeg, cloves, flour
+Output:  tensor([[    0,  2233,    10,  2184, 13016,     7,    77, 25727, 17031,  7943,
+            10,     3,    31,   345, 22777,  4836,    12, 10239,  4526,   377,
+          4077,  3072,  4526,   205,   137,  3796, 14608,    11,  7055,     3,
+             9,   668,   226,  2368,  5913,  2131,     5,   180,    99,    17,
+           544,     8,  7055,     6,  4216,  2656,     6, 31078,     6,   387,
+             6,   710,    35,    53,     6,  6506, 12495,     6,  3136,     6,
+         18684,     6,     3,  4796,   526,   122,    11, 27577,     7,     5,
+          2821,  5915,     5,    31,     6,     3,    31,  1570,     3,     9,
+           508,  3047,     6,  3022,   544,     8,  7055,     6,  4216,  2656,
+             6, 31078,     6,   387,     6,    11, 27577,     7,   552,   659,
+            11, 25155,     5, 14117,    16,     8,  7055,  4989,     5,  1474,
+         15839,   139,  2657,  2131,     5,    31,     6,     3,    31,   279,
+             9,  1050,    16,     8,   554,    88,   920,  4836,    21,   604,
+            12,  3097,   676,     6,    42,   552,     3,     9,  6290, 17967,
+             3, 19435,   139,     8,  1530,    13,     8,  4340,   639,    91,
+          1349,     5,  1563,  1633,    16,  2131,    21,   335,   676,     6,
+           258,   919,    91,  2400,     3,     9,  4107,  7782,    11,  1633,
+          1551,     5,    31,     1]])
+
+
+Decoded output:  title: Apple Raisin Spice Cake directions: 'Preheat oven to 350 degrees F (175 degrees C). Grease and flour a 9x13 inch pan. Sift together the flour, brown sugar, raisins, water, shortening, baking soda, salt, cinnamon, nutmeg and cloves. Set aside.', 'In a large bowl, cream together the flour, brown sugar, raisins, water, and cloves until light and fluffy. Beat in the flour mixture. Pour batter into prepared pan.', 'Bake in the preheated oven for 30 to 35 minutes, or until a toothpick inserted into the center of the cake comes out clean. Let cool in pan for 10 minutes, then turn out onto a wire rack and cool completely.'
+
+
+Prediction:  ["title: Apple Raisin Spice Cake directions: 'Preheat oven to 350 degrees F (175 degrees C).", 'Grease and flour a 9x13 inch pan.', 'Sift together the flour, brown sugar, raisins, water, shortening, baking soda, salt, cinnamon, nutmeg and cloves.', 'Set aside.', "', 'In a large bowl, cream together the flour, brown sugar, raisins, water, and cloves until light and fluffy.", 'Beat in the flour mixture.', 'Pour batter into prepared pan.', "', 'Bake in the preheated oven for 30 to 35 minutes, or until a toothpick inserted into the center of the cake comes out clean.", "Let cool in pan for 10 minutes, then turn out onto a wire rack and cool completely.'"]
+
+
+TEST 3: no measurements + few ingredients
+Text:  flour, yeast, apple, banana
+Output:  tensor([[    0,  2233,    10,  5185,   152,     9, 17031,  2466,  7943,    10,
+             3,    31,   345, 22777,  4836,    12, 10239,  4526,   377,  4077,
+          3072,  4526,   205,   137,  3796, 14608,    11,  7055,     3,     9,
+           335,  5913,  6100,    26,    17,  2131,     5,    31,     6,     3,
+            31,  1570,     3,     9,   508,  3047,     6,  2153,  7055,     6,
+         17937,     6,  8947,    11, 13634,     5,  7382,   168,    11,   171,
+           139,  2657,  2131,     5,    31,     6,     3,    31,   279,     9,
+          1050,    44, 10239,  4526,   377,  4077,  3072,  4526,   205,    61,
+            21,   604,    12,  3097,   676,     6,    42,   552,  6290, 17967,
+             3, 19435,   139,  1530,    13,  4340,   639,    91,  1349,     5,
+            31,     1]])
+
+
+Decoded output:  title: Banana Cake II directions: 'Preheat oven to 350 degrees F (175 degrees C). Grease and flour a 10 inch Bundt pan.', 'In a large bowl, mix flour, yeast, apple and banana. Mix well and pour into prepared pan.', 'Bake at 350 degrees F (175 degrees C) for 30 to 35 minutes, or until toothpick inserted into center of cake comes out clean.'
+
+
+Prediction:  ["title: Banana Cake II directions: 'Preheat oven to 350 degrees F (175 degrees C).", 'Grease and flour a 10 inch Bundt pan.', "', 'In a large bowl, mix flour, yeast, apple and banana.", 'Mix well and pour into prepared pan.', "', 'Bake at 350 degrees F (175 degrees C) for 30 to 35 minutes, or until toothpick inserted into center of cake comes out clean.'"]
+
 
 
 7/3/2024: 
