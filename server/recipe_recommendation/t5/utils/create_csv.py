@@ -23,11 +23,6 @@ def get_phrases_to_remove():
     df = pd.read_csv('server/recipe_recommendation/t5/dataset_backup/sorted_ingredients.csv')
 
     phrases_to_remove = df['Tertiary'].tolist()
-    # print(phrases_to_remove)
-    # print(phrases_to_remove[0])
-    # print(phrases_to_remove[1])
-    # print(phrases_to_remove[2])
-
     return phrases_to_remove
 
 def remove_phrases(ingredient):
