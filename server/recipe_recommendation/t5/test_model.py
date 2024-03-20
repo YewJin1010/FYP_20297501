@@ -1,14 +1,14 @@
 import nltk
 import string
 import numpy as np
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, DataCollatorForSeq2Seq, Seq2SeqTrainingArguments, Seq2SeqTrainer
+from transformers import T5Tokenizer, AutoModelForSeq2SeqLM, DataCollatorForSeq2Seq, Seq2SeqTrainingArguments, Seq2SeqTrainer
 from datasets import load_dataset, load_metric
 import torch
 
 # Load model and tokenizer
-model_name = "t5-small-fine-tuned/checkpoint-1400"
+model_name = "t5-small-fine-tuned_20-03-2024_13-55-06/checkpoint-1400"
 model_dir = "server/recipe_recommendation/t5/models/" + model_name
-tokenizer = AutoTokenizer.from_pretrained(model_dir)
+tokenizer = T5Tokenizer.from_pretrained(model_dir)
 model = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
 
 # Constants
@@ -26,39 +26,29 @@ dataset['train'] = dataset_train_validation['train']
 dataset['validation'] = dataset_train_validation['test']
 dataset['test'] = dataset_train_test['test']
 
-# Preprocess
-model_checkpoint = "t5-small"
-tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+# Filter out examples with missing or empty ingredients
+dataset = dataset.filter(lambda example: example['ingredients'] is not None and len(example['ingredients']) > 0)
 
-dataset_cleaned = dataset.filter(
-    lambda example: example['ingredients'] is not None 
-                    and example['directions'] is not None
-                    and len(example['ingredients']) >= 100
-                    and len(example['directions']) >= 100
-)
-
-prefix = "ingredients: "
-
-def clean_text(text):
-    sentences = nltk.sent_tokenize(text.strip())
-    sentences_cleaned = [s for sent in sentences for s in sent.split("\n")]
-    sentences_cleaned_no_titles = [sent for sent in sentences_cleaned
-                                    if len(sent) > 0 and sent[-1] in string.punctuation]
-    text_cleaned = "\n".join(sentences_cleaned_no_titles)
-    return text_cleaned
-
+# Tokenize inputs and targets separately
+ingredients_prefix = "ingredients: "
+title_prefix = "title: "
+directions_prefix = "directions: "
 def preprocess_data(examples):
-    texts_cleaned = [clean_text(text) for text in examples["ingredients"]]
-    inputs = [prefix + text for text in texts_cleaned]
-    model_inputs = tokenizer(inputs, max_length=max_input_length, truncation=True)
+    inputs = [ingredients_prefix + text for text in examples["ingredients"]]
+    titles = [title_prefix + text for text in examples["title"]]
+    directions = [directions_prefix + text for text in examples["directions"]]
 
+    # Combine titles and directions
+    title_directions = [title + directions for title, directions in zip(titles, directions)]
+    model_inputs = tokenizer(inputs, max_length=300, truncation=True, padding="max_length")
+    
     with tokenizer.as_target_tokenizer():
-        labels = tokenizer(examples["directions"], max_length=max_target_length, truncation=True)
+        labels = tokenizer(title_directions, max_length=600, truncation=True, padding="max_length")
 
     model_inputs["labels"] = labels["input_ids"]
     return model_inputs
 
-tokenized_datasets = dataset_cleaned.map(preprocess_data, batched=True)
+tokenized_datasets = dataset.map(preprocess_data, batched=True)
 
 # Testing
 print("TEST 1: Ingredients + measurements")
@@ -75,7 +65,7 @@ decoded_output = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
 print("Decoded output: ", decoded_output)
 print("\n")
 
-predicted_title = nltk.sent_tokenize(decoded_output.strip())[0]
+predicted_title = nltk.sent_tokenize(decoded_output.strip())
 print("Prediction: ", predicted_title)
 print("\n")
 
@@ -157,6 +147,7 @@ def compute_metrics(eval_pred):
 # Prepare Test Dataset
 test_tokenized_dataset = tokenized_datasets["test"]
 def preprocess_test(examples):
+    prefix = 'ingredients: '
     inputs = [prefix + text for text in examples["ingredients"]]
     model_inputs = tokenizer(inputs, max_length=max_input_length, truncation=True, padding="max_length")
     return model_inputs
