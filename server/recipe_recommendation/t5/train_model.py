@@ -13,7 +13,6 @@ print("Device:", device)
 tokenizer = T5Tokenizer.from_pretrained("t5-small")
 
 # Load the pre-trained T5 model
-#model = T5ForConditionalGeneration.from_pretrained("t5-small")
 model = AutoModelForSeq2SeqLM.from_pretrained("t5-small")
 
 dataset_path = 'server/recipe_recommendation/t5/dataset/'

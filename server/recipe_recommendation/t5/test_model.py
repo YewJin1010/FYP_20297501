@@ -63,7 +63,7 @@ tokenized_datasets = dataset_cleaned.map(preprocess_data, batched=True)
 # Testing
 print("TEST 1: Ingredients + measurements")
 text = dataset['test'][30]['ingredients']
-print("TEXT: ", text)
+print("Text: ", text)
 inputs = ["ingredients: " + text]
 
 inputs = tokenizer(inputs, max_length=max_input_length, truncation=True, return_tensors="pt")
@@ -83,6 +83,8 @@ print("\n")
 print("TEST 2: no measurements + many ingredients")
 #text = "flour, sugar, eggs, chocolate, apple, banana"
 text = " brown sugar, raisins, water, shortening, baking soda, salt, ground cinnamon, nutmeg, cloves, flour"
+print("Text: ", text)
+
 inputs = ["ingredients: " + text]
 
 inputs = tokenizer(inputs, max_length=max_input_length, truncation=True, return_tensors="pt")
@@ -102,6 +104,8 @@ print("\n")
 print("TEST 3: no measurements + few ingredients")
 #text = "flour, sugar, eggs, chocolate, apple, banana"
 text = "flour, yeast, apple, banana"
+print("Text: ", text)
+
 inputs = ["ingredients: " + text]
 
 inputs = tokenizer(inputs, max_length=max_input_length, truncation=True, return_tensors="pt")
