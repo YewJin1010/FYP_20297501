@@ -11,8 +11,8 @@ def create_csv(csv_path):
     df['title'] = df['title'].str.replace('[', '').str.replace(']', '')
     
     # Save new csv
-    save_path = 'server/recipe_recommendation/t5/dataset/recipes_dataset.csv'
+    save_path = 'server/recipe_recommendation/t5/dataset_backup/recipes_dataset.csv'
     df.to_csv(save_path, index=False)
 
-csv_path = 'server/recipe_recommendation/t5/dataset_backup/recipes.csv'
+csv_path = 'server/recipe_recommendation/t5/dataset_backup/cake.csv'
 create_csv(csv_path)

@@ -26,11 +26,12 @@ def count_data(csv_path):
         plt.xlabel('Number of Words')
         plt.ylabel('Frequency')
         plt.grid(True)
+        plt.savefig(f'server/recipe_recommendation/t5/dataset_backup/word_distribution_{column}.png')
         plt.show()
 
 # Path to the CSV file
 #csv_path = 'server/recipe_recommendation/t5/dataset/recipes_t5.csv'
-csv_path = 'server/recipe_recommendation/t5/dataset_backup/new_data.csv'
+csv_path = 'server/recipe_recommendation/t5/dataset_backup/recipes_dataset.csv'
 
 # Call the function to count data
 count_data(csv_path)
