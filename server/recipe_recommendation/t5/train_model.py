@@ -18,15 +18,15 @@ model = AutoModelForSeq2SeqLM.from_pretrained("t5-small")
 dataset_path = 'server/recipe_recommendation/t5/dataset/'
 dataset = load_dataset(dataset_path)
 
+# Filter out examples with missing or empty ingredients
+dataset = dataset.filter(lambda example: example['ingredients'] is not None and len(example['ingredients']) > 20)
+
 dataset_train_validation = dataset['train'].train_test_split(test_size=0.2)
 dataset['train'] = dataset_train_validation['train']
 dataset['validation'] = dataset_train_validation['test']
 
 print("Number of rows in the train split:", len(dataset['train']))
 print("Number of rows in the validation split:", len(dataset['validation']))
-
-# Filter out examples with missing or empty ingredients
-dataset = dataset.filter(lambda example: example['ingredients'] is not None and len(example['ingredients']) > 0)
 
 # Tokenize inputs and targets separately
 ingredients_prefix = "ingredients: "
