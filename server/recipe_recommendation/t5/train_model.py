@@ -1,9 +1,9 @@
 import torch
 import pandas as pd
 from transformers import T5ForConditionalGeneration, T5Tokenizer, DataCollatorForSeq2Seq, Seq2SeqTrainingArguments, Seq2SeqTrainer, AutoModelForSeq2SeqLM
-from sklearn.model_selection import train_test_split
 from datasets import load_dataset, Dataset, load_metric
 import numpy as np
+from datetime import datetime
 
 # Use GPU if available
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -30,24 +30,32 @@ print("Number of rows in the validation split:", len(dataset['validation']))
 dataset = dataset.filter(lambda example: example['ingredients'] is not None and len(example['ingredients']) > 0)
 
 # Tokenize inputs and targets separately
-prefix = "ingredients: "
+ingredients_prefix = "ingredients: "
+title_prefix = "title: "
+directions_prefix = "directions: "
 def preprocess_data(examples):
-    inputs = [prefix + text for text in examples["ingredients"]]
-    model_inputs = tokenizer(inputs, max_length=300, truncation=True, padding="max_length")
+    inputs = [ingredients_prefix + text for text in examples["ingredients"]]
+    titles = [title_prefix + text for text in examples["title"]]
+    directions = [directions_prefix + text for text in examples["directions"]]
 
+    # Combine titles and directions
+    title_directions = [title + directions for title, directions in zip(titles, directions)]
+    model_inputs = tokenizer(inputs, max_length=300, truncation=True, padding="max_length")
+    
     with tokenizer.as_target_tokenizer():
-        labels = tokenizer(examples["directions"], max_length=600, truncation=True, padding="max_length")
+        labels = tokenizer(title_directions, max_length=600, truncation=True, padding="max_length")
 
     model_inputs["labels"] = labels["input_ids"]
     return model_inputs
 
-dataset = dataset.filter(lambda example: example['ingredients'] is not None and len(example['ingredients']) > 0)
 tokenized_datasets = dataset.map(preprocess_data, batched=True)
 
 print("tokenized dataset: ", tokenized_datasets)
 
 batch_size = 4
-output_dir = "server/recipe_recommendation/t5/models/t5-small-fine-tuned"
+
+current_datetime = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
+output_dir = f"server/recipe_recommendation/t5/models/t5-small-fine-tuned_{current_datetime}"
 
 training_args = Seq2SeqTrainingArguments(
     output_dir = output_dir,
