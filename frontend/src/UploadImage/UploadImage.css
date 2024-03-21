@@ -2,18 +2,64 @@ img{
   width: 100%;
 }
 
+
+.mode-text{
+  color: white;
+  margin-left: 10%;
+  max-height: 30%;
+  max-width: 80%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  text-align: center;
+  background-color: rgb(255, 201, 37);
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
+.menu-text{
+  color: white;
+  margin-left: 5%;
+  max-height: 30%;
+  max-width: 80%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  text-align: center;
+  background-color: rgb(255, 201, 37);
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
+.gui-bg {
+  background-color: rgb(255, 154, 13);
+  border-radius: 20px;
+  margin-left: 15%;
+  margin-right: 10%;
+  padding-top: 50px;
+  padding-bottom: 10px;
+  max-width: 70%;
+}
+
+.gui-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns */
+  gap: 20px; 
+}
+
 .upload{
   background-color: white;
   border-radius: 10px;
   box-shadow: rgb(21, 68, 183) 0px 8px 24px;
-  width: 360px;
+  width: 80%;
   min-height: 360px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  margin-left: 15%;
+  margin-left: 10%;
+  padding-top: 10px;
+  margin-bottom: 10%;
 }
+
 .upload-info p{
   opacity: 0.6;
   font-weight: 600;
@@ -70,15 +116,12 @@ img{
   width: 340px;
   overflow-y: auto;
 }
-
 .upload-img::-webkit-scrollbar-track{
   background-color: #f1f1f1;
 }
-
 .upload-img::-webkit-scrollbar-thumb{
   background-color: #888;
 }
-
 .upload-img::-webkit-scrollbar-thumb:hover{
   background-color: #555;
 }
@@ -87,7 +130,7 @@ img{
   position: relative;
   max-height: 300px;
 }
-/* remove image button */
+
 .remove-btn{
   width: 25px;
   height:25px;
@@ -109,7 +152,6 @@ img{
   background-color: red;
   color: white;
 }
-
 .remove-btn-text{ 
   font-size: 12px;
   position: absolute;
@@ -117,23 +159,68 @@ img{
   padding-bottom: 3px;
 }
 
+.info-btn, .submit-btn, .change-btn, .openPopup {
+  background-color: rgb(255, 206, 57);
+  border: 1px solid black;
+  width: 200px;
+  padding: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  font-weight: 500;
+}
+
+.info-btn:hover, .submit-btn:hover, .change-btn:hover, .openPopup:hover {
+  background-color: #ffae00;
+  color: black;
+}
+
+.action-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto;
+}
+
+.button-grid {
+  grid-column: span 2;
+}
+
+.empty-square {
+  width: 100%;
+  height: 50px;
+  background-color: blue;
+}
+
+.info-btn {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.submit-btn {
+  grid-row: 2;
+  grid-column: 1;
+  margin-left: 10%;
+  margin-top: 10%;
+}
+
+.change-btn {
+  grid-row: 1;
+  grid-column: 2;
+  margin-bottom: 10%;
+  margin-top: 10%;
+  margin-left:10%;
+}
+
+.openPopup {
+  grid-row: 2;
+  grid-column: 2;
+}
+
+
 .popup-container {
   position: absolute;
   background-color: black;
 }
-
-
-.openPopup {
-  position: fixed;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border: 1px solid #888;
-  width: 200px;
-  padding: 20px;
-  border-radius: 20px;
-  bottom: 200px;
-}
-
 .popup{
   display: block;
   position: absolute;
@@ -180,80 +267,4 @@ img{
   color: black;
   text-decoration: none;
   cursor: pointer;
-}
-
-.action-btns{
-  display: flex;
-  justify-content: space-between;
-  margin-top: 40%;
-  margin-left: 55%;
-  max-height: fit-content;
-  
-}
-.info-btn{
-  position: fixed;
-  background-color: white;
-  border: 1px solid #888;
-  width: 200px;
-  padding: 20px;
-  border-radius: 20px;
-  transform: translate(-50%, -50%);
-  bottom: 400px;
-}
-
-.submit-btn{
-  position: fixed;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border: 1px solid #888;
-  width: 200px;
-  padding: 20px;
-  border-radius: 20px;
-  bottom: 300px;
-}
-
-.change-btn{
-  position: fixed;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border: 1px solid #888;
-  width: 200px;
-  padding: 20px;
-  border-radius: 20px;
-  bottom: 100px;
-}
-
-.openPopup:hover{
-  background-color: #f1f1f1;
-  color: black;
-}
-
-.submit-btn:hover{
-  background-color: #f1f1f1;
-  color: black;
-}
-
-.info-btn:hover{
-  background-color: #f1f1f1;
-  color: black;
-}
-
-.change-btn:hover{
-  background-color: #f1f1f1;
-  color: black;
-}
-
-.mode-text{
-  color: white;
-  margin-left: 20%;
-}
-
-.gui-bg{
-  background-color: black;
-  border-radius: 20px;
-  margin-left: 5%;
-  margin-right: 5%;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  max-height: fit-content;
 }

@@ -9,7 +9,6 @@ from text_detection.detect_text import get_text_detection
 from recipe_recommendation.tf_idf.recommend_recipes import query_recipes
 from chatbot.preprocess_text import autocorrect_text
 from chatbot.chatbot_response import get_bot_response
-from database.database_ingredients import extract_ingredients_from_text
 
 
 app = Flask(__name__)
@@ -142,7 +141,7 @@ def get_response():
             found_ingredients = []
             global recipe_list
 
-            found_ingredients = extract_ingredients_from_text(userText)
+            #found_ingredients = extract_ingredients_from_text(userText)
             print("Found ingredients: ", found_ingredients)
             if found_ingredients:
                 print("Found ingredients: ", found_ingredients)
