@@ -117,10 +117,10 @@ def get_recipes():
 
 @app.route("/ingredients", methods=['GET'])
 def get_available_ingredients():
+    print("flag 1")
     class_list = get_class_list()
+    print("Class list:", class_list)
     return jsonify({'ingredients': class_list})
-
-
 
 @app.route("/chatbotresponse", methods=['POST'])
 def get_response():

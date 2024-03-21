@@ -94,11 +94,6 @@ function UploadImage() {
 
   
   const submitImages = async () => {
-    setShowProgressBar(true);
-    const progressBar = document.querySelector('.progress-bar');
-    progressBar.style.width = '0%';
-    setBackgroundOpacity(0.5);
-    setButtonsDisabled(true);
 
     console.log('Submitting images');
     console.log('File objects Object:', fileObjectsObject);
@@ -111,6 +106,12 @@ function UploadImage() {
         alert('Please select an image to upload');
         return;
     }
+
+    setShowProgressBar(true);
+    const progressBar = document.querySelector('.progress-bar');
+    progressBar.style.width = '0%';
+    setBackgroundOpacity(0.5);
+    setButtonsDisabled(true);
  
     try{
       var formDataObject = new FormData();
@@ -233,6 +234,10 @@ function UploadImage() {
                   <button className="openPopup" onClick={openPopup} disabled={buttonsDisabled}>Available Ingredients</button>
                   <button className="change-btn" onClick={handleDetectChange} disabled={buttonsDisabled}>Change Detector</button>
                 </div>
+                <div className="addons">
+                  <label htmlFor="addon-input" className='addons-title'>Missing something?</label>
+                  <textarea className="addon-input" rows="4" cols="60" disabled={buttonsDisabled}  placeholder= "1 cup flour, 2 teaspoons cinnamon, grapes"></textarea>
+              </div>
               </div>
             </div>
         </div>
