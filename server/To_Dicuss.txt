@@ -1,3 +1,50 @@
+Meeting with Tissa 4: 
+Abstract - overview of problem is 3 lines
+3 lines of what i have done
+3 lines of results
+Conclusion 1 line: impact of this model 
+Summary of the entire project / half page 
+
+introduction : indepth
+Layout background and link to literature / survey papers 
+Addres what others have done: their limitaitions and identify their gaps
+Propose what you are going to do 
+: introduce aims and objectives 
+Say what yr going to do in the subsequent chapters 
+2 to 3 pages 
+Methods 1 and 2 ….. Chapter 3 more detail on method is better
+
+
+Refer datasets: 
+List original. Ref to original down to source. 
+How did you modify and what part are you using
+
+Reference dataset considered: 
+Ref compared dataset
+
+Dataset: 
+Mention also contains crab cakes. 
+Justify why. The word cake there. Doesnt affect the overall process
+This also in another way imrpove the learning process of the model. False negative 
+
+Medium: 
+Can cite 
+Cite as a website 
+
+Consider methodology: 
+Overview what is available and the decision to use the one chosen .
+Pros and cons, hence i chosen xxx
+In depth of xxx. 
+If chose y previously, also explain y 
+Overall ones just explain briefly 
+
+Watershed has limitation xxx. This is sovled by intellient scissors, hence it was chosen. 
+Overview for watershed but in depth to intellgent scissors .
+
+
+
+ 
+
 Todo: 
 1. remove ingredients from dataset to clean up the ingredients expected 
 2. add title to dataset
