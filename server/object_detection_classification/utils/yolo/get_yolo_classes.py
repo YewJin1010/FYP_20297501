@@ -1,19 +1,23 @@
+import yaml
 import os
 import pandas as pd
 
-def get_unique_classes_in_dataset(dataset_path):
-    unique_classes = []
-    for directory in ['train', 'test', 'valid']:
-        csv_file = os.path.join(dataset_path, directory, '_annotations.csv')
-        df = pd.read_csv(csv_file)
-        unique_classes.extend(df['class'].unique().tolist())
-    unique_classes = list(set(unique_classes))  # Remove duplicates
-    return unique_classes
+def read_data_yaml(file_path):
+    with open(file_path, 'r') as file:
+        data = yaml.safe_load(file)
+    return data
 
+def get_classes_from_data_yaml(file_path):
+    data = read_data_yaml(file_path)
+    if 'names' in data:
+        return data['names']
+    else:
+        return None
 
 def get_classes(dataset_path):
-    #dataset_path = 'server/object_detection_classification/multiclass_dataset'
-    unique_classes = get_unique_classes_in_dataset(dataset_path)
+    dataset_path = 'server/object_detection_classification/yolo_dataset'
+    data_yaml_path = os.path.join(dataset_path, 'data.yaml')
+    unique_classes = get_classes_from_data_yaml(data_yaml_path)
     print("Unique classes in the dataset:", unique_classes)
 
     # Read the ingredients CSV into a DataFrame
@@ -39,3 +43,4 @@ def get_classes(dataset_path):
 
     print("Unique classes after removal:", cleaned_classes)
     return cleaned_classes
+
