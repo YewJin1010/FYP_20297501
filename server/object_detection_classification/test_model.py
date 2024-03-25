@@ -4,11 +4,13 @@ import matplotlib as plt
 import seaborn as sns
 import os
 from keras.preprocessing.image import ImageDataGenerator
-from keras.applications.imagenet_utils import preprocess_input
 from keras.models import load_model
 from PIL import Image
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+from keras.applications.imagenet_utils import preprocess_input, decode_predictions 
+from keras.preprocessing.image import ImageDataGenerator
+import datetime
 
 def read_csv(file_path):
     return pd.read_csv(file_path)
@@ -84,8 +86,9 @@ def compare_results(results_csv_path, test_data):
 
 def test_on_sample_images(model, image_paths, columns, results_path):
 
-    model = load_model(model)
-
+    model = load_model(model, compile=False)
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    
     # Create a temporary data generator for the custom images
     data_generator = ImageDataGenerator(preprocessing_function=preprocess_input)
     custom_generator = data_generator.flow_from_dataframe(
@@ -99,10 +102,8 @@ def test_on_sample_images(model, image_paths, columns, results_path):
         shuffle=False
     )
 
-    predict = model.predict_generator(custom_generator, steps = len(image_paths))
-   
+    predict = model.predict(custom_generator, steps = len(image_paths))
     fig, axs = plt.subplots(len(image_paths), 2, figsize=(12, 6 * len(image_paths)))
-
     for i, (image_path, prediction) in enumerate(zip(image_paths, predict)):
         image_name = os.path.basename(image_path)
 
@@ -127,41 +128,64 @@ def test_on_sample_images(model, image_paths, columns, results_path):
 
     plt.subplots_adjust(hspace=0.5)
 
+    now = datetime.datetime.now()
+    date_time = now.strftime("%d-%m-%Y_%H-%M-%S")
     # Save the combined plot
-    output_file_path = os.path.join(results_path, "sample_images_prediction_plots.png")
+    output_file_path = os.path.join(results_path, f'predictions_{date_time}.png')
     plt.savefig(output_file_path)
     plt.show()
 
     print(f"Combined prediction plot saved to: {output_file_path}")
 
+def test_on_sample_images_2(model, image_paths):
+    top_k = 5  # Number of top predictions to display
+
+    for image_path in image_paths:
+        # Load and preprocess the image
+        img = Image.open(image_path)
+     
+        img_array = preprocess_input(img_array[np.newaxis, ...])
+
+        # Get predictions
+        predictions = model.predict(img_array)
+        decoded_predictions = decode_predictions(predictions, top=top_k)[0]
+
+        print(f"Top {top_k} predictions for {os.path.basename(image_path)}:")
+        for _, label, prob in decoded_predictions:
+            print(f"{label}: {prob:.2f}")
+
 # Model Directory
-model = "C:/Users/yewji/FYP_20297501/server/object_detection/trained_models/resnet50.h5"
+model = "server/object_detection_classification/trained_models/resnet50.h5"
 
 # Read CSVs
-train_data = read_csv('C:/Users/yewji/FYP_20297501/server/object_detection/dataset/train/_classes.csv')
-valid_data = read_csv('C:/Users/yewji/FYP_20297501/server/object_detection/dataset/valid/_classes.csv')
-test_data = read_csv('C:/Users/yewji/FYP_20297501/server/object_detection/dataset/test/_classes.csv')
+train_data = read_csv('server/object_detection_classification/dataset/train/_classes.csv')
+valid_data = read_csv('server/object_detection_classification/dataset/valid/_classes.csv')
+test_data = read_csv('server/object_detection_classification/dataset/test/_classes.csv')
 
 # Directory Paths
-data_dir = "C:/Users/yewji/FYP_20297501/server/object_detection/train"
-train_dir = "C:/Users/yewji/FYP_20297501/server/object_detection/dataset/train"
-valid_dir = "C:/Users/yewji/FYP_20297501/server/object_detection/dataset/valid"
-test_dir = "C:/Users/yewji/FYP_20297501/server/object_detection/dataset/test"
+data_dir = "server/object_detection_classification/train"
+train_dir = "server/object_detection_classification/dataset/train"
+valid_dir = "server/object_detection_classification/dataset/valid"
+test_dir = "server/object_detection_classification/dataset/test"
 
 # Result CSV
-results_csv_path = "C:/Users/yewji/FYP_20297501/server/object_detection/results/test_results/results.csv"
-results_path = "C:/Users/yewji/FYP_20297501/server/object_detection/results/test_results"
+results_csv_path = "server/object_detection_classification/results/test_results/results.csv"
+results_path = "server/object_detection_classification/results/test_results"
 
 # Sample Image Paths
-image_path_1 = "C:/Users/yewji/FYP_20297501/server/object_detection/sample_images/blueberries.jpg"
-image_path_2 = "C:/Users/yewji/FYP_20297501/server/object_detection/sample_images/eggs.jpg"
-image_path_3 = "C:/Users/yewji/FYP_20297501/server/object_detection/sample_images/flour.jpg"
-image_path_4 = "C:/Users/yewji/FYP_20297501/server/object_detection/sample_images/apple+banana.jpeg"
+image_path_1 = "server/object_detection_classification/sample_images/blueberries.jpg"
+image_path_2 = "server/object_detection_classification/sample_images/eggs.jpg"
+image_path_3 = "server/object_detection_classification/sample_images/flour.jpg"
+image_path_4 = "server/object_detection_classification/sample_images/apple+banana.jpg"
+image_path_5 = "server/object_detection_classification/sample_images/potato_sweet_potato.jpg"
+image_path_6 = "server/object_detection_classification/sample_images/tomato_carrot.jpg"
 
+image_paths = [image_path_1, image_path_2, image_path_3, image_path_4, image_path_5, image_path_6]
 print("1. Test on test set")
 print("2. Compare results with test csv")
 print("3. Test on sample images")
-choice = input("Enter your choice (1/2/3): ")
+print("4. Test on sample images 2")
+choice = input("Enter your choice (1/2/3/4): ")
 
 # Extract Columns
 train_columns = extract_columns(train_data)
@@ -176,7 +200,8 @@ elif choice == "2":
     accuracy = compare_results(results_csv_path, test_data)
     print(f"Accuracy: {accuracy:.2f}%")
 elif choice == "3":
-    image_paths = [image_path_1, image_path_2, image_path_3, image_path_4]
     test_on_sample_images(model, image_paths, columns, results_path)
+elif choice == "4":
+    test_on_sample_images_2(model, image_paths)
 else: 
     print("Invalid choice. Please enter a valid option (1/2/3)")

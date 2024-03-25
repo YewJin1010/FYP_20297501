@@ -47,3 +47,5 @@ server/database/cakes/*
 server/recipe_recommendation/t5/models/*
 
 server/recipe_recommendation/t5/t5-base
+
+server/object_detection_classification/multiclass_dataset
