@@ -1,4 +1,6 @@
 Meeting with Tissa 4: 
+
+1. 
 Abstract - overview of problem is 3 lines
 3 lines of what i have done
 3 lines of results
@@ -42,6 +44,20 @@ Watershed has limitation xxx. This is sovled by intellient scissors, hence it wa
 Overview for watershed but in depth to intellgent scissors .
 
 
+2. Dataset images: only from stock photos or google images / shoppee 
+Comparing models is critical analysis: 
+methodology and results
+
+Dataset stock photo: 
+Not enough photos 
+Individually allowed ro use or not 
+
+3. Storage
+Reference his github 
+Resources for htis available from xxxxx
+Model in final report: 
+Why was this model used but this one used all the way to findl 
+Final reprot describe process of trial and error and addresses weakensses of eliminated models and hwy it was eliminated until the final one chosen .
 
  
 
