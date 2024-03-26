@@ -19,6 +19,7 @@ def create_new_dataset(classes_to_transfer, dataset_path, destination_path):
         
         # Filter DataFrame to include only specified classes
         df = df[df['class'].isin(classes_to_transfer)]
+        df['class'] = df['class'].str.lower()
         
         # Create directory if it doesn't exist
         os.makedirs(os.path.join(destination_path, directory), exist_ok=True)
