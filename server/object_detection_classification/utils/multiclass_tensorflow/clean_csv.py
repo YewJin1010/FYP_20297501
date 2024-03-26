@@ -10,7 +10,6 @@ def clean_by_images(dataset_path):
         # Read annotations CSV file
         csv_file = os.path.join(dataset_path, directory, '_annotations.csv')
         df = pd.read_csv(csv_file)
-        original_length = len(df)
 
         # Create a list to store indices of rows to remove
         rows_to_remove = []
@@ -31,7 +30,6 @@ def clean_by_images(dataset_path):
         df_cleaned.to_csv(csv_file, index=False)
 
         print(f"Finished cleaning {directory} dataset.")
-        print("Original length of df: ", original_length)
         print(f"New length of df: {len(df_cleaned)}")
 
 def remove_classes_from_all_datasets(dataset_path, classes_to_remove):
@@ -56,7 +54,6 @@ def clean_by_df(dataset_path):
         # Read annotations CSV file
         csv_file = os.path.join(dataset_path, directory, '_annotations.csv')
         df = pd.read_csv(csv_file)
-        original_length = len(df)
 
         # Get list of existing image filenames
         image_files = os.listdir(os.path.join(dataset_path, directory))
@@ -71,8 +68,6 @@ def clean_by_df(dataset_path):
         # Remove rows from DataFrame if corresponding image does not exist
         df = df[df['filename'].isin(image_files)]
         df.to_csv(csv_file, index=False)
-        
-        print(f"Original length of df: {original_length}")
         print(f"Length of df after removal: {len(df)}")
 
 
@@ -92,4 +87,4 @@ elif choice == '3':
 else:
     print("Invalid choice.")
 
-# cream cheese, ham, noodles, cilantro, bacon, sausage, cream, soy sauce
+#  olive oil,noodle,pea,ice,pear,ginger,d,wheat

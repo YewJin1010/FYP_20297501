@@ -1,6 +1,20 @@
 import pandas as pd
 import os 
 
+def convert_classes_to_lowercase(dataset_path):
+    for directory in ['train', 'test', 'valid']:
+        # Read annotations CSV file
+        csv_file = os.path.join(dataset_path, directory, '_annotations.csv')
+        df = pd.read_csv(csv_file)
+
+        # Convert class column to lowercase
+        df['class'] = df['class'].str.lower()
+
+        # Save modified DataFrame back to CSV file
+        df.to_csv(csv_file, index=False)
+
+        print(f"Classes in {directory} dataset converted to lowercase and saved.")
+
 def count_classes(dataset_path):
     for directory in ['train', 'test', 'valid']:
             # Read annotations CSV file
@@ -25,6 +39,18 @@ def count_classes(dataset_path):
 
             # Write class counts into a csv
             class_counts.to_csv(f'server/object_detection_classification/utils/multiclass_tensorflow/{directory}_class_counts.csv')
+
+def get_all_classes(dataset_path):
+    all_classes = set()
+
+    # Iterate through the directories
+    for directory in ['train', 'test', 'valid']:
+        # Read annotations CSV file
+        csv_file = os.path.join(dataset_path, directory, '_annotations.csv')
+        df = pd.read_csv(csv_file)
+        # Convert class column to lowercase and add to set
+        all_classes.update(df['class'].str.lower())
+    return all_classes
 
 def get_classes_present_in_all_datasets(dataset_path):
     # Initialize sets to store unique classes in each dataset
@@ -53,6 +79,12 @@ def get_classes_present_in_all_datasets(dataset_path):
     classes_present_in_all = unique_classes_train.intersection(unique_classes_test, unique_classes_valid)
     
     return list(classes_present_in_all)
+
+def get_classes_not_in_all_datasets(dataset_path):
+    all_classes = get_all_classes(dataset_path)
+    classes_present_in_all = get_classes_present_in_all_datasets(dataset_path)
+    classes_not_in_all_datasets = all_classes - set(classes_present_in_all)
+    return classes_not_in_all_datasets
 
 def count_class_occurrences(dataset_path, classes_present_in_all):
     class_counts = {}
@@ -117,6 +149,9 @@ dataset_path = 'server/object_detection_classification/multiclass_dataset'
 classes_present_in_all_datasets = get_classes_present_in_all_datasets(dataset_path)
 print("Classes present in all three datasets:", classes_present_in_all_datasets)
 print("Number of classes present in all three datasets:", len(classes_present_in_all_datasets))
+
+classes_not_present_in_all_datasets = get_classes_not_in_all_datasets(dataset_path)
+print("Classes not present in all three datasets:", classes_not_present_in_all_datasets)
 
 class_occurrences = count_class_occurrences(dataset_path, classes_present_in_all_datasets)
 print("\nNumber of occurrences of classes present in all datasets:")
