@@ -1,9 +1,6 @@
 import pandas as pd
 import os 
 
-# read csv
-dataset_path = 'server/object_detection_classification/multiclass_dataset'
-
 def count_classes(dataset_path):
     for directory in ['train', 'test', 'valid']:
             # Read annotations CSV file
@@ -116,7 +113,7 @@ def remove_classes_from_all_datasets(dataset_path, classes_to_remove):
         # Write back to CSV file
         df.to_csv(csv_file, index=False)
 
-dataset_path = 'server/object_detection_classification/temp_dataset'
+dataset_path = 'server/object_detection_classification/multiclass_dataset'
 classes_present_in_all_datasets = get_classes_present_in_all_datasets(dataset_path)
 print("Classes present in all three datasets:", classes_present_in_all_datasets)
 print("Number of classes present in all three datasets:", len(classes_present_in_all_datasets))
@@ -132,7 +129,3 @@ print("\nClasses that share images and their counts:")
 for cls, counts in shared_classes.items():
     print(f"{cls}: Train - {counts['train']}, Test - {counts['test']}, Valid - {counts['valid']}")
 
-#remove_classes = input("Enter the classes to remove (comma-separated): ").split(',')
-#remove_classes_from_all_datasets(dataset_path, remove_classes)
-    
-# [bacon,cream cheese,ham,cream]
