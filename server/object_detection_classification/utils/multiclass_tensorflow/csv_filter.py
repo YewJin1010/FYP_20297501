@@ -77,22 +77,6 @@ def count_class_occurrences(dataset_path, classes_present_in_all):
 
     return class_counts
 
-def remove_classes_from_all_datasets(dataset_path, classes_to_remove):
-    # Iterate through the directories
-    for directory in ['train', 'test', 'valid']:
-        # Read annotations CSV file
-        csv_file = os.path.join(dataset_path, directory, '_annotations.csv')
-        df = pd.read_csv(csv_file)
-
-        # Convert class column to lowercase
-        df['class'] = df['class'].str.lower()
-
-        # Remove rows with specified classes
-        df = df[~df['class'].isin(classes_to_remove)]
-
-        # Write back to CSV file
-        df.to_csv(csv_file, index=False)
-
 def get_classes_with_shared_images(dataset_path):
     # Initialize an empty dictionary to store classes with shared images and their counts
     classes_with_shared_images = {}
@@ -117,6 +101,22 @@ def get_classes_with_shared_images(dataset_path):
 
     return classes_with_shared_images
 
+def remove_classes_from_all_datasets(dataset_path, classes_to_remove):
+    # Iterate through the directories
+    for directory in ['train', 'test', 'valid']:
+        # Read annotations CSV file
+        csv_file = os.path.join(dataset_path, directory, '_annotations.csv')
+        df = pd.read_csv(csv_file)
+
+        # Convert class column to lowercase
+        df['class'] = df['class'].str.lower()
+
+        # Remove rows with specified classes
+        df = df[~df['class'].isin(classes_to_remove)]
+
+        # Write back to CSV file
+        df.to_csv(csv_file, index=False)
+
 dataset_path = 'server/object_detection_classification/temp_dataset'
 classes_present_in_all_datasets = get_classes_present_in_all_datasets(dataset_path)
 print("Classes present in all three datasets:", classes_present_in_all_datasets)
@@ -127,11 +127,12 @@ print("\nNumber of occurrences of classes present in all datasets:")
 for class_name, counts in class_occurrences.items():
     print(f"{class_name}: {counts}")
 
+# Get the classes that share images
+shared_classes = get_classes_with_shared_images(dataset_path)
+print("\nClasses that share images and their counts:")
+for cls, counts in shared_classes.items():
+    print(f"{cls}: Train - {counts['train']}, Test - {counts['test']}, Valid - {counts['valid']}")
+
 #rmeove_classes = input("Enter the classes to remove (comma-separated): ").split(',')
 #remove_classes_from_all_datasets(dataset_path, rmeove_classes)
     
-# Get the classes that share images
-shared_classes = get_classes_with_shared_images(dataset_path)
-print("Classes that share images and their counts:")
-for cls, counts in shared_classes.items():
-    print(f"{cls}: Train - {counts['train']}, Test - {counts['test']}, Valid - {counts['valid']}")
