@@ -7,19 +7,15 @@ from get_multiclasses import get_classes
 dataset_path = 'C:/Users/miku/Documents/Yew Jin/xml_dataset/IngredientDetector v4i' 
 desination_path = 'server/object_detection_classification/multiclass_dataset'
 
-classes_to_transfer = get_classes(dataset_path)
-print("Classes to transfer:", classes_to_transfer)
-
 # craete new dataset
 def create_new_dataset(classes_to_transfer, dataset_path, destination_path):
     for directory in ['train', 'test', 'valid']:
         # Read annotations CSV file
         csv_file = os.path.join(dataset_path, directory, '_annotations.csv')
         df = pd.read_csv(csv_file)
-        
+
         # Filter DataFrame to include only specified classes
         df = df[df['class'].isin(classes_to_transfer)]
-        df['class'] = df['class'].str.lower()
         
         # Create directory if it doesn't exist
         os.makedirs(os.path.join(destination_path, directory), exist_ok=True)
@@ -45,6 +41,6 @@ def create_new_dataset(classes_to_transfer, dataset_path, destination_path):
                 else:
                     print(f"Image {image_path} does not exist. Skipping...")
 
-
-
+classes_to_transfer = get_classes(dataset_path)
+print("Classes to transfer:", classes_to_transfer)
 create_new_dataset(classes_to_transfer, dataset_path, desination_path)
