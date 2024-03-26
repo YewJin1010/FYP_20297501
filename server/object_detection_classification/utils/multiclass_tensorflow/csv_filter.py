@@ -2,8 +2,7 @@ import pandas as pd
 import os 
 
 # read csv
-dataset_path = 'server/object_detection_classification/temp_dataset'
-
+dataset_path = 'server/object_detection_classification/multiclass_dataset'
 
 def count_classes(dataset_path):
     for directory in ['train', 'test', 'valid']:
@@ -133,6 +132,7 @@ print("\nClasses that share images and their counts:")
 for cls, counts in shared_classes.items():
     print(f"{cls}: Train - {counts['train']}, Test - {counts['test']}, Valid - {counts['valid']}")
 
-#rmeove_classes = input("Enter the classes to remove (comma-separated): ").split(',')
-#remove_classes_from_all_datasets(dataset_path, rmeove_classes)
+#remove_classes = input("Enter the classes to remove (comma-separated): ").split(',')
+#remove_classes_from_all_datasets(dataset_path, remove_classes)
     
+# [bacon,cream cheese,ham,cream]
