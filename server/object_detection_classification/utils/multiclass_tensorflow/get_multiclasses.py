@@ -34,8 +34,8 @@ def get_classes(dataset_path):
     print("Classes matched with ingredients:", matched_classes)
 
     # Remove classes
-    classes_to_remove = input("Enter the classes to remove (comma-separated): ").split(',')
-    cleaned_classes = [cls for cls in matched_classes if cls not in classes_to_remove]
+    #classes_to_remove = input("Enter the classes to remove (comma-separated): ").split(',')
+    #cleaned_classes = [cls for cls in matched_classes if cls not in classes_to_remove]
 
-    print("Unique classes after removal:", cleaned_classes)
-    return cleaned_classes
+    #print("Unique classes after removal:", cleaned_classes)
+    return matched_classes
