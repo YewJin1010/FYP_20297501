@@ -32,6 +32,11 @@ def create_new_dataset(classes_to_transfer, dataset_path, destination_path):
                 image_path = os.path.join(dataset_path, directory, row['filename'])
                 destination_image_path = os.path.join(destination_path, directory, row['filename'])
                 
+                # Check if destination image file exists
+                if os.path.exists(destination_image_path):
+                    print(f"Destination image {destination_image_path} already exists. Skipping...")
+                    continue
+                
                 # Check if image file exists
                 if os.path.exists(image_path):
                     # Copy image using shutil.copy()
