@@ -4,7 +4,8 @@ import shutil
 
 from get_multiclasses import get_classes
 
-dataset_path = 'C:/Users/miku/Documents/Yew Jin/xml_dataset/IngredientDetector v4i' 
+dataset = 'ingredients v1i'
+dataset_path = f'C:/Users/miku/Documents/Yew Jin/xml_dataset/{dataset}' 
 desination_path = 'server/object_detection_classification/multiclass_dataset'
 
 # craete new dataset
@@ -15,13 +16,19 @@ def create_new_dataset(classes_to_transfer, dataset_path, destination_path):
         df = pd.read_csv(csv_file)
 
         # Filter DataFrame to include only specified classes
-        df = df[df['class'].isin(classes_to_transfer)]
+        df_filtered = df[df['class'].isin(classes_to_transfer)]
         
         # Create directory if it doesn't exist
         os.makedirs(os.path.join(destination_path, directory), exist_ok=True)
         
         # Save filtered DataFrame to new CSV file
-        df.to_csv(os.path.join(destination_path, directory, '_annotations.csv'), index=False)
+        output_csv_file = os.path.join(destination_path, directory, '_annotations.csv')
+        if os.path.exists(output_csv_file):
+            # Append to existing CSV file if it exists
+            df_filtered.to_csv(output_csv_file, mode='a', header=False, index=False)
+        else:
+            # Otherwise, create a new CSV file
+            df_filtered.to_csv(output_csv_file, index=False)
 
         # Copy images for each class
         for cls in classes_to_transfer:
@@ -34,19 +41,11 @@ def create_new_dataset(classes_to_transfer, dataset_path, destination_path):
                     print(f"Destination image {destination_image_path} already exists. Skipping...")
                     continue
                 
-                # Check if image file exists
-                if os.path.exists(image_path):
-                    # Check if the current row already exists in the destination DataFrame
-                    existing_rows = df[(df['filename'] == row['filename']) & (df['class'] == row['class'])]
-                    if len(existing_rows) > 1:
-                        # Skip copying the image if all data in the row are the same as an existing row
-                        if all(existing_rows.iloc[0] == existing_rows.iloc[i] for i in range(1, len(existing_rows))):
-                            print(f"Skipping image {image_path} as all data in the row are the same as an existing row.")
-                            continue
-                        
+                try:
                     # Copy image using shutil.copy()
                     shutil.copy(image_path, destination_image_path)
-                else:
+                    print(f"Image {image_path} copied to {destination_image_path}")
+                except FileNotFoundError:
                     print(f"Image {image_path} does not exist. Skipping...")
 
 classes_to_transfer = get_classes(dataset_path)
