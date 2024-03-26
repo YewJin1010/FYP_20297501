@@ -4,8 +4,8 @@ import shutil
 
 from get_multiclasses import get_classes
 
-dataset_path = 'server/object_detection_classification/multiclass_dataset'
-desination_path = 'server/object_detection_classification/transfer_dataset'
+dataset_path = 'C:/Users/miku/Documents/Yew Jin/xml_dataset/IngredientDetector v4i' 
+desination_path = 'server/object_detection_classification/multiclass_dataset'
 
 classes_to_transfer = get_classes(dataset_path)
 print("Classes to transfer:", classes_to_transfer)
