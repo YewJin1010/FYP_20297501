@@ -36,6 +36,14 @@ def create_new_dataset(classes_to_transfer, dataset_path, destination_path):
                 
                 # Check if image file exists
                 if os.path.exists(image_path):
+                    # Check if the current row already exists in the destination DataFrame
+                    existing_rows = df[(df['filename'] == row['filename']) & (df['class'] == row['class'])]
+                    if len(existing_rows) > 1:
+                        # Skip copying the image if all data in the row are the same as an existing row
+                        if all(existing_rows.iloc[0] == existing_rows.iloc[i] for i in range(1, len(existing_rows))):
+                            print(f"Skipping image {image_path} as all data in the row are the same as an existing row.")
+                            continue
+                        
                     # Copy image using shutil.copy()
                     shutil.copy(image_path, destination_image_path)
                 else:
