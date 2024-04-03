@@ -1,25 +1,24 @@
-import pytesseract 
-import matplotlib.pyplot as plt
+import cv2
+import csv
 import numpy as np
-import re, os, cv2, csv
+import os
+import re
+import matplotlib.pyplot as plt
+import pytesseract
 from PIL import Image
-import nltk
 from nltk.corpus import stopwords
 
-# Set the path to the Tesseract executable
-pytesseract.pytesseract.tesseract_cmd = r'C:/Users/yewji/FYP_20297501/server/text_detection/Tesseract-OCR/tesseract.exe'
-
-# Set the confidence threshold for text detection
-confidence_threshold = 50
+# Path to the Tesseract executable
+pytesseract.pytesseract.tesseract_cmd = r'text_detection/Tesseract-OCR/tesseract.exe'
 
 # Function to preprocess the image
 def preprocess_image(image):
-    rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    gray_image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2GRAY)
-    resized_image = cv2.resize(gray_image, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
-    gaussian_blur_image = cv2.GaussianBlur(resized_image, (5, 5), 0)
-    laplacian = cv2.Laplacian(gaussian_blur_image, cv2.CV_64F)
-    sharpened_image = np.uint8(np.clip(gaussian_blur_image - 0.5 * laplacian, 0, 255))
+    rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # Convert to RGB
+    gray_image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2GRAY)   # Convert to grayscale
+    resized_image = cv2.resize(gray_image, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC) # Resize the image
+    gaussian_blur_image = cv2.GaussianBlur(resized_image, (5, 5), 0) # Apply Gaussian blur
+    laplacian = cv2.Laplacian(gaussian_blur_image, cv2.CV_64F) # Apply Laplacian filter
+    sharpened_image = np.uint8(np.clip(gaussian_blur_image - 0.5 * laplacian, 0, 255)) # Sharpen the image
    
     return sharpened_image
 
@@ -32,7 +31,7 @@ def detect_text(image, confidence_threshold):
    
     # Iterate through detected text regions
     for i in range(len(d['text'])):
-        # Check confidence score against threshold
+        # Compare confidence score against threshold
         if int(d['conf'][i]) > confidence_threshold:
             # Extract text, bounding box coordinates, and confidence score
             text = d['text'][i]
@@ -43,24 +42,21 @@ def detect_text(image, confidence_threshold):
 
     return detected_text_list
 
+# Function to filter non-alphanumeric characters and stopwords from detected text
 def filter_text(detected_text_list):
-    text_list = []
-    for text_info in detected_text_list:
-        text, confidence, left, top, width, height = text_info
-        text_list.append(text)
-    
-    # Remove non-alphanumeric characters
-    text_list = [re.sub(r'\W+', ' ', text) for text in text_list]
-    # Convert to lowercase
-    text_list = [text.lower() for text in text_list]
     # Remove stopwords
     stop_words = set(stopwords.words('english'))
-    text_list = [' '.join([word for word in text.split() if word not in stop_words]) for text in text_list]
+    # Extract text from detected text list
+    filtered_text = []
 
-    # Remove empty strings
-    text_list = list(filter(None, text_list))
-
-    return text_list
+    for text_info in detected_text_list:
+        text, _, _, _, _, _ = text_info
+        text = re.sub(r'\W+', ' ', text)  # Remove non-alphanumeric characters
+        text = ' '.join([word for word in text.lower().split() if word not in stop_words])  # Remove stopwords
+        # Append to filtered text list
+        if text:
+            filtered_text.append(text)
+    return filtered_text
 
 # Function to draw bounding boxes and text labels on the image
 def draw_boxes(image, detected_text_list):
@@ -72,49 +68,45 @@ def draw_boxes(image, detected_text_list):
         label = f"{text} ({confidence}%)"
         cv2.putText(image, label, (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
+# Load the ingredients from the CSV file
 def get_ingredients():
-    file_path = "text_detection/sorted_ingredients.csv"
+    file_path = "text_detection/cleaned_ingredients.csv"
     ingredients = []
     with open(file_path, newline='') as csvfile:
         reader = csv.reader(csvfile)
-        first_row_skipped = False
+        next(reader)  # Skip header row
         for row in reader:
-            if not first_row_skipped:
-                first_row_skipped = True
-                continue  # Skip the first row
             ingredients.extend(row)
-    
+
     # Remove empty strings
     ingredients = list(filter(None, ingredients))
     return ingredients
 
+# Function to perform text detection on the image
 def get_text_detection(image_path):
-    # show image
+
+    # Set the confidence threshold for text detection
+    confidence_threshold = 50
+
+    # Test if the image can be opened
     try: 
         image = Image.open(image_path)
     except Exception as e:
         error = str(e)
-        print("here")
+        print("Error reading the image: ", error)
         return error
 
-    plt.imshow(image)
-    plt.savefig("text_detection/results/original_image.jpg")    
-
     # Load the image into a numpy array
-    image_np = np.array(Image.open(image_path))
+    image_np = np.array(image)
     # Read the image
     original_image = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
-   # Check if the image is read successfully
     if original_image is not None:
         # Preprocess the image
         preprocessed_image = preprocess_image(original_image)
-
         # Detect text in the image
         detected_text_list = detect_text(preprocessed_image, confidence_threshold)
         # Filter text
         filtered_text = filter_text(detected_text_list)
-        print("Filtered text: ", filtered_text)
-
         # Do not draw if no text detected
         if len(detected_text_list) == 0:
             print("No text detected.")
@@ -130,25 +122,20 @@ def get_text_detection(image_path):
             #plt.show()
             # Define the directory to save the plot
             plot_directory = os.path.join('text_detection', 'results')
-
             # Extract the file name from the FileStorage object
             image_name = image_path.filename
-
             # Construct the full path for saving the plot
             plot_path = os.path.join(plot_directory, image_name)
-
             # Save the plot
             plt.savefig(plot_path)
         
+        # Get the list of ingredients
         ingredients_list = get_ingredients()
         # Check if any of the detected text is an ingredient
         detected_ingredients = [text for text in filtered_text if text in ingredients_list]
         print("Detected ingredients: ", detected_ingredients)
-
     else:
         print("Error reading the image.")
-
+    
     return detected_ingredients
-
-
 

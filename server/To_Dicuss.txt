@@ -358,7 +358,7 @@ Object Detection:
 - Considered the use of VIT- visual transformer but it was only introduced late last year
 
 Text Detection: 
-- Write function to make TrOCR work for show weakness and prove it
+- Write function to make TrOCR work or show weakness and prove it
 
 Chatbot: 
 - Find comparison of expressions or syntax:
