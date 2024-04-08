@@ -73,6 +73,14 @@ https://www.kaggle.com/datasets/kritikseth/fruit-and-vegetable-image-recognition
 KRITIK SETH, 2022, Fruits and Vegetables Image Recognition Dataset
 Fruit and Vegetable Images for Object Recognition
 
+10.
+# phanloaihat > 2023-03-14 11:30pm
+https://universe.roboflow.com/xu-ly-anh/phanloaihat
+phanloaihat - v2 2023-03-14 11:30pm
+==============================
+
+This dataset was exported via roboflow.com on November 20, 2023 at 1:29 AM GMT
+
 
 Meeting with Tissa 4: 
 
