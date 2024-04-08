@@ -1,6 +1,9 @@
 import json
 from collections import Counter
 
+"""
+Function to extract unique ingredients from the JSON file and save them to a new JSON file
+"""
 def extract_unique_ingredients():
     json_file_path = 'server/database/ingredients_list.json'
     # Load the JSON file
