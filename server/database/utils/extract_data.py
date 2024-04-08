@@ -1,6 +1,10 @@
 import json
 import pandas as pd
 
+"""
+Function to extract data from the JSON file and save it to a new JSON or CSV file
+"""
+
 # Load the data from cake.json
 with open('server/database/dataset/cake.json', 'r') as json_file:
     data = json.load(json_file)
