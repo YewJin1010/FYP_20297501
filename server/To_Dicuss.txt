@@ -2,6 +2,77 @@ Cake Datasets:
 https://github.com/josephrmartinez/recipe-dataset/blob/main/13k-recipes.csv
 https://github.com/sandhaka/recipes-dataset/blob/main/dishes.csv
 
+Roboflow Datasets: 
+1. 
+# Detection_of_ingr > 2023-05-24 11:05pm
+https://universe.roboflow.com/fruits-qrswm/detection_of_ingr
+
+Detection_of_ingr - v3 2023-05-24 11:05pm
+==============================
+
+This dataset was exported via roboflow.com on January 3, 2024 at 10:25 AM GMT
+
+2.
+# Every-Ingredient-2 > 2023-05-01 1:47pm
+https://universe.roboflow.com/vegetableimages/every-ingredient-2
+Every-Ingredient-2 - v2 2023-05-01 1:47pm
+==============================
+
+This dataset was exported via roboflow.com on January 3, 2024 at 8:12 AM GMT
+
+3.
+# Food ingredient recognition > 2022-02-24 1:40pm
+https://universe.roboflow.com/thanh-huy-phan/food-ingredient-recognition
+Food ingredient recognition - v4 2022-02-24 1:40pm
+==============================
+
+This dataset was exported via roboflow.com on March 31, 2023 at 12:12 AM GMT
+
+4.
+# FOOD-INGREDIENTS dataset > 2023-10-06 11:10pm
+https://universe.roboflow.com/food-recipe-ingredient-images-0gnku/food-ingredients-dataset
+FOOD-INGREDIENTS dataset - v4 2023-10-06 11:10pm
+==============================
+
+This dataset was exported via roboflow.com on October 18, 2023 at 5:20 PM GMT
+
+5.
+# IngredientDetectorMerged > 2022-10-10 8:46pm
+https://universe.roboflow.com/tsiisccds/ingredientdetectormerged'
+IngredientDetectorMerged - v6 2022-10-10 8:46pm
+==============================
+
+This dataset was exported via roboflow.com on January 3, 2024 at 8:53 AM GMT
+
+6.
+# IngredientDetector > 2022-10-06 2:24am
+https://universe.roboflow.com/tsiisccds/ingredientdetector
+IngredientDetector - v4 2022-10-06 2:24am
+==============================
+
+This dataset was exported via roboflow.com on January 3, 2024 at 9:00 AM GMT
+
+7.
+# Ingredients Detection > 2023-07-08 6:04pm
+https://universe.roboflow.com/dappuu/ingredients-detection-ze16s
+Ingredients Detection - v20 2023-07-08 6:04pm
+==============================
+
+This dataset was exported via roboflow.com on January 3, 2024 at 8:35 AM GMT
+
+8.
+# ingredients > 2023-09-26 11:41am
+https://universe.roboflow.com/object-detection-f8udo/ingredients-hbvsw
+ingredients - v1 2023-09-26 11:41am
+==============================
+
+This dataset was exported via roboflow.com on December 16, 2023 at 5:31 PM GMT
+
+9.
+https://www.kaggle.com/datasets/kritikseth/fruit-and-vegetable-image-recognition
+KRITIK SETH, 2022, Fruits and Vegetables Image Recognition Dataset
+Fruit and Vegetable Images for Object Recognition
+
 
 Meeting with Tissa 4: 
 
