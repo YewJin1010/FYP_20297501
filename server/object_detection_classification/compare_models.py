@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np 
 from sklearn.preprocessing import OneHotEncoder 
 from keras.preprocessing.image import ImageDataGenerator
-from keras.applications import ResNet50
+from keras.applications import ResNet50, MobileNetV2, EfficientNetB0
 from keras.layers import Input, MaxPool2D, MaxPooling2D, AveragePooling2D, add, Dense, Activation, Flatten, Dropout, BatchNormalization, Conv2D, MaxPooling2D, GlobalAveragePooling2D
 from keras.models import Model
 import matplotlib.pyplot as plt
@@ -11,6 +11,7 @@ from keras.applications.imagenet_utils import preprocess_input
 from keras.callbacks import ModelCheckpoint, EarlyStopping, History, ReduceLROnPlateau
 import glob, os, shutil
 from keras.optimizers import Adam
+import time
 
 def read_csv(file_path):
     return pd.read_csv(file_path)
@@ -61,6 +62,21 @@ def plot_images_per_class(class_counts, title):
     plt.xticks(rotation=45, ha='right')
     plt.show()
 
+def create_resnet50_base_model(input_shape, num_classes): 
+    base_model = ResNet50(weights='imagenet', include_top=False, input_shape = input_shape)
+
+    x = base_model.output
+    x = GlobalAveragePooling2D()(x)
+    x = Dense(128, activation= 'elu')(x)
+    predictions = Dense(num_classes, activation = 'sigmoid')(x)
+
+    model = Model(inputs = base_model.input, outputs = predictions)
+    for layer in base_model.layers: 
+        layer.trainable = False
+    
+    model.compile(optimizer=Adam(lr=0.0001), loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+
 def create_resnet50_model(input_shape, num_classes):
     base_model = ResNet50(weights='imagenet', include_top=False, input_shape=input_shape)
     for layer in base_model.layers:
@@ -78,6 +94,43 @@ def create_resnet50_model(input_shape, num_classes):
     model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
     
     return model
+
+def create_mobilenet_model(input_shape, num_classes):
+    base_model = MobileNetV2(weights='imagenet', include_top=False, input_shape=input_shape)
+    for layer in base_model.layers:
+        layer.trainable = False
+    # Get base model output 
+    base_model_ouput = base_model.output
+
+    # Adding our own layer 
+    x = GlobalAveragePooling2D()(base_model_ouput)
+    # Adding fully connected layer
+    x = Dense(512, activation='relu')(x)
+    x = Dense(num_classes, activation='softmax', name='fcnew')(x)
+    
+    model = Model(inputs=base_model.input, outputs=x)
+    model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
+    
+    return model
+
+def create_efficientnet_model(input_shape, num_classes):
+    base_model = EfficientNetB0(weights='imagenet', include_top=False, input_shape=input_shape)
+    for layer in base_model.layers:
+        layer.trainable = False
+    # Get base model output 
+    base_model_ouput = base_model.output
+
+    # Adding our own layer 
+    x = GlobalAveragePooling2D()(base_model_ouput)
+    # Adding fully connected layer
+    x = Dense(512, activation='relu')(x)
+    x = Dense(num_classes, activation='softmax', name='fcnew')(x)
+    
+    model = Model(inputs=base_model.input, outputs=x)
+    model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
+    
+    return model
+
 
 def train_model(model, train_generator, valid_generator, epochs):
     STEP_SIZE_TRAIN = train_generator.n // train_generator.batch_size
@@ -146,22 +199,36 @@ elif choice == "n":
 else:
     print("Invalid choice. Please enter a valid option (y/n).")
 
-model = create_resnet50_model(input_shape=(224, 224, 3), num_classes=len(classes))
+print("Select the model you want to train:")
+print("1. ResNet50\n2. MobileNetV2\n3. EfficientNetB0")
+model_choice = int(input("Enter your choice: "))
+if model_choice == 1:
+    model = create_resnet50_model(input_shape=(224, 224, 3), num_classes=len(classes))
+    file_name = "resnet50"
+elif model_choice == 2:
+    model = create_mobilenet_model(input_shape=(224, 224, 3), num_classes=len(classes))
+    file_name = "mobilenetv2"
+elif model_choice == 3:
+    model = create_efficientnet_model(input_shape=(224, 224, 3), num_classes=len(classes))
+    file_name = "efficientnetb0"
+else:
+    print("Invalid choice. Please enter a valid option.")
 
 model.summary()
 
-file_name = "resnet50"
-
 callbacks = [
     ModelCheckpoint(
-        filepath=os.path.join(checkpoint_save_path, f'base_{file_name}.h5'),
+        filepath=os.path.join(checkpoint_save_path, f'{file_name}.h5'),
         save_best_only=True
     ),
     History()
 ]
-
+# Train model
 model = train_model(model, train_generator, valid_generator, train_epochs)
-model_path = os.path.join(model_save_path, f'{file_name}_model.h5')
+
+# Save model
+now = time.strftime("%d-%m-%Y_%H-%M-%S")
+model_path = os.path.join(model_save_path, f'{file_name}_{now}_model.h5')
 model.save(model_path)
 
 history = callbacks[-1]
@@ -175,4 +242,4 @@ plt.title('Training and Validation Accuracy and Loss over Epochs')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.legend()
-plt.savefig(os.path.join(plot_path, f'{file_name}.png'))
+plt.savefig(os.path.join(plot_path, f'{file_name}_{now}.png'))
