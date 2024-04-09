@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np 
 from sklearn.preprocessing import OneHotEncoder 
 from keras.preprocessing.image import ImageDataGenerator
-from keras.applications import ResNet50, MobileNetV2, EfficientNetB0
+from keras.applications import ResNet50, MobileNetV2
 from keras.layers import Input, MaxPool2D, MaxPooling2D, AveragePooling2D, add, Dense, Activation, Flatten, Dropout, BatchNormalization, Conv2D, MaxPooling2D, GlobalAveragePooling2D
 from keras.models import Model
 import matplotlib.pyplot as plt
@@ -113,25 +113,6 @@ def create_mobilenet_model(input_shape, num_classes):
     
     return model
 
-def create_efficientnet_model(input_shape, num_classes):
-    base_model = EfficientNetB0(weights='imagenet', include_top=False, input_shape=input_shape)
-    for layer in base_model.layers:
-        layer.trainable = False
-    # Get base model output 
-    base_model_ouput = base_model.output
-
-    # Adding our own layer 
-    x = GlobalAveragePooling2D()(base_model_ouput)
-    # Adding fully connected layer
-    x = Dense(512, activation='relu')(x)
-    x = Dense(num_classes, activation='softmax', name='fcnew')(x)
-    
-    model = Model(inputs=base_model.input, outputs=x)
-    model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
-    
-    return model
-
-
 def train_model(model, train_generator, valid_generator, epochs):
     STEP_SIZE_TRAIN = train_generator.n // train_generator.batch_size
     STEP_SIZE_VALID = valid_generator.n // valid_generator.batch_size
@@ -200,7 +181,7 @@ else:
     print("Invalid choice. Please enter a valid option (y/n).")
 
 print("Select the model you want to train:")
-print("1. ResNet50\n2. MobileNetV2\n3. EfficientNetB0")
+print("1. ResNet50\n2. MobileNetV2")
 model_choice = int(input("Enter your choice: "))
 if model_choice == 1:
     model = create_resnet50_model(input_shape=(224, 224, 3), num_classes=len(classes))
@@ -208,9 +189,6 @@ if model_choice == 1:
 elif model_choice == 2:
     model = create_mobilenet_model(input_shape=(224, 224, 3), num_classes=len(classes))
     file_name = "mobilenetv2"
-elif model_choice == 3:
-    model = create_efficientnet_model(input_shape=(224, 224, 3), num_classes=len(classes))
-    file_name = "efficientnetb0"
 else:
     print("Invalid choice. Please enter a valid option.")
 
@@ -235,11 +213,20 @@ history = callbacks[-1]
 
 # Plot training and validation loss
 plt.plot(history.history['loss'], label='Training Loss')
-plt.plot(history.history['accuracy'], label='Training Accuracy')
 plt.plot(history.history['val_loss'], label='Validation Loss')
-plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
-plt.title('Training and Validation Accuracy and Loss over Epochs')
+plt.title('Training and Validation Loss over Epochs')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.legend()
-plt.savefig(os.path.join(plot_path, f'{file_name}_{now}.png'))
+plt.savefig(os.path.join(plot_path, f'{file_name}_{now}_loss.png'))
+
+# Plot training and validation accuracy
+plt.plot(history.history['accuracy'], label='Training Accuracy')
+plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+plt.title('Training and Validation Accuracy over Epochs')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.legend()
+plt.savefig(os.path.join(plot_path, f'{file_name}_{now}_accuracy.png'))
+            
+
