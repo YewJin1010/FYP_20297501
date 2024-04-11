@@ -17,8 +17,8 @@ from sklearn.metrics import accuracy_score,matthews_corrcoef
 import torch
 from torch.utils.data import Dataset, DataLoader
 
-# Create a custom dataset class
-class CustomDataset(Dataset):
+# Dataset class
+class Dataset(Dataset):
     def __init__(self, texts, labels, tokenizer, max_length):
         self.texts = texts
         self.labels = labels
@@ -39,7 +39,7 @@ class CustomDataset(Dataset):
         }
     
 # Load your dataset
-df = pd.read_csv('C:/Users/yewji/FYP_20297501/server/recipe_recommendation/bert/datasets/title_ingredient.csv')
+df = pd.read_csv('recipe_recommendation/bert/dataset/cleaned_recipes_dataset.csv')
 
 print(df['title'].unique())
 
@@ -67,8 +67,8 @@ num_epochs = 3
 max_length = 128
 
 # Create dataset objects
-train_dataset = CustomDataset(train_df['sentence'], train_df['label'], tokenizer, max_length)
-val_dataset = CustomDataset(val_df['sentence'], val_df['label'], tokenizer, max_length)
+train_dataset = Dataset(train_df['sentence'], train_df['label'], tokenizer, max_length)
+val_dataset = Dataset(val_df['sentence'], val_df['label'], tokenizer, max_length)
 
 # Create data loaders
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)

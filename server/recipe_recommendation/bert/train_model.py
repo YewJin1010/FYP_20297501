@@ -23,7 +23,7 @@ df_train, df_valid = train_test_split(df, test_size=0.2)
 label_map = {}
 
 # Read the label map txt file
-with open('recipe_recommendation/bert/label_map.txt', 'r') as file:
+with open('recipe_recommendation/bert/dataset/label_map.txt', 'r') as file:
     lines = file.readlines()
 
 # Create the label map dictionary
@@ -35,14 +35,16 @@ for line in lines:
 df_train['title'] = df_train['title'].map(label_map)
 df_valid['title'] = df_valid['title'].map(label_map)
 
-print(df_train.title)
-print(len(df_train.title))
-print(df_valid.title)
-print(len(df_valid.title))
+print("df_train title: ", df_train.title)
+print("df_train title len: ", len(df_train.title))
+print("df_valid title: ", df_valid.title)
+print("df_valid title len: ", len(df_valid.title))
       
 num_classes_train = len(df_train.title)
 num_classes_valid = len(df_valid.title)
 
+print("len(df_train.title): ", len(df_train['title']))
+print("num_classes_train: ", num_classes_train)
 # Use one-hot encoding for the 'title' column
 y_train = to_categorical(df_train['title'], num_classes=num_classes_train)
 y_valid = to_categorical(df_valid['title'], num_classes=num_classes_valid)
