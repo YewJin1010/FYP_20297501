@@ -17,11 +17,9 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
 # Path to the saved model
-PATH_TO_SAVED_MODEL = 'C:/Users/yewji/FYP_20297501/server/object_detection_classification/tensorflow/pretrained_models/faster_rcnn_resnet50_v1_640x640_coco17_tpu-8/saved_model'
+PATH_TO_SAVED_MODEL = 'object_detection_classification/tensorflow/pretrained_models/faster_rcnn_resnet50_v1_640x640_coco17_tpu-8/saved_model'
 # Path to the label map
-PATH_TO_LABELS = 'C:/Users/yewji/FYP_20297501/server/object_detection_classification/tensorflow/data/mscoco_complete_label_map.pbtxt'
-# List of classes
-class_list = ['almonds', 'apple', 'apricots', 'avocado', 'baking_soda', 'banana', 'bell_pepper', 'blueberry', 'brown_sugar', 'butter', 'carrot', 'cashews', 'cheese', 'cherries', 'chestnuts', 'chickpeas', 'cinnamon', 'corn', 'dates', 'dried_currant', 'dried_figs', 'egg', 'flour', 'garlic', 'ginger', 'grapefruit', 'grapes', 'hazelnut', 'kiwi', 'lemon', 'lettuce', 'lime', 'macadamia', 'mandarin', 'mango', 'milk', 'mozzarella', 'oats', 'oil', 'onion', 'orange', 'papaya', 'paprika', 'peanuts', 'pear', 'pecan', 'pineapple', 'pistachio', 'plums', 'pomegranate', 'potato', 'pumpkin', 'raspberries', 'rice', 'rice_flour', 'salt', 'semolina', 'strawberry', 'sweet_potato', 'tomato', 'turnip', 'walnut', 'watermelon', 'wheat_flour', 'white_sugar', 'yogurt']
+PATH_TO_LABELS = 'object_detection_classification/tensorflow/data/mscoco_complete_label_map.pbtxt'
 
 print('Loading model...', end='')
 start_time = time.time()
@@ -36,9 +34,16 @@ print('Model loaded after {} seconds'.format(elapsed_time))
 # Label Map data
 category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_LABELS, use_display_name=True)
 
-model = "C:/Users/yewji/FYP_20297501/server/object_detection_classification/trained_models/resnet50.h5"
+# Path to ResNet50 model
+model = "object_detection_classification/trained_models/resnet50.h5"
+
+def extract_columns(dataframe):
+    return dataframe.keys().values.tolist()
 
 def get_class_list():
+    dataframe = pd.read_csv('object_detection_classification/dataset/train/_classes.csv')
+    columns = extract_columns(dataframe)
+    class_list = [col for col in columns if col != 'filename']
     return class_list
 
 # Function to load an image into a numpy array
@@ -236,6 +241,7 @@ def detect_and_classify(image_path):
     image_np = load_image_into_numpy_array(image_path)
     image_np_with_detections, filtered_detections = detect_objects(image_np, detection_score_threshold)
     rois_list = extract_and_resize_rois(image_np_with_detections, filtered_detections)
+    class_list = get_class_list()
     classification_results = classify_rois(model, rois_list, class_list, classification_score_threshold)
     final_results = combine_results(filtered_detections, classification_results)
     draw_boxes(final_results, image_path)

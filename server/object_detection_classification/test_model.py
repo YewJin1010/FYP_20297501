@@ -12,9 +12,6 @@ from keras.applications.imagenet_utils import preprocess_input, decode_predictio
 from keras.preprocessing.image import ImageDataGenerator
 import datetime
 
-def read_csv(file_path):
-    return pd.read_csv(file_path)
-
 def extract_columns(dataframe):
     return dataframe.keys().values.tolist()
 
@@ -158,9 +155,9 @@ def test_on_sample_images_2(model, image_paths):
 model = "server/object_detection_classification/trained_models/resnet50.h5"
 
 # Read CSVs
-train_data = read_csv('server/object_detection_classification/dataset/train/_classes.csv')
-valid_data = read_csv('server/object_detection_classification/dataset/valid/_classes.csv')
-test_data = read_csv('server/object_detection_classification/dataset/test/_classes.csv')
+train_data = pd.read_csv('server/object_detection_classification/dataset/train/_classes.csv')
+valid_data = pd.read_csv('server/object_detection_classification/dataset/valid/_classes.csv')
+test_data = pd.read_csv('server/object_detection_classification/dataset/test/_classes.csv')
 
 # Directory Paths
 data_dir = "server/object_detection_classification/train"
