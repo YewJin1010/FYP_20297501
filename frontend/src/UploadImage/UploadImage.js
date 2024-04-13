@@ -13,7 +13,7 @@ function UploadImage() {
   const [showProgressBar, setShowProgressBar] = useState(false);
   const [backgroundOpacity, setBackgroundOpacity] = useState(1);
   const [buttonsDisabled, setButtonsDisabled] = useState(false);
- 
+  
   // Log current mode
   useEffect(() => {
     console.log('Mode1:', mode);
@@ -79,13 +79,13 @@ function UploadImage() {
       .then(response => {
         console.log('Response from server:', response);
         setIngredients(response.data.ingredients);
+        console.log('Ingredients:', ingredients);
         setPopupOpen(true);
       })
       .catch(error => {
         console.error('Error getting ingredients:', error);
       });
-    setPopupOpen(true);
-  }
+  };  
 
   const closePopup = () => {
     console.log('Closing pop-up');
@@ -192,8 +192,12 @@ function UploadImage() {
       <div className="progress" id="progressBar" style={{ visibility: showProgressBar ? 'visible' : 'hidden' }}>
         <div className="progress-bar" role="progressbar" style={{ width: '0%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
-      <div className="background" style={{ opacity: backgroundOpacity }}>
-      <br /><br /><br />
+      <div className="uploadimg_bg" style={{ opacity: backgroundOpacity }}>
+      <nav className='nav'>
+          <h3 style={{ marginLeft: "45%" }}>
+            FYP 20297501 DEMO
+          </h3>
+        </nav>
       <div className="gui-bg">
         <div className="gui-grid">
           <div className="left-side">
@@ -233,6 +237,19 @@ function UploadImage() {
                   <button className="submit-btn" onClick={submitImages} disabled={buttonsDisabled}>Submit</button>
                   <button className="openPopup" onClick={openPopup} disabled={buttonsDisabled}>Available Ingredients</button>
                   <button className="change-btn" onClick={handleDetectChange} disabled={buttonsDisabled}>Change Detector</button>
+                </div>
+                <div className="popup" style={{ display: isPopupOpen ? 'block' : 'none' }}>
+                  <div className="popup-content">
+                    <h2>Available Ingredients</h2>
+                    <div className="ingredients-container">
+                      <ul className="ingredients-list">
+                        {ingredients.map((ingredient, index) => (
+                          <li key={index}>{ingredient}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <button className="close-btn" onClick={closePopup}>Close</button>
+                  </div>
                 </div>
                 <div className="addons">
                   <label htmlFor="addon-input" className='addons-title'>Missing something?</label>

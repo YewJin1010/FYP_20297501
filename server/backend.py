@@ -117,8 +117,13 @@ def get_recipes():
 
 @app.route("/ingredients", methods=['GET'])
 def get_available_ingredients():
-    print("flag 1")
     class_list = get_class_list()
+    # Remove underscores from class labels
+    class_list = [re.sub(r'_', ' ', class_label) for class_label in class_list]
+
+    # Capitalize the first letter of each word
+    class_list = [class_label.title() for class_label in class_list]
+                  
     print("Class list:", class_list)
     return jsonify({'ingredients': class_list})
 
