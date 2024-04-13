@@ -109,6 +109,7 @@ function UploadImage() {
     console.log('Submitting images');
     console.log('File objects Object:', fileObjectsObject);
     console.log('File text Object:', fileObjectsText);
+    console.log('Textarea:', document.querySelector('.addon-input').value);
 
     let object_results = [];
     let text_results = [];
@@ -166,9 +167,12 @@ function UploadImage() {
               progressBar.style.width = '60%';
           }
       }
+    
+      // Get text area value
+      let textAreaValue = document.querySelector('.addon-input').value;
 
-      // Combine results and send to backend
-    let combined_results = object_results.concat(text_results);
+    // Combine results and send to backend
+    let combined_results = object_results.concat(text_results, textAreaValue);
     console.log('Combined results:', combined_results);
     progressBar.style.width = '80%';
     
@@ -220,7 +224,7 @@ function UploadImage() {
                     <div key={index} className="uploaded-img">
                       <img src={image} alt={`Preview ${index}`}/>
                       <button type="button" className="remove-btn" onClick={() => handleRemoveImage(index)}>
-                        <b><u className='remove-btn-text'>x</u></b>
+                        <b className='remove-btn-text'>x</b>
                       </button>
                     </div>
                   ))}
@@ -290,7 +294,7 @@ function UploadImage() {
                         <li>
                           <b><u>Missing Something?</u></b><br/>
                           - The more ingredients you provide, the better the recipes will be.<br />
-                          - If you are missing an ingredient, you can type it in the text area.<br />
+                          - If you are missing an ingredient or if its not included in the available ingredients, you can type it in the text area.<br />
                           - The ingredients are seperated by commas.<br />
                         </li>
                       </ul>

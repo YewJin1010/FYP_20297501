@@ -153,9 +153,7 @@ img{
 }
 .remove-btn-text{ 
   font-size: 12px;
-  position: absolute;
   color: white;
-  padding-bottom: 3px;
 }
 
 .info-btn, .submit-btn, .change-btn, .openPopup {
