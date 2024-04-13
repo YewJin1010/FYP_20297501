@@ -4,6 +4,7 @@ import axios from 'axios';
 
 function UploadImage() {
   const [isPopupOpen, setPopupOpen] = useState(false);
+  const [isInfoOpen, setInfoOpen] = useState(false);
   const [ingredients, setIngredients] = useState([]);
   const [previewImagesObject, setPreviewImagesObject] = useState([]);
   const [previewImagesText, setPreviewImagesText] = useState([]);
@@ -90,6 +91,16 @@ function UploadImage() {
   const closePopup = () => {
     console.log('Closing pop-up');
     setPopupOpen(false);
+  }
+
+  const openInfo = () => {
+    console.log('Opening info');
+    setInfoOpen(true);
+  }
+
+  const closeInfo = () => {
+    console.log('Closing info');
+    setInfoOpen(false);
   }
 
   
@@ -209,7 +220,7 @@ function UploadImage() {
                     <div key={index} className="uploaded-img">
                       <img src={image} alt={`Preview ${index}`}/>
                       <button type="button" className="remove-btn" onClick={() => handleRemoveImage(index)}>
-                        <b className='remove-btn-text'>x</b>
+                        <b><u className='remove-btn-text'>x</u></b>
                       </button>
                     </div>
                   ))}
@@ -233,7 +244,7 @@ function UploadImage() {
               <h3 className='menu-text'>Menu</h3>
               <div className="action-btns">
                 <div className="button-grid">
-                  <button className="info-btn" disabled={buttonsDisabled}>Info</button>
+                  <button className="info-btn" onClick={openInfo} disabled={buttonsDisabled}>Info</button>
                   <button className="submit-btn" onClick={submitImages} disabled={buttonsDisabled}>Submit</button>
                   <button className="openPopup" onClick={openPopup} disabled={buttonsDisabled}>Available Ingredients</button>
                   <button className="change-btn" onClick={handleDetectChange} disabled={buttonsDisabled}>Change Detector</button>
@@ -249,6 +260,42 @@ function UploadImage() {
                       </ul>
                     </div>
                     <button className="close-btn" onClick={closePopup}>Close</button>
+                  </div>
+                </div>
+                <div className="info" style={{ display: isInfoOpen ? 'block' : 'none' }}>
+                  <div className="info-content">
+                    <h2>Need Help?</h2>
+                    <div className="info-container">	
+                      <ul className='info-list'>
+                        <li>
+                          <b><u>Upload Image</u></b><br/>
+                          - Upload an image of your ingredients to get started. <br />
+                        </li>
+                        <li>
+                          <b><u>Change Detector</u></b><br/>
+                          - Click on "Change Detector" to switch between detecting objects and text. <br />
+                          - Your current mode is displayed at the top. <br />
+                          - Your images will be saved when you switch modes. <br />
+                        </li>
+                        <li>
+                          <b><u>Submit</u></b><br/>
+                          - Click on "Submit" to get recipes based on the detected ingredients. <br />
+                          - The submit button will be disabled until an image is uploaded. <br />
+                          - Remember to provide as many ingredients as possible for better results. <br />
+                        </li>
+                        <li>
+                          <b><u>Available Ingredients</u></b><br/>
+                          - Click on "Available Ingredients" to view a list of ingredients that can be detected. <br />
+                        </li>
+                        <li>
+                          <b><u>Missing Something?</u></b><br/>
+                          - The more ingredients you provide, the better the recipes will be.<br />
+                          - If you are missing an ingredient, you can type it in the text area.<br />
+                          - The ingredients are seperated by commas.<br />
+                        </li>
+                      </ul>
+                    </div>
+                    <button className="close-btn" onClick={closeInfo}>Close</button>
                   </div>
                 </div>
                 <div className="addons">
