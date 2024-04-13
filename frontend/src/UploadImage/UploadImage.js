@@ -187,7 +187,7 @@ function UploadImage() {
         console.error('Error getting recipes:', error);
     }
     progressBar.style.width = '100%';
-    //window.location.href = '/chatbot';
+    window.location.href = '/chatbot';
         
     } catch (error) {
       console.error(error);
@@ -274,6 +274,7 @@ function UploadImage() {
                         <li>
                           <b><u>Upload Image</u></b><br/>
                           - Upload an image of your ingredients to get started. <br />
+                          - The more ingredients you provide, the better the recipes will be. <br />
                         </li>
                         <li>
                           <b><u>Change Detector</u></b><br/>

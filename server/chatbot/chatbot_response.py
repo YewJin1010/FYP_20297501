@@ -66,5 +66,5 @@ def get_bot_response(msg):
 
     return response, intents
 
-msg = "I want to make a cake"
-get_bot_response(msg)
+# msg = "I want to make a cake"
+# get_bot_response(msg)

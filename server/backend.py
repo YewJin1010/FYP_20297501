@@ -6,7 +6,7 @@ import decimal, os, re
 from datetime import datetime
 from object_detection_classification.object_detection_classification import get_class_list, detect_and_classify
 from text_detection.detect_text import get_text_detection
-from recipe_recommendation.tf_idf.recommend_recipes import query_recipes
+from recipe_recommendation.t5.generate_recipes import generate_recipe
 from chatbot.preprocess_text import autocorrect_text
 from chatbot.chatbot_response import get_bot_response
 
@@ -99,6 +99,10 @@ def upload_text_detection():
         print("Error:", str(e))
         return jsonify({'error': 'Internal server error'}), 500
 
+def format_ingredients(combined_results):
+    ingredients = ', '.join(combined_results)
+    return ingredients
+
 @app.route('/get_recipes', methods=['POST'])
 def get_recipes():
     global recipe_list
@@ -106,8 +110,11 @@ def get_recipes():
         combined_results = request.json
         print("Combined results:", combined_results)
 
+        ingredients = format_ingredients(combined_results)
+        print("Ingredients:", ingredients)
+
         # Use combined results as query for recipes
-        recipe_list = query_recipes(combined_results)
+        recipe_list = generate_recipe(ingredients)
         print("Recipe list:", recipe_list)
 
         return jsonify({'recipes': recipe_list}), 200
@@ -150,7 +157,7 @@ def get_response():
             print("Found ingredients: ", found_ingredients)
             if found_ingredients:
                 print("Found ingredients: ", found_ingredients)
-                recipe_list = query_recipes(found_ingredients)
+                recipe_list = generate_recipe(found_ingredients)
                 return jsonify({'recipes': recipe_list})
             else: 
                 response = "Sorry, I didn't catch that. Could you please specify the ingredient you would like to use?"
