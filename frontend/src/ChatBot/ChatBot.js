@@ -12,51 +12,7 @@ function ChatBot() {
   const userInputRef = useRef(null);
   const [inputValue, setInputValue] = useState('');
 
-  const recipeFormat = (recipe, index) => {
-    const ingredientsArray = recipe.ingredients.split(';'); // Split ingredients by semicolon
-    const ingredientsList = ingredientsArray.map((ingredient, idx) => (
-      <p key={`ingredient_${idx}`}>{ingredient.trim()}</p> // Trim whitespace around each ingredient
-    ));
-
-    const splitDirections = recipe.directions.split('.').filter(sentence => sentence.trim() !== ''); // Split directions by '.' and filter out empty sentences
-    const indexedDirections = splitDirections.map((sentence, index) => `${index + 1}. ${sentence.trim()}`); // Add index number to each sentence
-    const numberedDirections = indexedDirections.map((direction, idx) => (
-      <p key={`direction_${idx}`}>{direction}.</p> // Wrap each direction in a paragraph tag to create line break
-    ));
-    const recipeMessage = (
-      <div key={`recipe_${index}`}>
-        <p><strong>Recipe {index + 1}:</strong> {recipe.title}</p>
-        <p><strong>Ingredients:</strong><br />{ingredientsList}</p>
-        <p><strong>Directions:</strong><br />{numberedDirections}</p>
-      </div>
-    );
-    return recipeMessage;
-  }
-
   useEffect(() => {
-    const formatRecipesIntoMessages = (recipes) => {
-      let newMessages = [...messages]; // Copy existing messages
-
-       // Check if there are any recipes
-      if (recipes.length > 0) {
-        // Add a greeting message if there are recipes
-        const greetingMessage = {
-          sender: "Bot",
-          message: <p>Based on your ingredients, here are some recipes you can try:</p>,
-          type: "bot",
-          time: getTime()
-        };
-        newMessages.push(greetingMessage);
-
-        recipes.forEach((recipe, index) => {
-          const recipeMessage = recipeFormat(recipe, index);
-          newMessages.push({ sender: "Bot", message: recipeMessage, type: "bot", time: getTime() });
-        });
-        setMessages(newMessages); // Update messages state with new recipe messages
-      };
-    };
-      
-    // Function to fetch recipes when component mounts
     const fetchRecipes = async () => {
       try {
         const response = await axios.get('/recipe');
@@ -66,9 +22,65 @@ function ChatBot() {
         console.error('Error fetching recipes:', error);
       }
     };
-    // Call the function to fetch recipes when component mounts
+    
     fetchRecipes();
   }, []);
+
+  const formatRecipesIntoMessages = (recipes) => {
+    let newMessages = [];
+  
+    if (recipes.length > 0) {
+      const recipe = recipes[0];
+      const [title, directions] = recipe.split("directions: "); // Split the recipe into title and directions and remove 'directions:'
+  
+      const cleanTitle = title.replace('title:', '').trim(); // Remove 'title:' 
+      const cleanDirections = directions
+        .slice(1, -1) // Remove opening and closing quotes 
+        .replace(/', '/g, '') // Remove all occurrences of ', '
+        .split('. ') // Split by '. ' to get individual sentences
+        .flatMap(sentence => sentence.split('.').map(step => step.trim())) // Split each sentence by '.' and flatten the resulting array
+        .filter(sentence => sentence !== ''); // Remove any empty strings
+
+      const titleMessage = {
+        sender: "Bot",
+        message: (
+          <div>
+            <p><strong>Title:</strong> {cleanTitle}</p>
+            <p><strong>Directions:</strong></p>
+            <ol>
+            {cleanDirections.map((step, index) => (
+              <li key={index}>
+                <p>{step}</p>
+              </li>
+            ))}
+            </ol>
+          </div>
+        ),
+        type: "bot",
+        time: getTime()
+      };
+  
+      newMessages.push(titleMessage);
+    } else {
+      const noRecipesMessage = {
+        sender: "Bot",
+        message: <p>No recipes found.</p>,
+        type: "bot",
+        time: getTime()
+      };
+      newMessages.push(noRecipesMessage);
+    }
+  
+    setMessages(newMessages);
+};
+  
+  
+  const getTime = () => {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
 
   useEffect(() => {
     const handleKeyPress = (event) => {
@@ -98,12 +110,6 @@ function ChatBot() {
       setInputValue(inputValue + '\n');
     }
   }
-  const getTime = () => {
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
-  };
 
   const appendMessage = (sender, message, type) => {
     setMessages(prevMessages => [...prevMessages, { sender, message, type, time: getTime() }]);
@@ -134,7 +140,7 @@ function ChatBot() {
               newMessages.push(greetingMessage);
       
               recipes.forEach((recipe, index) => {
-                const recipeMessage = recipeFormat(recipe, index);
+                const recipeMessage = formatRecipesIntoMessages(recipe, index);
                 newMessages.push({ sender: "Bot", message: recipeMessage, type: "bot", time: getTime() });
               });
               setMessages(newMessages);
