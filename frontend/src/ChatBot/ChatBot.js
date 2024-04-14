@@ -2,11 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import './ChatBot.css';
 import axios from 'axios';
 
-function getRandomColor() {
-  // Generate a random hexadecimal color code
-  return '#' + Math.floor(Math.random()*16777215).toString(16);
-}
-
 function ChatBot() {
   const [messages, setMessages] = useState([]);
   const userInputRef = useRef(null);
@@ -155,52 +150,84 @@ function ChatBot() {
     }
   };
 
-  useEffect(() => {
-    // Scroll to the bottom whenever messages change
-    const chatBox = document.getElementById("chatBox");
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }, [messages]);
-
+  function generateCakeList() {
+    const cakeList = ['Chocolate cake', 'Vanilla cake', 'Strawberry cake', 'Red velvet cake', 'Carrot cake', 'Cheesecake', 'Ice cream cake'];
+    const renderedCakeList = cakeList.map((cakeName, index) => {
+      const imageUrl = `assets/chef_${index + 1}.jpg`;
+      return (
+        <li key={index}>
+          <div className="previous-discussion">
+            <img className="profile-picture" src={imageUrl} alt={cakeName}></img>
+            <div className="discussion-info">
+              <p><b>{cakeName}</b></p>
+              <p className="time">7:30 p.m. 12/4/2024</p>
+            </div>
+          </div>
+        </li>
+      );
+    });
+  
+    return renderedCakeList;
+  }  
 
   return (
-    <div className="background">
-      <div className="chat-box" id="chatBox">
-        {messages.map((msg, index) => (
-          <div key={index} className={`message ${msg.type}`}>
-            {msg.type === 'bot' && (
-              <div className="bot-message-container">
-                <img className="bot-profile-image" src="assets/robot.jpg" alt="chatbot"></img>
-                <div className="bot-message-bubble">
-                  <div className = "bot-message-sender">{msg.sender}</div>
-                  <div className="bot-message-text">{msg.message}</div>
-                  <div className="bot-message-time">{msg.time}</div>
-                </div>
+    <div className="chat-bg">
+      <nav className='nav'>
+          <h3 style={{ marginLeft: "45%" }}>
+            FYP 20297501 DEMO
+          </h3>
+        </nav>
+      <div className="chat-grid">
+        <div className="titles-column">
+        <h2 className='title-header'>Previous Discussions</h2>
+        <div className='title-container'>
+          <ul className='title-list'>
+            {generateCakeList()}
+          </ul>
+        </div>
+    </div>
+        <div className="chat-column">
+          <div className="chat-box" id="chatBox">
+            {messages.map((msg, index) => (
+              <div key={index} className={`message ${msg.type}`}>
+                {msg.type === 'bot' && (
+                  <div className="bot-message-container">
+                    <img className="bot-profile-image" src="assets/chef_4.jpg" alt="chatbot" />
+                    <div className="bot-message-bubble">
+                      <div className="bot-message-sender">{msg.sender}</div>
+                      <div className="bot-message-text">{msg.message}</div>
+                      <div className="bot-message-time">{msg.time}</div>
+                    </div>
+                  </div>
+                )}
+                {msg.type === 'user' && (
+                  <div className="user-message-container">
+                    <img className="user-profile-image" src="assets/user.jpeg" alt="user" />
+                    <div className="user-message-bubble">
+                      <div className="user-message-sender">{msg.sender}</div>
+                      <div className="user-message-text">{msg.message}</div>
+                      <div className="user-message-time">{msg.time}</div>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-            {msg.type === 'user' && (
-              <div className="user-message-container">
-                <img className="user-profile-image" src="assets/user.jpeg" alt="user"></img>
-                <div className="user-message-bubble">
-                  <div className = "user-message-sender">{msg.sender}</div>
-                  <div className="user-message-text">{msg.message}</div>
-                  <div className="user-message-time">{msg.time}</div>
-                </div>
-              </div>
-            )}
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="input-container">
-        <textarea
-          className='user-input' 
-          type="text" 
-          ref={userInputRef} 
-          value = {inputValue}
-          onChange = {handleInputChange}
-          onKeyDown = {handleKeyDown}
-          placeholder="Type your message..." 
-        />
-        <button className="send-btn" onClick={sendMessage}>Send</button>
+          <div className="input-container">
+            <textarea
+              className="user-input"
+              type="text"
+              ref={userInputRef}
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Type your message..."
+            />
+            <button className="send-btn" onClick={sendMessage}>
+              Send
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
