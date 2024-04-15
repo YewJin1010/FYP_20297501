@@ -60,8 +60,28 @@ def plot_images_per_class(class_counts, title):
     plt.xlabel('Classes')
     plt.ylabel('Number of Images')
     plt.xticks(rotation=45, ha='right')
+    plt.savefig(f'server/object_detection_classification/dataset/{title}.png')
     plt.show()
 
+def plot_images_train_valid(train_counts, valid_counts, title):
+    plt.figure(figsize=(10, 6))
+    train_counts_numeric = pd.to_numeric(train_counts, errors='coerce')
+    valid_counts_numeric = pd.to_numeric(valid_counts, errors='coerce')
+    
+    # Plot training data
+    plt.bar(train_counts_numeric.index, train_counts_numeric.values, color='skyblue', label='Training')
+    
+    # Plot validation data
+    plt.bar(valid_counts_numeric.index, valid_counts_numeric.values, color='yellow', label='Validation')
+    
+    plt.title(title)
+    plt.xlabel('Classes')
+    plt.ylabel('Number of Images')
+    plt.xticks(rotation=45, ha='right')
+    plt.legend()
+    plt.savefig(f'server/object_detection_classification/dataset/{title}.png')
+    plt.show()
+  
 def create_resnet50_model(input_shape, num_classes):
     base_model = ResNet50(weights='imagenet', include_top=False, input_shape=input_shape)
     for layer in base_model.layers:
@@ -142,6 +162,8 @@ choice.lower()
 if choice == "y":
     plot_images_per_class(train_df[classes].sum(), 'Number of Images per Class for Training')
     plot_images_per_class(valid_df[classes].sum(), 'Number of Images per Class for Validation')
+    plot_images_train_valid(train_df[classes].sum(), valid_df[classes].sum(), 'Number of Images per Class')
+
 elif choice == "n":
     print("No plots selected.")
 else:
@@ -160,6 +182,8 @@ callbacks = [
     ),
     History()
 ]
+# Train model
+model = train_model(model, train_generator, valid_generator, train_epochs)
 
 # Save model
 now = time.strftime("%d-%m-%Y_%H-%M-%S")
