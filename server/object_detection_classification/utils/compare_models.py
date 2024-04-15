@@ -233,6 +233,7 @@ model.save(model_path)
 history = callbacks[-1]
 
 # Plot training and validation loss
+plt.figure()  # Create a new figure for the loss plot
 plt.plot(history.history['loss'], label='Training Loss')
 plt.plot(history.history['val_loss'], label='Validation Loss')
 plt.title('Training and Validation Loss over Epochs')
@@ -242,6 +243,7 @@ plt.legend()
 plt.savefig(os.path.join(plot_path, f'{file_name}_{now}_loss.png'))
 
 # Plot training and validation accuracy
+plt.figure()  
 plt.plot(history.history['accuracy'], label='Training Accuracy')
 plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
 plt.title('Training and Validation Accuracy over Epochs')
@@ -249,5 +251,3 @@ plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.legend()
 plt.savefig(os.path.join(plot_path, f'{file_name}_{now}_accuracy.png'))
-            
-

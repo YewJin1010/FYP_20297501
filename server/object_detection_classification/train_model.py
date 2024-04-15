@@ -13,9 +13,6 @@ import glob, os, shutil
 from keras.optimizers import Adam
 import time
 
-def read_csv(file_path):
-    return pd.read_csv(file_path)
-
 def extract_columns(dataframe):
     return dataframe.keys().values.tolist()
 
@@ -82,6 +79,7 @@ def plot_images_train_valid(train_counts, valid_counts, title):
     plt.savefig(f'server/object_detection_classification/dataset/{title}.png')
     plt.show()
   
+# Create ResNet50 model
 def create_resnet50_model(input_shape, num_classes):
     base_model = ResNet50(weights='imagenet', include_top=False, input_shape=input_shape)
     for layer in base_model.layers:
@@ -89,7 +87,6 @@ def create_resnet50_model(input_shape, num_classes):
     # Get base model output 
     base_model_ouput = base_model.output
 
-    # Adding our own layer 
     x = GlobalAveragePooling2D()(base_model_ouput)
     # Adding fully connected layer
     x = Dense(512, activation='relu')(x)
@@ -125,8 +122,8 @@ def evaluate_model(model, test_generator):
     print("The best accuracy is: ", test_acc * 100)
 
 # Read CSVs
-train_data = read_csv('server/object_detection_classification/dataset/train/_classes.csv')
-valid_data = read_csv('server/object_detection_classification/dataset/valid/_classes.csv')
+train_data = pd.read_csv('server/object_detection_classification/dataset/train/_classes.csv')
+valid_data = pd.read_csv('server/object_detection_classification/dataset/valid/_classes.csv')
 
 # Directory Paths
 train_dir = "server/object_detection_classification/dataset/train"
@@ -193,6 +190,7 @@ model.save(model_path)
 history = callbacks[-1]
 
 # Plot training and validation loss
+plt.figure()  # Create a new figure for the loss plot
 plt.plot(history.history['loss'], label='Training Loss')
 plt.plot(history.history['val_loss'], label='Validation Loss')
 plt.title('Training and Validation Loss over Epochs')
@@ -202,6 +200,7 @@ plt.legend()
 plt.savefig(os.path.join(plot_path, f'{file_name}_{now}_loss.png'))
 
 # Plot training and validation accuracy
+plt.figure()  
 plt.plot(history.history['accuracy'], label='Training Accuracy')
 plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
 plt.title('Training and Validation Accuracy over Epochs')
@@ -209,4 +208,5 @@ plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.legend()
 plt.savefig(os.path.join(plot_path, f'{file_name}_{now}_accuracy.png'))
+
             
