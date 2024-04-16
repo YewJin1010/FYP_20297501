@@ -41,7 +41,6 @@ def test_model(model, image_paths, columns, results_path):
 
         # Get the top 5 class indices with highest confidence
         top5_indices = np.argsort(prediction)[::-1][:5]
-        print(prediction[top5_indices])
 
         # Load and plot the image to the left of the bar chart
         img = mpimg.imread(image_path)
@@ -62,7 +61,7 @@ def test_model(model, image_paths, columns, results_path):
 
     now = datetime.datetime.now()
     date_time = now.strftime("%d-%m-%Y_%H-%M-%S")
-    #
+    
     # Save the combined plot
     output_file_path = os.path.join(results_path, f'predictions_{date_time}.png')
     plt.savefig(output_file_path)
@@ -84,11 +83,11 @@ columns = test_data.keys().values.tolist()
 classes = [col for col in columns if col != 'filename']
 
 # Sample Image Paths
-images = ['blueberries', 'eggs', 'flour', 'carrots', 'fruits']
+images = ['blueberries', 'eggs', 'flour', 'fruits']
 image_paths = []
 
 for image in images: 
     image_path = f'server/object_detection_classification/sample_images/{image}.jpg'
     image_paths.append(image_path)
 
-test_model(model, image_paths, columns, results_path)
+test_model(model, image_paths, classes, results_path)
