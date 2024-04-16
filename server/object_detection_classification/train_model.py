@@ -116,11 +116,6 @@ def train_model(model, train_generator, valid_generator, epochs):
     )
     return model
 
-def evaluate_model(model, test_generator):
-    test_loss, test_acc = model.evaluate(test_generator)
-    print("The test loss is: ", test_loss)
-    print("The best accuracy is: ", test_acc * 100)
-
 # Read CSVs
 train_data = pd.read_csv('server/object_detection_classification/dataset/train/_classes.csv')
 valid_data = pd.read_csv('server/object_detection_classification/dataset/valid/_classes.csv')

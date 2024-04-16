@@ -160,7 +160,7 @@ valid_data = pd.read_csv('server/object_detection_classification/dataset/valid/_
 test_data = pd.read_csv('server/object_detection_classification/dataset/test/_classes.csv')
 
 # Directory Paths
-data_dir = "server/object_detection_classification/train"
+data_dir = "server/object_detection_classification/dataset/raw_data"
 train_dir = "server/object_detection_classification/dataset/train"
 valid_dir = "server/object_detection_classification/dataset/valid"
 test_dir = "server/object_detection_classification/dataset/test"
@@ -188,16 +188,15 @@ choice = input("Enter your choice (1/2/3/4): ")
 train_columns = extract_columns(train_data)
 
 # Remove filename column
-columns = [col for col in train_columns if col != 'filename']
-print(columns)
+classes = [col for col in train_columns if col != 'filename']
 
 if choice == "1":
-    test_on_testing_set(test_dir, model, columns)
+    test_on_testing_set(test_dir, model, classes)
 elif choice == "2":
     accuracy = compare_results(results_csv_path, test_data)
     print(f"Accuracy: {accuracy:.2f}%")
 elif choice == "3":
-    test_on_sample_images(model, image_paths, columns, results_path)
+    test_on_sample_images(model, image_paths, classes, results_path)
 elif choice == "4":
     test_on_sample_images_2(model, image_paths)
 else: 
