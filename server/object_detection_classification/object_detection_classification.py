@@ -223,10 +223,10 @@ def draw_boxes(final_results, image_path):
 
 def detect_and_classify(image_path):
     # Confidence score threshold for detection
-    detection_score_threshold = 0.6
+    detection_score_threshold = 0.2
 
     # Confidence score threshold for classification
-    classification_score_threshold = 0.8
+    classification_score_threshold = 0.2
 
     print('Running inference for {}... '.format(image_path), end='')
     # Load image into numpy array
