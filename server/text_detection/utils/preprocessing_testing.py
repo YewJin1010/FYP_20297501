@@ -9,26 +9,42 @@ from PIL import Image
 from nltk.corpus import stopwords
 
 # Path to the Tesseract executable
-pytesseract.pytesseract.tesseract_cmd = r'text_detection/Tesseract-OCR/tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'server/text_detection/Tesseract-OCR/tesseract.exe'
 
 # Function to preprocess the image
 def preprocess_image(image):
+    save_path = f'server/text_detection/results/preprocessing_images/{image_name}'
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+ 
     # Convert image to grayscale
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    cv2.imwrite(os.path.join(save_path, 'gray_image.jpg'), gray_image)
+
     # Resize the image
     resized_image = cv2.resize(gray_image, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC) # Resize the image
+    cv2.imwrite(os.path.join(save_path, 'resized_image.jpg'), resized_image)
+
     # Apply gaussian blur to the image
     blurred_image = cv2.GaussianBlur(resized_image, (5, 5), 0)
+    cv2.imwrite(os.path.join(save_path, 'blurred_image.jpg'), blurred_image)
+
     # Apply laplacian filter to the image
     laplacian = cv2.Laplacian(blurred_image, cv2.CV_64F)
     # Sharpen the image
     sharpened_image = np.uint8(np.clip(blurred_image - 0.5 * laplacian, 0, 255))
+    cv2.imwrite(os.path.join(save_path, 'sharpened_image.jpg'), sharpened_image)
+
     # Increase brightness of the image
     sharpened_image = cv2.convertScaleAbs(sharpened_image, alpha=1.5, beta=0)
+    cv2.imwrite(os.path.join(save_path, 'brightened_image.jpg'), sharpened_image)
+
     # Perform otsu thresholding to get binary image
-    _, binary_image = cv2.threshold(sharpened_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)    
+    _, binary_image = cv2.threshold(sharpened_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    cv2.imwrite(os.path.join(save_path, 'binary_iamge.jpg'), binary_image)
     
     return binary_image
+
 
 # Function to detect text in the image
 def detect_text(image, confidence_threshold):
@@ -78,7 +94,7 @@ def draw_boxes(image, detected_text_list):
 
 # Load the ingredients from the CSV file
 def get_ingredients():
-    file_path = "text_detection/cleaned_ingredients.csv"
+    file_path = "server/text_detection/cleaned_ingredients.csv"
     ingredients = []
     with open(file_path, newline='') as csvfile:
         reader = csv.reader(csvfile)
@@ -91,7 +107,7 @@ def get_ingredients():
     return ingredients
 
 # Function to perform text detection on the image
-def get_text_detection(image_path):
+def get_text_detection(image_path, image_name):
 
     # Set the confidence threshold for text detection
     confidence_threshold = 50
@@ -113,8 +129,10 @@ def get_text_detection(image_path):
         preprocessed_image = preprocess_image(original_image)
         # Detect text in the image
         detected_text_list = detect_text(preprocessed_image, confidence_threshold)
+        print("Detected text: ", detected_text_list)
         # Filter text
         filtered_text = filter_text(detected_text_list)
+        print("Filtered text: ", filtered_text)
         # Do not draw if no text detected
         if len(detected_text_list) == 0:
             print("No text detected.")
@@ -129,11 +147,11 @@ def get_text_detection(image_path):
             plt.axis('off')
             #plt.show()
             # Define the directory to save the plot
-            plot_directory = os.path.join('text_detection', 'results')
-            # Extract the file name from the FileStorage object
-            image_name = image_path.filename
+            plot_directory = f'server/text_detection/results/preprocessing_images/{image_name}'
+            if not os.path.exists(plot_directory):
+                os.makedirs(plot_directory)
             # Construct the full path for saving the plot
-            plot_path = os.path.join(plot_directory, image_name)
+            plot_path = os.path.join(plot_directory, f'text_detection.jpg')
             # Save the plot
             plt.savefig(plot_path)
         
@@ -147,3 +165,8 @@ def get_text_detection(image_path):
     
     return detected_ingredients
 
+
+image_names = ['sugar.jpeg', 'flour.jpg', 'milk_powder.jpeg']
+for image_name in image_names:
+    image_path = f'server/text_detection/sample_images/{image_name}'
+    detected_ingredients = get_text_detection(image_path, image_name)
