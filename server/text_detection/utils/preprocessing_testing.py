@@ -55,14 +55,12 @@ def detect_text(image, confidence_threshold):
    
     # Iterate through detected text regions
     for i in range(len(d['text'])):
-        # Compare confidence score against threshold
-        if int(d['conf'][i]) > confidence_threshold:
-            # Extract text, bounding box coordinates, and confidence score
-            text = d['text'][i]
-            left, top, width, height = d['left'][i], d['top'][i], d['width'][i], d['height'][i]
-            confidence = d['conf'][i]
-            # Append to detected text list
-            detected_text_list.append((text, confidence, left, top, width, height))
+        # Extract text, bounding box coordinates, and confidence score
+        text = d['text'][i]
+        left, top, width, height = d['left'][i], d['top'][i], d['width'][i], d['height'][i]
+        confidence = d['conf'][i]
+        # Append to detected text list
+        detected_text_list.append((text, confidence, left, top, width, height))
 
     return detected_text_list
 
@@ -109,9 +107,6 @@ def get_ingredients():
 # Function to perform text detection on the image
 def get_text_detection(image_path, image_name):
 
-    # Set the confidence threshold for text detection
-    confidence_threshold = 50
-
     # Test if the image can be opened
     try: 
         image = Image.open(image_path)
@@ -128,7 +123,7 @@ def get_text_detection(image_path, image_name):
         # Preprocess the image
         preprocessed_image = preprocess_image(original_image)
         # Detect text in the image
-        detected_text_list = detect_text(preprocessed_image, confidence_threshold)
+        detected_text_list = detect_text(preprocessed_image)
         print("Detected text: ", detected_text_list)
         # Filter text
         filtered_text = filter_text(detected_text_list)
