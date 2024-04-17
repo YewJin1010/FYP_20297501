@@ -79,6 +79,24 @@ training_args = Seq2SeqTrainingArguments(
 
 data_collator = DataCollatorForSeq2Seq(tokenizer)
 
+# Load metrics
+rouge_metric = load_metric("rouge")
+bleu_metric = load_metric("bleu")
+
+def compute_metrics(eval_predictions):
+    predictions, labels = eval_predictions
+    decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+    decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
+    
+    rouge_output = rouge_metric.compute(predictions=decoded_preds, references=decoded_labels)
+    bleu_output = bleu_metric.compute(predictions=decoded_preds, references=[decoded_labels])
+    
+    rouge_results = {key: value.mid.fmeasure for key, value in rouge_output.items()}
+    bleu_results = bleu_output["bleu"]
+    
+    return {**rouge_results, **bleu_results}
+
+
 trainer = Seq2SeqTrainer(
     model=model,
     args=training_args,
@@ -86,6 +104,7 @@ trainer = Seq2SeqTrainer(
     eval_dataset=tokenized_datasets['validation'],
     data_collator=data_collator,
     tokenizer=tokenizer,
+    compute_metrics=compute_metrics
 )
 
 print("Training the model...")
