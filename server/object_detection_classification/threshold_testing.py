@@ -17,9 +17,9 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
 # Path to the saved model
-PATH_TO_SAVED_MODEL = 'object_detection_classification/tensorflow/pretrained_models/faster_rcnn_resnet50_v1_640x640_coco17_tpu-8/saved_model'
+PATH_TO_SAVED_MODEL = 'server/object_detection_classification/tensorflow/pretrained_models/faster_rcnn_resnet50_v1_640x640_coco17_tpu-8/saved_model'
 # Path to the label map
-PATH_TO_LABELS = 'object_detection_classification/tensorflow/data/mscoco_complete_label_map.pbtxt'
+PATH_TO_LABELS = 'server/object_detection_classification/tensorflow/data/mscoco_complete_label_map.pbtxt'
 
 print('Loading model...', end='')
 start_time = time.time()
@@ -35,13 +35,31 @@ print('Model loaded after {} seconds'.format(elapsed_time))
 category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_LABELS, use_display_name=True)
 
 # Path to ResNet50 model
-model = "object_detection_classification/trained_models/resnet50.h5"
+model = "server/object_detection_classification/trained_models/resnet50.h5"
 
 def get_class_list():
-    dataframe = pd.read_csv('object_detection_classification/dataset/train/_classes.csv')
+    dataframe = pd.read_csv('server/object_detection_classification/dataset/train/_classes.csv')
     columns = dataframe.keys().values.tolist()
     class_list = [col for col in columns if col != 'filename']
     return class_list
+
+def plot_detections(image_np_with_detections, filtered_detections, image_name, detection_score_threshold):
+    for i in range(filtered_detections['detection_boxes'].shape[0]):
+        ymin, xmin, ymax, xmax = filtered_detections['detection_boxes'][i]
+        xmin = int(xmin * image_np_with_detections.shape[1])
+        xmax = int(xmax * image_np_with_detections.shape[1])
+        ymin = int(ymin * image_np_with_detections.shape[0])
+        ymax = int(ymax * image_np_with_detections.shape[0])
+        # Draw bounding box
+        cv2.rectangle(image_np_with_detections, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
+
+    plt.imshow(image_np_with_detections)
+    plt.axis('off')
+    save_path = f'server/object_detection_classification/results/detection_threshold_test_results'
+    # Create the directory if it does not exist
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+    plt.savefig(f'{save_path}/{image_name}_threshold_{detection_score_threshold}.jpg')
 
 def preprocess_image(image_path):
     print("Preprocessing image...")
@@ -55,9 +73,7 @@ def preprocess_image(image_path):
     tensor_image = tf.expand_dims(tensor_image, axis=0)
     return tensor_image
  
-# Function to detect objects in an image
-def detect_objects(image_np, detection_score_threshold):
-
+def detect_objects(image_np, detection_score_threshold, image_name, plot_results):
     # Convert image to tensor
     input_tensor = tf.convert_to_tensor(image_np)
     input_tensor = input_tensor[tf.newaxis, ...]
@@ -81,6 +97,10 @@ def detect_objects(image_np, detection_score_threshold):
     above_threshold = detections['detection_scores'] > detection_score_threshold
     filtered_detections = {key: value[above_threshold]
         for key, value in detections.items() if isinstance(value, np.ndarray)}
+    
+    if plot_results:
+        plot_detections(image_np_with_detections, filtered_detections, image_name, detection_score_threshold)
+        
     print('\nDetection finished!')
     return image_np_with_detections, filtered_detections
 
@@ -139,9 +159,9 @@ def classify_rois(model, rois_list, class_list, classification_score_threshold):
                 top_index = prediction.argmax()  # Get the index of the class with the highest probability
                 top_class = class_list[top_index]
                 top_score = prediction[top_index]  # Retrieve the score corresponding to the top class
-                if top_score >= classification_score_threshold:
-                    top_class = class_list[top_index]
-                    result.append((top_class, top_score))
+                #if top_score >= classification_score_threshold:
+                top_class = class_list[top_index]
+                result.append((top_class, top_score))
             # Append result if it is not empty
             if result:
                 results.append(result)
@@ -206,7 +226,7 @@ def draw_boxes(final_results, image_path):
         ax.text(xmin, ymin - 5, label_text, color='r')
 
     # Define the directory to save the plot
-    plot_directory = os.path.join('object_detection_classification', 'results', 'inference_results')
+    plot_directory = os.path.join('server/object_detection_classification', 'results', 'inference_results')
 
     # Extract the file name from the FileStorage object
     image_name = image_path.filename
@@ -221,17 +241,12 @@ def draw_boxes(final_results, image_path):
     print("images saved at: ", plot_path)
     plt.show()
 
-def detect_and_classify(image_path):
-    # Confidence score threshold for detection
-    detection_score_threshold = 0.6
-
-    # Confidence score threshold for classification
-    classification_score_threshold = 0.8
+def detect_and_classify(image_path, image_name, detection_score_threshold, classification_score_threshold):
 
     print('Running inference for {}... '.format(image_path), end='')
     # Load image into numpy array
     image_np = np.array(Image.open(image_path))
-    image_np_with_detections, filtered_detections = detect_objects(image_np, detection_score_threshold)
+    image_np_with_detections, filtered_detections = detect_objects(image_np, detection_score_threshold, image_name)
     rois_list = extract_and_resize_rois(image_np_with_detections, filtered_detections)
     class_list = get_class_list()
     classification_results = classify_rois(model, rois_list, class_list, classification_score_threshold)
@@ -239,4 +254,44 @@ def detect_and_classify(image_path):
     draw_boxes(final_results, image_path)
     return final_results  
 
+def detection_threshold_test(images):
+    plot_results = input("Do you want to plot the detection results? (y/n): ")
+    # Do not take inputs not y and n
+    while plot_results not in ['y', 'n']:
+        plot_results = input("Invalid input. Please enter 'y' or 'n': ")
+    if plot_results == 'y':
+        plot_results = True
+    else:
+        plot_results = False
+
+    for image in images:
+        image_path = f'server/object_detection_classification/sample_images/{image}.jpg'
+        detection_thresholds = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+
+        for threshold in detection_thresholds:
+            print(f"Running inference for threshold: {threshold}")
+            image_np = np.array(Image.open(image_path))
+            image_np_with_detections, filtered_detections = detect_objects(image_np, threshold, image, plot_results)
+            print("Inference finished!")
+
+def classification_threshold_test(images):
+    for image in images:
+        image_path = f'server/object_detection_classification/sample_images/{image}.jpg'
+        detection_score_threshold = 0.2
+        classification_score_thresholds = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+        for threshold in classification_score_thresholds:
+            print(f"Running inference for threshold: {threshold}")
+            detect_and_classify(image_path, image, detection_score_threshold, threshold)
+            print("Inference finished!")
+
+images = ['fruits', 'egg_carton', 'baking_ingredients', 'carrots']
+
+print("1. Detection threshold test")
+print("2. Classification threshold test")
+
+test_to_run = int(input("Enter the test to run: "))	
+if test_to_run == 1:
+    detection_threshold_test(images)
+elif test_to_run == 2:
+    classification_threshold_test(images)
 

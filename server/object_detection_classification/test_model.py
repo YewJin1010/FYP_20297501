@@ -18,7 +18,7 @@ def test_model(model, image_paths, columns, results_path):
     model = load_model(model, compile=False)
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     
-    # Create a temporary data generator for the custom images
+    # Data generator for the custom images
     data_generator = ImageDataGenerator(preprocessing_function=preprocess_input)
     custom_generator = data_generator.flow_from_dataframe(
         dataframe=pd.DataFrame({'filename': image_paths}),
