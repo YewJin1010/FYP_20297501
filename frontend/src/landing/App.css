@@ -15,10 +15,16 @@
 	font-weight: bold;
 }
 
+.content-container {
+	display: flex; /* Flexbox for side-by-side arrangement */
+	flex-grow: 1; /* Grow to fill remaining space */
+  }
+
 .landing_bg {
 	background-color: #ffcbfa;
 	display: flex;
-	flex: 1;
+	flex-direction: column;
+	width: 100%;
 }
 
 /* Left Section */

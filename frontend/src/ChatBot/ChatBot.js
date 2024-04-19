@@ -177,15 +177,16 @@ function ChatBot() {
             FYP 20297501 DEMO
           </h3>
         </nav>
+      <div className="content-container">
       <div className="chat-grid">
         <div className="titles-column">
-        <h2 className='title-header'>Previous Discussions</h2>
-        <div className='title-container'>
-          <ul className='title-list'>
-            {generateCakeList()}
-          </ul>
+          <h2 className='title-header'>Previous Discussions</h2>
+          <div className='title-container'>
+            <ul className='title-list'>
+              {generateCakeList()}
+            </ul>
+          </div>
         </div>
-    </div>
         <div className="chat-column">
           <div className="chat-box" id="chatBox">
             {messages.map((msg, index) => (
@@ -227,6 +228,7 @@ function ChatBot() {
               Send
             </button>
           </div>
+        </div>
         </div>
       </div>
     </div>

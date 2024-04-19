@@ -213,6 +213,7 @@ function UploadImage() {
             FYP 20297501 DEMO
           </h3>
         </nav>
+        <div className="content-container">
       <div className="gui-bg">
         <div className="gui-grid">
           <div className="left-side">
@@ -308,6 +309,7 @@ function UploadImage() {
                   <textarea className="addon-input" rows="4" cols="60" disabled={buttonsDisabled}  placeholder= "1 cup flour, 2 teaspoons cinnamon, grapes"></textarea>
               </div>
               </div>
+            </div>
             </div>
         </div>
       </div>

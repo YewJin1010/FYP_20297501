@@ -28,6 +28,7 @@ function App() {
             FYP 20297501 DEMO
           </h3>
         </nav>
+        <div className="content-container">
         <div className="left-section">
           <header className="header">
             <h1>Inspire me TODAY!</h1> {/* Title */}
@@ -61,6 +62,7 @@ function App() {
               />
             ))}
           </div>
+        </div>
         </div>
       </div>
     </div>
