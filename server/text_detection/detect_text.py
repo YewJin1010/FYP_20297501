@@ -100,6 +100,10 @@ def get_text_detection(image_path):
 
     # Load the image into a numpy array
     image_np = np.array(image)
+
+    # Save the image
+    image.save('text_detection/results/original_image_3.jpg')
+
     # Read the image
     original_image = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR) 
     if original_image is not None:

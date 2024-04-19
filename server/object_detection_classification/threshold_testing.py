@@ -121,51 +121,54 @@ def extract_and_resize_rois(image_np_with_detections, filtered_detections):
     print("ROIs extracted and resized!")
     return rois_list
 
+def save_roi_image(roi_image, image_name, i, result, classification_score_threshold):
+    roi_image_rgb = cv2.cvtColor(roi_image, cv2.COLOR_BGR2RGB)
+
+    save_path = f'server/object_detection_classification/results/roi_images/{image_name}/{classification_score_threshold}'
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+    image_path = os.path.join(save_path, f"roi_{result}_{i}.jpg")
+    cv2.imwrite(image_path, roi_image_rgb)
+    print(f"ROI image saved: {image_path}")
+
 # Function to classify ROIs using a pre-trained ResNet50 model
-def classify_rois(model, rois_list, class_list, classification_score_threshold):
+def classify_rois(model, rois_list, class_list, classification_score_threshold, image_name):
     # Load pre-trained ResNet50 model
     model = load_model(model, compile=False)
     model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])
     results = []
     roi_boxes = []  # List to store the bounding box coordinates for each ROI
     try:
-        for rois, roi_box in rois_list:
+        for i, (roi, roi_box) in enumerate(rois_list):
             try:
                 print("Attempting approach 1")
-                preprocessed_rois = preprocess_input(np.array(rois))
-                preprocessed_rois = np.reshape(preprocessed_rois, (-1, 224, 224, 3))
+                preprocessed_roi = preprocess_input(np.array([roi]))  # Preprocess a single ROI
             except Exception as e:
                 print(f"Error: {e}")
                 print("Attempting approach 2")
-                # Initialize a list to store resized ROIs
-                resized_rois_list = []
+                # Resize ROI to (224, 224) dimensions
+                resized_roi = cv2.resize(roi, (224, 224))
+                # Preprocess resized ROI
+                preprocessed_roi = preprocess_input(np.array([resized_roi]))
 
-                # Resize each ROI to (224, 224) dimensions
-                for roi in rois:
-                    resized_roi = cv2.resize(roi, (224, 224))
-                    resized_rois_list.append(resized_roi)
+            # Predict class probabilities for the ROI
+            predictions = model.predict(preprocessed_roi)
 
-                # Stack resized ROIs into a single array
-                resized_rois_array = np.stack(resized_rois_list)
+            top_indices = np.argsort(predictions)[0, ::-1][:5]
 
-                # Preprocess resized ROIs
-                preprocessed_rois = preprocess_input(resized_rois_array)
-                preprocessed_rois = np.stack([preprocessed_rois] * 3, axis=-1)
+            top_predictions = [(class_list[idx], predictions[0, idx]) for idx in top_indices]
+            print(f"Top predictions for ROI {i}: {top_predictions}")
 
-            # Predict class probabilities for all ROIs
-            predictions = model.predict(preprocessed_rois)
-
-            result = []
-            for i, prediction in enumerate(predictions):
+            for j, prediction in enumerate(predictions):
+                # Get top 5 class indices with highest confidence
                 top_index = prediction.argmax()  # Get the index of the class with the highest probability
                 top_class = class_list[top_index]
                 top_score = prediction[top_index]  # Retrieve the score corresponding to the top class
                 if top_score >= classification_score_threshold:
-                    result.append((top_class, top_score))
-                    roi_boxes.append(roi_box)  # Store the bounding box coordinates corresponding to the ROI
-            # Append result if it is not empty
-            if result:
-                results.append(result)
+                    result = [(top_class, top_score)]
+                    results.append(result)
+                    # Save the ROI image
+                    save_roi_image(roi, image_name, f"{i}_{j}", result, classification_score_threshold)
 
     except Exception as e:
         print(f"Error: {e}")
@@ -192,66 +195,16 @@ def combine_results(classification_results, roi_boxes):
     print("Results combined!")
     return combined_results
 
-# Function to draw bounding boxes on an image
-def draw_boxes(final_results, image_path, image_name, classification_score_threshold):
-    image = plt.imread(image_path)
-    
-    # Create figure and axes
-    fig, ax = plt.subplots(1)
-    
-    # Display the image
-    ax.imshow(image)
-        
-    # Iterate over each detection result
-    for result in final_results:
-        class_label = result['class_label']
-        class_score = result['class_score']
-        xmin, ymin, xmax, ymax = result['bounding_box']
-        
-        # Ensure bounding box coordinates are within image boundaries
-        xmin = max(0, xmin)
-        ymin = max(0, ymin)
-        xmax = min(xmax, image.shape[1])
-        ymax = min(ymax, image.shape[0])
-        
-        # Create a rectangle patch
-        rect = patches.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, linewidth=1, edgecolor='r', facecolor='none')
-
-        # Add the patch to the Axes
-        ax.add_patch(rect)
-
-        # Add label and score as text
-        label_text = f'{class_label}: {class_score:.2f}'
-        ax.text(xmin, ymin - 5, label_text, color='r')
-
-    # Define the directory to save the plot
-    plot_directory = os.path.join('server/object_detection_classification/results/classification_threshold_test_results')
-    if not os.path.exists(plot_directory):
-        os.makedirs(plot_directory)
-
-    # Construct the full path for saving the plot
-    plot_path = os.path.join(plot_directory, f'{image_name}_threshold_{classification_score_threshold}.jpg')
-
-    # Save the plot
-    plt.savefig(plot_path)
-    # Show the plot
-    print("Image with bounding boxes saved!")
-    print("Images saved at:", plot_path)
-    plt.show()
-
 def detect_and_classify(image_path, image_name, detection_score_threshold, classification_score_threshold, plot_detections):
-
     print('Running inference for {}... '.format(image_path), end='')
     # Load image into numpy array
     image_np = np.array(Image.open(image_path))
     image_np_with_detections, filtered_detections = detect_objects(image_np, detection_score_threshold, image_name, plot_detections)
     rois_list = extract_and_resize_rois(image_np_with_detections, filtered_detections)
     class_list = get_class_list()
-    classification_results, roi_boxes = classify_rois(model, rois_list, class_list, classification_score_threshold)
+    classification_results, roi_boxes = classify_rois(model, rois_list, class_list, classification_score_threshold, image_name)
     final_results = combine_results(classification_results, roi_boxes)
-    draw_boxes(final_results, image_path, image_name, classification_score_threshold)
-    return final_results  
-
+    
 def detection_threshold_test(images):
     plot_results = input("Do you want to plot the detection results? (y/n): ")
     # Do not take inputs not y and n
@@ -284,8 +237,8 @@ def classification_threshold_test(images):
             detect_and_classify(image_path, image, detection_score_threshold, threshold, plot_detections)
             print("Inference finished!")
 
-images = ['fruits', 'egg_carton', 'baking_ingredients', 'carrots']
-
+images = ['apple_banana','fruits','bicycle', 'market']
+# images = ['bicycle']
 print("1. Detection threshold test")
 print("2. Classification threshold test")
 
