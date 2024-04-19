@@ -89,13 +89,13 @@ def compute_metrics(eval_predictions):
     decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
     
     rouge_output = rouge_metric.compute(predictions=decoded_preds, references=decoded_labels)
-    bleu_output = bleu_metric.compute(predictions=decoded_preds, references=[decoded_labels])
+    #bleu_output = bleu_metric.compute(predictions=decoded_preds, references=[decoded_labels])
     
     rouge_results = {key: value.mid.fmeasure for key, value in rouge_output.items()}
-    bleu_results = bleu_output["bleu"]
+    #bleu_results = bleu_output["bleu"]
     
-    return {**rouge_results, **bleu_results}
-
+    #return {**rouge_results, **bleu_results}
+    return {**rouge_results}
 
 trainer = Seq2SeqTrainer(
     model=model,
@@ -105,6 +105,7 @@ trainer = Seq2SeqTrainer(
     data_collator=data_collator,
     tokenizer=tokenizer,
     compute_metrics=compute_metrics
+    ##push.weight_and_bias
 )
 
 print("Training the model...")
