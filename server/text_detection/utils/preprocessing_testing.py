@@ -47,7 +47,7 @@ def preprocess_image(image):
 
 
 # Function to detect text in the image
-def detect_text(image, confidence_threshold):
+def detect_text(image):
     detected_text_list = []
 
     # Get word-level bounding box coordinates, text, and confidence scores
@@ -161,7 +161,8 @@ def get_text_detection(image_path, image_name):
     return detected_ingredients
 
 
-image_names = ['sugar.jpeg', 'flour.jpg', 'milk_powder.jpeg']
+# image_names = ['sugar.jpeg', 'flour.jpg', 'milk_powder.jpeg']
+image_names = ['yeast.jpg']
 for image_name in image_names:
     image_path = f'server/text_detection/sample_images/{image_name}'
     detected_ingredients = get_text_detection(image_path, image_name)
