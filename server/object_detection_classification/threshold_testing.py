@@ -149,15 +149,19 @@ def classify_rois(model, rois_list, class_list, classification_score_threshold, 
                 # Resize ROI to (224, 224) dimensions
                 resized_roi = cv2.resize(roi, (224, 224))
                 # Preprocess resized ROI
+                # Preprocess resized ROI using ResNet50 preprocess_input function
                 preprocessed_roi = preprocess_input(np.array([resized_roi]))
 
-            # Predict class probabilities for the ROI
-            predictions = model.predict(preprocessed_roi)
+            # Data generator for the single ROI
+            data_generator = ImageDataGenerator(preprocessing_function=None)
+            roi_generator = data_generator.flow(
+                x=preprocessed_roi,
+                batch_size=1,
+                shuffle=False
+            )
 
-            top_indices = np.argsort(predictions)[0, ::-1][:5]
-
-            top_predictions = [(class_list[idx], predictions[0, idx]) for idx in top_indices]
-            print(f"Top predictions for ROI {i}: {top_predictions}")
+            # Predict the ROI using the model
+            predictions = model.predict(roi_generator)
 
             for j, prediction in enumerate(predictions):
                 # Get top 5 class indices with highest confidence

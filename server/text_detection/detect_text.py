@@ -24,7 +24,7 @@ def preprocess_image(image):
     # Sharpen the image
     sharpened_image = np.uint8(np.clip(blurred_image - 0.5 * laplacian, 0, 255))
     # Increase brightness of the image
-    sharpened_image = cv2.convertScaleAbs(sharpened_image, alpha=1.5, beta=0)
+    sharpened_image = cv2.convertScaleAbs(resized_image, alpha=1.5, beta=0)
     # Perform otsu thresholding to get binary image
     _, binary_image = cv2.threshold(sharpened_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)    
     
@@ -100,10 +100,7 @@ def get_text_detection(image_path):
 
     # Load the image into a numpy array
     image_np = np.array(image)
-
-    # Save the image
-    image.save('text_detection/results/original_image_3.jpg')
-
+   
     # Read the image
     original_image = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR) 
     if original_image is not None:

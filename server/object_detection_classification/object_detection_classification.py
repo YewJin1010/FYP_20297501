@@ -226,7 +226,7 @@ def detect_and_classify(image_path):
     detection_score_threshold = 0.2
 
     # Confidence score threshold for classification
-    classification_score_threshold = 0.2
+    classification_score_threshold = 0.25
 
     print('Running inference for {}... '.format(image_path), end='')
     # Load image into numpy array
