@@ -89,7 +89,7 @@ def create_resnet50_model(input_shape, num_classes):
 
     x = GlobalAveragePooling2D()(base_model_ouput)
     # Adding fully connected layer
-    x = Dense(512, activation='relu')(x)
+    x = Dense(512, activation='elu')(x)
     x = Dense(num_classes, activation='softmax', name='fcnew')(x)
     
     model = Model(inputs=base_model.input, outputs=x)

@@ -1,3 +1,14 @@
+Resnet50 ELU:
+596/596 [==============================] - 2119s 4s/step - loss: 1.1132 - accuracy: 0.7329 - val_loss: 0.4682 - val_accuracy: 0.8770
+Epoch 2/5
+596/596 [==============================] - 2125s 4s/step - loss: 0.3747 - accuracy: 0.9045 - val_loss: 0.3306 - val_accuracy: 0.9132
+Epoch 3/5
+596/596 [==============================] - 2168s 4s/step - loss: 0.2588 - accuracy: 0.9331 - val_loss: 0.2604 - val_accuracy: 0.9311
+Epoch 4/5
+596/596 [==============================] - 2182s 4s/step - loss: 0.2019 - accuracy: 0.9514 - val_loss: 0.2271 - val_accuracy: 0.9371
+Epoch 5/5
+596/596 [==============================] - 2098s 4s/step - loss: 0.1635 - accuracy: 0.9620 - val_loss: 0.1989 - val_accuracy: 0.9432
+
 {'loss': 1.4281, 'grad_norm': 0.4898701310157776, 'learning_rate': 0.0009685534591194969, 'epoch': 0.31}
   3%|███▋                                                                                                                | 100/3180 [01:04<32:50,  1.56it/s]C:\Users\miku\AppData\Local\Programs\Python\Python310\lib\site-packages\transformers\generation\utils.py:1178: UserWarning: Using the model-agnostic default `max_length` (=20) to control the generation length. We recommend setting `max_new_tokens` to control the maximum length of the generation.
   warnings.warn(
