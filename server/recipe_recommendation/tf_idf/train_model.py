@@ -199,8 +199,8 @@ w_array = np.array([w_title, w_text, w_categories])
 recipe_stopwords = ['cup','cups','ingredient','ingredients','teaspoon','teaspoons','tablespoon',
                    'tablespoons','C','F']
 
-csv_save_directory = 'C:/Users/yewji/FYP_20297501/server/recipe_recommendation/tf_idf/csv'
-recipes = pd.read_csv("C:/Users/yewji/FYP_20297501/server/recipe_recommendation/tf_idf/csv/recipes.csv")
+csv_save_directory = 'server/recipe_recommendation/tf_idf/csv'
+recipes = pd.read_csv("server/recipe_recommendation/tf_idf/csv/recipes.csv")
 recipes = recipes.drop('image', axis=1)
 
 # Indexing rows with columns that only contain numbers or punctuation
