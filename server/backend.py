@@ -100,6 +100,8 @@ def upload_text_detection():
         return jsonify({'error': 'Internal server error'}), 500
 
 def format_ingredients(combined_results):
+    # Remove repeating ingredients from the list
+    combined_results = list(set(combined_results))
     ingredients = ', '.join(combined_results)
     return ingredients
 

@@ -139,6 +139,7 @@ def classify_rois(model, rois_list, class_list, classification_score_threshold):
                 top_index = prediction.argmax()  # Get the index of the class with the highest probability
                 top_class = class_list[top_index]
                 top_score = prediction[top_index]  # Retrieve the score corresponding to the top class
+                print(f"Top class: {top_class}, Top score: {top_score}")
                 if top_score >= classification_score_threshold:
                     top_class = class_list[top_index]
                     result.append((top_class, top_score))
@@ -226,7 +227,7 @@ def detect_and_classify(image_path):
     detection_score_threshold = 0.2
 
     # Confidence score threshold for classification
-    classification_score_threshold = 0.25
+    classification_score_threshold = 0.5
 
     print('Running inference for {}... '.format(image_path), end='')
     # Load image into numpy array
