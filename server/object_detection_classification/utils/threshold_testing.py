@@ -9,12 +9,10 @@ import warnings
 warnings.filterwarnings('ignore')   # Suppress Matplotlib warnings
 import tensorflow as tf
 from keras.applications import ResNet50 
-from keras.applications.imagenet_utils import preprocess_input, decode_predictions 
+from keras.applications.imagenet_utils import preprocess_input 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import load_model
-import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
-import matplotlib.patches as patches
 
 # Path to the saved model
 PATH_TO_SAVED_MODEL = 'server/object_detection_classification/tensorflow/pretrained_models/faster_rcnn_resnet50_v1_640x640_coco17_tpu-8/saved_model'
@@ -149,7 +147,6 @@ def classify_rois(model, rois_list, class_list, classification_score_threshold, 
                 # Resize ROI to (224, 224) dimensions
                 resized_roi = cv2.resize(roi, (224, 224))
                 # Preprocess resized ROI
-                # Preprocess resized ROI using ResNet50 preprocess_input function
                 preprocessed_roi = preprocess_input(np.array([resized_roi]))
 
             # Data generator for the single ROI

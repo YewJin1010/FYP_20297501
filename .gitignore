@@ -13,11 +13,6 @@ server/venv/*
 # do not commit nltk data
 nltk_data/
 
-# do not commit flowers
-server/object_detection_classification/flower_recognition/flowers/*
-server/object_detection_classification/flower_recognition/train/*
-server/object_detection_classification/flower_recognition/test/*
-
 # do not commit object detection images
 server/object_detection_classification/dataset/valid/*
 server/object_detection_classification/dataset/train/*
@@ -43,14 +38,9 @@ server/recipe_recommendation/t5/fine_tuned_model/model.safetensors
 
 server/database/cakes/*
 
-# T5 Igmpre
+# T5 
 server/recipe_recommendation/t5/models/*
 
 server/recipe_recommendation/t5/t5-base
-
-server/object_detection_classification/yolo_dataset
-server/object_detection_classification/transfer_dataset
-server/object_detection_classification/multiclass_dataset
-server/object_detection_classification/multiclass_dataset_backup
 
 

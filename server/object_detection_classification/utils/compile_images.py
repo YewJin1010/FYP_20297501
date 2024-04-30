@@ -1,7 +1,6 @@
 import shutil
 import os
 
-# Define directory paths
 DIR_PATHS = {
     "Test Data": "server/object_detection_classification/dataset/test",
     "Train Data": "server/object_detection_classification/dataset/train",

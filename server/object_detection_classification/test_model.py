@@ -35,7 +35,6 @@ def test_model(model, image_paths, columns, results_path):
     predict = model.predict(custom_generator, steps = len(image_paths))
 
     # Plot the images and predictions
-    # Plot the images and predictions
     fig, axs = plt.subplots(len(image_paths), 2, figsize=(12, 6 * len(image_paths)))
     for i, (image_path, prediction) in enumerate(zip(image_paths, predict)):
         image_name = os.path.basename(image_path)
@@ -83,8 +82,7 @@ columns = test_data.keys().values.tolist()
 classes = [col for col in columns if col != 'filename']
 
 # Sample Image Paths
-#images = ['blueberries', 'eggs', 'flour', 'fruits']
-images = ['bicycle','blueberries']
+images = ['blueberries', 'eggs', 'flour', 'fruits']
 image_paths = []
 
 for image in images: 

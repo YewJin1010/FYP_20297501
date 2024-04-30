@@ -1,16 +1,14 @@
 import pandas as pd 
 import numpy as np 
-from sklearn.preprocessing import OneHotEncoder 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications import ResNet50
-from keras.layers import Input, MaxPool2D, MaxPooling2D, AveragePooling2D, add, Dense, Activation, Flatten, Dropout, BatchNormalization, Conv2D, MaxPooling2D, GlobalAveragePooling2D
+from keras.layers import Input, MaxPool2D, add, Dense, GlobalAveragePooling2D
 from keras.models import Model
 import matplotlib.pyplot as plt
 from keras.callbacks import History
 from keras.applications.imagenet_utils import preprocess_input
-from keras.callbacks import ModelCheckpoint, EarlyStopping, History, ReduceLROnPlateau
+from keras.callbacks import ModelCheckpoint, History
 import glob, os, shutil
-from keras.optimizers import Adam
 import time
 
 def extract_columns(dataframe):
