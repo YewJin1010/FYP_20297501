@@ -50,7 +50,6 @@ def detect_text(image):
 
 # Function to filter non-alphanumeric characters and stopwords from detected text
 def filter_text(detected_text_list):
-    # Remove stopwords
     stop_words = set(stopwords.words('english'))
     # Extract text from detected text list
     filtered_text = []
@@ -123,8 +122,8 @@ def get_text_detection(image_path):
             plt.imshow(cv2.cvtColor(preprocessed_image, cv2.COLOR_BGR2RGB))
             plt.axis('off')
             #plt.show()
-            # Define the directory to save the plot
-            plot_directory = os.path.join('text_detection', 'results')
+
+            plot_directory = 'text_detection/results'
             # Extract the file name from the FileStorage object
             image_name = image_path.filename
             # Construct the full path for saving the plot
