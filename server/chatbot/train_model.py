@@ -11,8 +11,8 @@ from keras.optimizers import SGD
 import random
 from keras_preprocessing.sequence import pad_sequences
 
-nltk_data_path = 'C:/Users/yewji/FYP_20297501/server/chatbot/nltk_data'
-model_path = 'C:/Users/yewji/FYP_20297501/server/chatbot/model'
+nltk_data_path = 'server/chatbot/nltk_data'
+model_path = 'server/chatbot/model'
 # Set the NLTK data path
 nltk.data.path.append(nltk_data_path)
 
@@ -20,7 +20,7 @@ words=[]
 classes = []
 documents = []
 ignore_words = ['?', '!']
-data_file = open('C:/Users/yewji/FYP_20297501/server/chatbot/intents.json').read()
+data_file = open('server/chatbot/intents.json').read()
 intents = json.loads(data_file)
 
 for intent in intents['intents']:

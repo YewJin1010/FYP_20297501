@@ -4,25 +4,25 @@ lemmatizer = WordNetLemmatizer()
 import pickle
 import numpy as np
 from keras.models import load_model
-model = load_model('C:/Users/yewji/FYP_20297501/server/chatbot/model/chatbot_model.h5')
+model = load_model('server/chatbot/model/chatbot_model.h5')
 import json
 import random
-nltk_data_path = 'C:/Users/yewji/FYP_20297501/server/chatbot/nltk_data'
-intents = json.loads(open('C:/Users/yewji/FYP_20297501/server/chatbot/intents.json').read())
-words = pickle.load(open('C:/Users/yewji/FYP_20297501/server/chatbot/nltk_data/texts.pkl','rb'))
-classes = pickle.load(open('C:/Users/yewji/FYP_20297501/server/chatbot/nltk_data/labels.pkl','rb'))
+nltk_data_path = 'server/chatbot/nltk_data'
+intents = json.loads(open('server/chatbot/intents.json').read())
+words = pickle.load(open('server/chatbot/nltk_data/texts.pkl','rb'))
+classes = pickle.load(open('server/chatbot/nltk_data/labels.pkl','rb'))
 
 
 def clean_up_sentence(sentence):
-    # tokenize the pattern - split words into array
+    # tokenize the pattern 
     sentence_words = nltk.word_tokenize(sentence)
-    # stem each word - create short form for word
+    # stem each word 
     sentence_words = [lemmatizer.lemmatize(word.lower()) for word in sentence_words]
     return sentence_words
 def bow(sentence, words, show_details=True):
     # tokenize the pattern
     sentence_words = clean_up_sentence(sentence)
-    # bag of words - matrix of N words, vocabulary matrix
+    # bag of word
     bag = [0]*len(words)  
     for s in sentence_words:
         for i,w in enumerate(words):

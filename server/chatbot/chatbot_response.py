@@ -8,10 +8,10 @@ lemmatizer = WordNetLemmatizer()
 from keras.models import load_model
 
 
-model = load_model('C:/Users/yewji/FYP_20297501/server/chatbot/model/chatbot_model.h5')
-intent_json = json.loads(open('C:/Users/yewji/FYP_20297501/server/chatbot/intents.json').read())
-words = pickle.load(open('C:/Users/yewji/FYP_20297501/server/chatbot/nltk_data/texts.pkl','rb'))
-classes = pickle.load(open('C:/Users/yewji/FYP_20297501/server/chatbot/nltk_data/labels.pkl','rb'))
+model = load_model('chatbot/model/chatbot_model.h5')
+intent_json = json.loads(open('chatbot/intents.json').read())
+words = pickle.load(open('chatbot/nltk_data/texts.pkl','rb'))
+classes = pickle.load(open('chatbot/nltk_data/labels.pkl','rb'))
 
 
 def clean_up_sentence(sentence):
@@ -24,7 +24,7 @@ def clean_up_sentence(sentence):
 def bow(sentence, words, show_details=True):
     # tokenize the pattern
     sentence_words = clean_up_sentence(sentence)
-    # bag of words - matrix of N words, vocabulary matrix
+    # bag of words
     bag = [0]*len(words)  
     for s in sentence_words:
         for i,w in enumerate(words):
@@ -65,6 +65,3 @@ def get_bot_response(msg):
     print("Response: ", response)
 
     return response, intents
-
-# msg = "I want to make a cake"
-# get_bot_response(msg)

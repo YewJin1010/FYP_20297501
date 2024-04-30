@@ -3,10 +3,9 @@
   max-height: calc(90vh - 160px); 
   overflow-y: auto;
   padding: 10px;
-  margin-left: 10%;
   background-color: black;
-  margin-right: 10%;
   border-radius: 10px;
+  width: 80%;
 }
 
 .chat-bg {
@@ -68,7 +67,6 @@ input {
   margin-bottom: 10px;
   max-width: 80%;
   margin-right: 2%;
-
 }
 
 .user-message-text{
@@ -77,11 +75,11 @@ input {
 
 .bot-profile-image,
 .user-profile-image {
-  width: 50px; /* Adjust the size as needed */
+  width: 50px;
   height: 50px;
-  border-radius: 50%; /* Makes it a circle */
-  object-fit: cover; /* Maintain aspect ratio and cover container */
-  margin-right: 10px; /* Add some spacing to the right */
+  border-radius: 50%;
+  object-fit: cover; 
+  margin-right: 10px;
 }
 
 .bot-message-sender,
@@ -91,7 +89,7 @@ input {
 }
 
 .input-container{
-  width: 80%;
+  width: 75%;
   margin-left: 10%;
 
 }
@@ -179,7 +177,7 @@ input {
     padding: 10px;
     bottom: 0;
     left: 0;
-    width: 80%; /* Adjust width as needed */
+    width: 80%;
     background-color: #f1f1f1;
     border-top: 1px solid #ddd;
     border-radius: 50px;
@@ -202,7 +200,6 @@ input {
   }
 
   .chat-column{
-    margin-left: 10%;
     margin-top: 5%;
-    width: 110%;
+    width: 100%;
   }
