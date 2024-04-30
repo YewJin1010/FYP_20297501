@@ -19,9 +19,6 @@ server/object_detection_classification/dataset/train/*
 server/object_detection_classification/dataset/test/*
 server/object_detection_classification/dataset/raw_data/*
 
-# do not commit chatbot
-server/chatbot_cnn
-
 # do not commit tensorflow files
 server/object_detection_classification/tensorflow/models/*
 server/object_detection_classification/tensorflow/protoc/*
@@ -40,7 +37,5 @@ server/database/cakes/*
 
 # T5 
 server/recipe_recommendation/t5/models/*
-
-server/recipe_recommendation/t5/t5-base
 
 

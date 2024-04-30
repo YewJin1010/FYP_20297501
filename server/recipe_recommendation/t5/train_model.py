@@ -39,7 +39,7 @@ def preprocess_data(examples):
 
     # Combine titles and directions
     title_directions = [title + " " + directions for title, directions in zip(titles, directions)]
-    model_inputs = tokenizer(inputs, max_length=300, truncation=True, padding="max_length")
+    model_inputs = tokenizer(inputs, max_length=250, truncation=True, padding="max_length")
     
     with tokenizer.as_target_tokenizer():
         labels = tokenizer(title_directions, max_length=600, truncation=True, padding="max_length")
