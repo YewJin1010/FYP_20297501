@@ -11,9 +11,6 @@ from keras.callbacks import ModelCheckpoint, History
 import glob, os, shutil
 import time
 
-def extract_columns(dataframe):
-    return dataframe.keys().values.tolist()
-
 def extract_subfolder(filename):
     parts = filename.split('_')
     if len(parts) == 2 and parts[-1].isdigit():
@@ -133,7 +130,7 @@ plot_path = "server/object_detection_classification/results/training_plots"
 train_epochs = int(input("Enter the number of training epochs: "))
 
 # Extract Columns
-train_columns = extract_columns(train_data)
+train_columns = train_data.keys().values.tolist()
 
 # Remove filename column
 classes = [col for col in train_columns if col != 'filename']

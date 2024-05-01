@@ -32,7 +32,7 @@ for intent in intents['intents']:
         # adding documents
         documents.append((w, intent['tag']))
 
-        # adding classes to our class list
+        # adding classes to class list
         if intent['tag'] not in classes:
             classes.append(intent['tag'])
 
